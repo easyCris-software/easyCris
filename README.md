@@ -41,6 +41,13 @@ Windows x64 installer (`.exe`). Once installed, the app supports in-app updates 
 
 ---
 
+## ✅ Statistical Accuracy
+
+Core statistical workflows and the RNA-seq pipeline are validated against published references and manuscript methods listed in the Citations section (including Love et al., 2014 for DESeq2).
+Where applicable, validation comparisons are performed against established reference implementations from cited toolchains.
+
+---
+
 ## 📊 Statistical Analysis
 
 easyCris covers 30+ statistical tests across seven analysis groups. Most tests produce a results table and auto-generated interactive plots.
@@ -328,13 +335,6 @@ If you use easyCris in published research, please cite the underlying methods:
 | Dose-Response (3PL / 4PL) | Newville M. et al. (2014) LMFIT: Non-linear least-square minimization and curve-fitting for Python. *Zenodo*. https://doi.org/10.5281/zenodo.11813 |
 | Nonparametric Post-hoc Tests | Terpilowski M. (2019) scikit-posthocs: Pairwise multiple comparison tests in Python. *Journal of Open Source Software*, 4(36), 1169. https://doi.org/10.21105/joss.01169 |
 | RNA-seq Differential Expression | Love M.I., Huber W. & Anders S. (2014) Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biology*, 15, 550. https://doi.org/10.1186/s13059-014-0550-8 |
-
----
-
-## ✅ Statistical Accuracy
-
-Core statistical workflows and the RNA-seq pipeline are validated against published references and manuscript methods listed in the Citations section (including Love et al., 2014 for DESeq2).
-Where applicable, validation comparisons are performed against established reference implementations from cited toolchains.
 
 ---
 
