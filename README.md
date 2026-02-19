@@ -244,7 +244,7 @@ Autocomplete is intentionally limited to these categories (from the current allo
 | **Financial** | 55 | NPV, IRR, PMT, FV, RATE |
 | **Engineering** | 54 | BIN2DEC, HEX2DEC, CONVERT, COMPLEX, ERF, DELTA, GESTEP |
 
-> Formulas use standard Excel-like syntax and run directly in the grid (no scripting required).
+> Formulas use familiar spreadsheet syntax and run directly in the grid (no scripting required).
 
 ---
 
