@@ -2,6 +2,8 @@
 
 **Professional statistical analysis and RNA-seq for researchers — no coding required.**
 
+> **Beta Release:** easyCris is actively improving and may still contain bugs or unfinished edge cases.
+
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)
 ![Version](https://img.shields.io/github/v/release/easyCris-software/easyCris?color=brightgreen)
 ![License](https://img.shields.io/badge/license-Proprietary-red)
@@ -33,7 +35,7 @@ easyCris is a desktop application for scientific data analysis — covering clas
 
 ## ⬇️ Download
 
-**[→ Download Latest Release](https://github.com/easyCris-software/easyCris/releases/latest)**
+**[→ Download Latest Beta Release](https://github.com/easyCris-software/easyCris/releases/latest)**
 
 Windows x64 installer (`.exe`). Once installed, the app supports in-app updates through signed release packages.
 
@@ -242,9 +244,7 @@ Autocomplete is intentionally limited to these categories (from the current allo
 | **Financial** | 55 | NPV, IRR, PMT, FV, RATE |
 | **Engineering** | 54 | BIN2DEC, HEX2DEC, CONVERT, COMPLEX, ERF, DELTA, GESTEP |
 
-Additional scalar functions can evaluate when entered manually (for example: MATCH, XLOOKUP, OFFSET, LEN, UPPER, VALUE, SUBSTITUTE, TEXTJOIN, MEDIAN, LARGE, SMALL).
-
-> Formulas use standard  syntax and run directly in the grid (no scripting required).
+> Formulas use standard Excel-like syntax and run directly in the grid (no scripting required).
 
 ---
 
