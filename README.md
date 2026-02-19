@@ -232,7 +232,7 @@ easyCris includes a set of data preparation tools to reshape, filter, and summar
 
 ## 🧮 Formula Engine
 
-The easyCris grid formula engine supports Excel-style formulas with dependency tracking, autocomplete, and backend-assisted evaluation for large ranges.
+The easyCris grid formula engine supports spreadsheet-style formulas with dependency tracking, autocomplete, and backend-assisted evaluation for large ranges.
 
 Autocomplete is intentionally limited to these categories (from the current allowed formula set):
 
