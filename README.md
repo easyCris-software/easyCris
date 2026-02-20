@@ -6,8 +6,6 @@
 
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)
 ![Version](https://img.shields.io/github/v/release/easyCris-software/easyCris?color=brightgreen)
-![License](https://img.shields.io/badge/license-Proprietary-red)
-
 <table>
   <tr>
     <td><img src="assets/screenshots/anova_bar_tukey.png" alt="One-Way ANOVA with Tukey post-hoc brackets" width="420"/></td>
