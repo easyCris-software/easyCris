@@ -27,7 +27,7 @@ No usage data, analysis data, file contents, or personal information is sent.
 
 ## 🧪 What is easyCris?
 
-easyCris is a desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core statistical workflows and the RNA-seq pipeline are validated against published methods and reference implementations cited below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
+easyCris is a desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
 
 ---
 
@@ -39,10 +39,10 @@ Windows x64 installer (`.exe`). Once installed, the app supports in-app updates 
 
 ---
 
-## ✅ Statistical Accuracy
+## ✅ Statistical Methods
 
-Core statistical workflows and the RNA-seq pipeline are validated against published references and manuscript methods listed in the Citations section (including Love et al., 2014 for DESeq2).
-Where applicable, validation comparisons are performed against established reference implementations from cited toolchains.
+Core statistical workflows and the RNA-seq pipeline follow published methods listed in the Citations section.
+References are provided to support manuscript-ready reporting.
 
 ---
 
@@ -326,13 +326,13 @@ If you use easyCris in published research, please cite the underlying methods:
 
 | Module | Citation |
 |---|---|
-| Parametric & Nonparametric Tests | Virtanen et al. (2020) SciPy 1.0: fundamental algorithms for scientific computing in Python. *Nature Methods*, 17, 261–272. https://doi.org/10.1038/s41592-019-0686-2 |
-| Regression & Correlation | Seabold S. & Perktold J. (2010) Statsmodels: Econometric and statistical modeling with Python. *Proceedings of the 9th Python in Science Conference*. https://doi.org/10.25080/Majora-92bf1922-011 |
-| Mediation & Moderation | Seabold S. & Perktold J. (2010) Statsmodels: Econometric and statistical modeling with Python. *Proceedings of the 9th Python in Science Conference*. https://doi.org/10.25080/Majora-92bf1922-011 |
-| Survival Analysis | Davidson-Pilon C. (2019) lifelines: survival analysis in Python. *Journal of Open Source Software*, 4(40), 1317. https://doi.org/10.21105/joss.01317 |
-| Dose-Response (3PL / 4PL) | Newville M. et al. (2014) LMFIT: Non-linear least-square minimization and curve-fitting for Python. *Zenodo*. https://doi.org/10.5281/zenodo.11813 |
-| Nonparametric Post-hoc Tests | Terpilowski M. (2019) scikit-posthocs: Pairwise multiple comparison tests in Python. *Journal of Open Source Software*, 4(36), 1169. https://doi.org/10.21105/joss.01169 |
-| RNA-seq Differential Expression | Love M.I., Huber W. & Anders S. (2014) Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biology*, 15, 550. https://doi.org/10.1186/s13059-014-0550-8 |
+| t-Tests & ANOVA | Student (1908). The probable error of a mean. *Biometrika*, 6(1), 1-25. https://doi.org/10.1093/biomet/6.1.1; Fisher (1925). *Statistical Methods for Research Workers*. Oliver and Boyd. |
+| Rank-Based Nonparametric Tests | Wilcoxon (1945). Individual comparisons by ranking methods. *Biometrics Bulletin*, 1(6), 80-83; Mann & Whitney (1947). On a test of whether one of two random variables is stochastically larger than the other. *Annals of Mathematical Statistics*, 18(1), 50-60. https://doi.org/10.1214/aoms/1177730491; Kruskal & Wallis (1952). Use of ranks in one-criterion variance analysis. *JASA*, 47(260), 583-621. https://doi.org/10.1080/01621459.1952.10483441; Dunn (1964). Multiple comparisons using rank sums. *Technometrics*, 6(3), 241-252. https://doi.org/10.1080/00401706.1964.10490181 |
+| Regression & Correlation | Pearson (1895). Note on regression and inheritance in the case of two parents. *Proceedings of the Royal Society of London*, 58, 240-242. https://doi.org/10.1098/rspl.1895.0041; Spearman (1904). The proof and measurement of association between two things. *American Journal of Psychology*, 15(1), 72-101. https://doi.org/10.2307/1412159; Kendall (1938). A new measure of rank correlation. *Biometrika*, 30(1/2), 81-93. https://doi.org/10.1093/biomet/30.1-2.81; Cox (1958). The regression analysis of binary sequences. *JRSS Series B*, 20(2), 215-242. https://doi.org/10.1111/j.2517-6161.1958.tb00292.x |
+| Survival Analysis | Kaplan & Meier (1958). Nonparametric estimation from incomplete observations. *JASA*, 53(282), 457-481. https://doi.org/10.1080/01621459.1958.10501452; Cox (1972). Regression models and life-tables. *JRSS Series B*, 34(2), 187-220. https://doi.org/10.1111/j.2517-6161.1972.tb00899.x; Nelson (1969). Hazard plotting for incomplete failure data. *Journal of Quality Technology*, 1(1), 27-52. https://doi.org/10.1080/00224065.1969.11980344 |
+| Dose-Response (3PL / 4PL) | Hill (1910). The possible effects of the aggregation of the molecules of haemoglobin on its dissociation curves. *Journal of Physiology*, 40(Suppl), iv-vii. https://doi.org/10.1113/jphysiol.1910.sp001386; Sebaugh (2011). Guidelines for accurate EC50/IC50 estimation. *Pharmaceutical Statistics*, 10(2), 128-134. https://doi.org/10.1002/pst.426 |
+| Mediation & Moderation | Baron & Kenny (1986). The moderator-mediator variable distinction in social psychological research. *Journal of Personality and Social Psychology*, 51(6), 1173-1182. https://doi.org/10.1037/0022-3514.51.6.1173; Sobel (1982). Asymptotic confidence intervals for indirect effects in structural equation models. *Sociological Methodology*, 13, 290-312. https://doi.org/10.2307/270723; Hayes (2022). *Introduction to Mediation, Moderation, and Conditional Process Analysis: A Regression-Based Approach* (3rd ed.). Guilford Press (PROCESS framework); Preacher, Rucker, & Hayes (2007). Addressing moderated mediation hypotheses. *Multivariate Behavioral Research*, 42(1), 185-227. https://doi.org/10.1080/00273170701341316 |
+| RNA-seq Differential Expression | Love, Huber, & Anders (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biology*, 15, 550. https://doi.org/10.1186/s13059-014-0550-8; Zhu, Ibrahim, & Love (2019). Heavy-tailed prior distributions for sequence count data. *Bioinformatics*, 35(12), 2084-2092. https://doi.org/10.1093/bioinformatics/bty895 |
 
 ---
 
