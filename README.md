@@ -1,11 +1,11 @@
 # easyCris
 
-**Professional statistical analysis and RNA-seq for researchers — no coding required.**
-
-> **Beta Release:** easyCris is actively improving and may still contain bugs or unfinished edge cases.
+**Publication-ready statistics and RNA-seq — no coding required, no data uploaded.**
 
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)
 ![Version](https://img.shields.io/github/v/release/easyCris-software/easyCris?color=brightgreen)
+![Free](https://img.shields.io/badge/price-free-brightgreen)
+
 <table>
   <tr>
     <td><img src="assets/screenshots/anova_bar_tukey.png" alt="One-Way ANOVA with Tukey post-hoc brackets" width="420"/></td>
@@ -13,29 +13,37 @@
   </tr>
 </table>
 
+### Why researchers choose easyCris
+
+- **30+ statistical tests** — ANOVA, regression, survival, pharmacology, mediation, and more
+- **Complete RNA-seq pipeline** — from raw counts to differential expression with QC plots
+- **Runs 100% locally** — your data never leaves your machine
+- **Publication-ready output** — interactive plots, results tables, and built-in citations
+
+**[Download easyCris](https://github.com/easyCris-software/easyCris/releases/latest)** · **[Visit easycris.com](https://www.easycris.com)** · **[Join the Discussion](https://github.com/easyCris-software/easyCris/discussions)**
+
 ---
 
 ## 🔒 Privacy
 
-easyCris runs entirely on your machine.
-Your data, files, and results never leave your computer — nothing is uploaded or transmitted.
-No account required.
+Your analysis data, files, and results stay on your machine — nothing is uploaded or shared.
 The in-app updater checks release metadata and only downloads update files when you choose to install.
-No usage data, analysis data, file contents, or personal information is sent.
+No usage data, analysis data, or file contents are sent to external servers.
 
 ---
 
 ## 🧪 What is easyCris?
 
-easyCris is a desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
+easyCris is a free desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
 
 ---
 
 ## ⬇️ Download
 
-**[→ Download Latest Beta Release](https://github.com/easyCris-software/easyCris/releases/latest)**
+**[Download Latest Release](https://github.com/easyCris-software/easyCris/releases/latest)**
 
 Windows x64 installer (`.exe`). Once installed, the app supports in-app updates through signed release packages.
+easyCris is currently free to use.
 
 ---
 
@@ -338,8 +346,8 @@ If you use easyCris in published research, please cite the underlying methods:
 
 ## ⚖️ License
 
-Copyright © easyCris Software. All rights reserved.
-Unauthorized copying, distribution, or modification is prohibited.
+easyCris is currently free to use. All rights reserved.
+Copyright © easyCris Software. Unauthorized copying, distribution, or modification is prohibited.
 By downloading and using easyCris you agree to the Terms of Use included with the installer.
 
 ## ⚠️ Disclaimer
