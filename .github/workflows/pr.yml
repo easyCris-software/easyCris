@@ -43,6 +43,9 @@ jobs:
       - name: Typecheck
         run: npm run -s typecheck
 
+      - name: Generate license summary artifacts
+        run: npm run -s license:summary
+
       - name: License summary sync check
         run: npm run -s license:summary:check
 
