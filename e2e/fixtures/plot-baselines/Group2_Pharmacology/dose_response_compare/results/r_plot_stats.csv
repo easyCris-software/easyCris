@@ -1,0 +1,8 @@
+metric,value
+observed_point_count,21
+3pl_aic,87.4449
+4pl_aic,89.3293
+3pl_ic50,0.8957
+4pl_ic50,0.9047
+5pl_aic,74.4797
+5pl_ic50,0.0395

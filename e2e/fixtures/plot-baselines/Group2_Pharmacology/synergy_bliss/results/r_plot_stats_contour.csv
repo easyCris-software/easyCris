@@ -1,0 +1,9 @@
+metric,value
+contour_mean_synergy,4.528
+contour_min_synergy,0
+contour_max_synergy,13.24
+contour_n_doses_a,5
+contour_n_doses_b,5
+contour_total_points,25
+contour_zmin,-13.24
+contour_zmax,13.24

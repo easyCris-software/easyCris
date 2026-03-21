@@ -1,0 +1,11 @@
+{
+  "plot_type": "box",
+  "n_points": 150,
+  "n_traces": 3,
+  "n_groups": 3,
+  "value_range": [65.7039, 143.6359],
+  "n": 150,
+  "value_mean": 103.1129,
+  "value_std": 18.4406,
+  "group_count": 3
+}

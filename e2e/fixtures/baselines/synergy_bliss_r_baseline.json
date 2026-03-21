@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "test_type": "synergy_bliss",
+  "method": "Bliss",
+  "mean_synergy_score": 4.528,
+  "max_synergy_score": 13.24,
+  "min_synergy_score": 0,
+  "synergistic_fraction": 64,
+  "interpretation": "additive",
+  "n_combinations": 25,
+  "n_drug_a_doses": 5,
+  "n_drug_b_doses": 5
+}

@@ -1,0 +1,12 @@
+metric,value
+n,20
+median,24.95
+q1,23.4
+q3,26.125
+min,5
+max,45
+value_mean,24.815
+value_std,6.6694
+group_count,1
+outlier_count,2
+n_traces,2

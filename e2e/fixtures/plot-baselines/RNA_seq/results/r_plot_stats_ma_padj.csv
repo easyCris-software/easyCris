@@ -1,0 +1,8 @@
+metric,value
+ma_total,9275
+ma_up,0
+ma_down,0
+ma_not_sig,9275
+ma_pval_threshold,0.05
+ma_lfc_threshold,1
+ma_use_padj,1

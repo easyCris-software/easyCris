@@ -1,0 +1,15 @@
+{
+  "n": 20,
+  "q1": 23.4,
+  "q3": 26.125,
+  "iqr": 2.725,
+  "lower_fence": 19.3125,
+  "upper_fence": 30.2125,
+  "iqr_outlier_count": 2,
+  "z_outlier_count": 1,
+  "mad": 1.35,
+  "mad_outlier_count": 2,
+  "grubbs_g": 3.0265,
+  "grubbs_p": 0.0085,
+  "grubbs_critical": 2.7082
+}

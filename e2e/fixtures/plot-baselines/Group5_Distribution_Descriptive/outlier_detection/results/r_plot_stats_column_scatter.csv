@@ -1,0 +1,6 @@
+metric,value
+n,20
+value_mean,24.815
+value_std,6.6694
+outlier_count,2
+n_traces,2

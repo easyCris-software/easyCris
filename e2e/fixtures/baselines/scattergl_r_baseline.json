@@ -1,0 +1,32 @@
+{
+  "plot_type": "scattergl",
+  "n_points": 150000,
+  "n_traces": 1,
+  "x_range": [0, 100],
+  "y_range": [-180.7143, 10122.0586],
+  "n": 150000,
+  "x_mean": 50,
+  "y_mean": 3333.1753,
+  "x_std": 28.8678,
+  "y_std": 2981.8883,
+  "correlation": 0.9681,
+  "expected_sampled_n": 100000,
+  "expected_data_policy": "sampled",
+  "trendline_linear": {
+    "type": "linear",
+    "degree": 2,
+    "equation": "y = 100.0000x + -1666.8227",
+    "r_squared": 0.9372,
+    "slope": 100,
+    "intercept": -1666.8227,
+    "n_points": 150000
+  },
+  "trendline_poly2": {
+    "type": "polynomial",
+    "degree": 2,
+    "equation": "y = 1.0001x² + -0.0075x + -0.0420",
+    "r_squared": 0.9997,
+    "coefficients": [-0.042, -0.0075, 1.0001],
+    "n_points": 150000
+  }
+}

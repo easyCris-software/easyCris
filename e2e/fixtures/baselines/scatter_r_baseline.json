@@ -1,0 +1,30 @@
+{
+  "plot_type": "scatter",
+  "n_points": 200,
+  "n_traces": 1,
+  "x_range": [1.2, 120.5],
+  "y_range": [2.5, 250.8],
+  "n": 200,
+  "x_mean": 60.801,
+  "y_mean": 126.351,
+  "x_std": 34.7258,
+  "y_std": 72.3463,
+  "correlation": 1,
+  "trendline_linear": {
+    "type": "linear",
+    "degree": 2,
+    "equation": "y = 2.0834x + -0.3191",
+    "r_squared": 1,
+    "slope": 2.0834,
+    "intercept": -0.3191,
+    "n_points": 200
+  },
+  "trendline_poly2": {
+    "type": "polynomial",
+    "degree": 2,
+    "equation": "y = -0.0000x² + 2.0836x + -0.3242",
+    "r_squared": 1,
+    "coefficients": [-0.3242, 2.0836, -2.0665e-06],
+    "n_points": 200
+  }
+}

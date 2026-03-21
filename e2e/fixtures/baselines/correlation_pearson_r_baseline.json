@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "test_type": "pearson_correlation",
+  "pearson_r": 0.998,
+  "pearson_t_statistic": 44.6423,
+  "pearson_df": 8,
+  "pearson_p_value": 6.99816504804231e-11,
+  "pearson_ci_95_lower": 0.9912,
+  "pearson_ci_95_upper": 0.9995,
+  "n": 10,
+  "alpha": 0.05
+}

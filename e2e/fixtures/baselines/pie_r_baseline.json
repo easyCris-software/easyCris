@@ -1,0 +1,11 @@
+{
+  "plot_type": "pie",
+  "n_points": 5,
+  "n_traces": 1,
+  "n_categories": 5,
+  "n_slices": 5,
+  "value_sum": 100,
+  "n": 5,
+  "value_mean": 20,
+  "category_count": 5
+}

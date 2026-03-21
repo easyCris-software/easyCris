@@ -1,0 +1,27 @@
+{
+  "correlation_pearson": {
+    "columns": ["x", "y", "z", "w", "v"]
+  },
+  "correlation_spearman": {
+    "columns": ["x", "y", "z", "w", "v"]
+  },
+  "correlation_kendall": {
+    "columns": ["x", "y", "z", "w", "v"]
+  },
+  "linear_regression": {
+    "dv": "y",
+    "predictors": ["x"]
+  },
+  "multiple_linear_regression": {
+    "dv": "y",
+    "predictors": ["x1", "x2", "x3"]
+  },
+  "logistic_binary": {
+    "dv": "outcome",
+    "predictors": ["predictor1", "predictor2"]
+  },
+  "logistic_multinomial": {
+    "dv": "outcome",
+    "predictors": ["predictor1", "predictor2"]
+  }
+}

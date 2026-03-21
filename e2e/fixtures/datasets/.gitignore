@@ -1,0 +1,17 @@
+# E2E Fixture Files - Do Not Commit
+# These are large binary files that should be created locally
+
+# Ignore all contents by default
+*
+
+# Allow directories (so Git tracks the structure)
+!*/
+
+# Allow documentation files
+!.gitignore
+!README.md
+
+# Explicitly ignore fixture files at all levels
+**/*.ecp
+**/*.ecpdb
+**/*_data/

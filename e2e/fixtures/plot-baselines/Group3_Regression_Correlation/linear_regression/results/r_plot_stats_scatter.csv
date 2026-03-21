@@ -1,0 +1,6 @@
+metric,value
+n_points,10
+slope,2.0164
+intercept,0.12
+r_squared,0.9984
+ci_band_points,100

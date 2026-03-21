@@ -1,0 +1,21 @@
+{
+  "app": {
+    "binary": "${E2E_APP_PATH}",
+    "binaryFallback": "src-tauri/target/release/easycris.exe"
+  },
+  "webdriver": {
+    "binary": "${E2E_DRIVER_PATH}",
+    "binaryFallback": "edgedriver_win64_2/msedgedriver.exe",
+    "port": 4674,
+    "logLevel": "INFO"
+  },
+  "timeouts": {
+    "appLoad": 10000,
+    "elementWait": 10000,
+    "testTimeout": 60000
+  },
+  "window": {
+    "width": 1920,
+    "height": 1080
+  }
+}

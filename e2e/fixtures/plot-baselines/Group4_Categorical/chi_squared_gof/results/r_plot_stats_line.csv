@@ -1,0 +1,8 @@
+metric,value
+df,3
+alpha,0.05
+critical_value,7.8147
+max_density,0.2419
+n_points,200
+test_statistic,6.32
+p_value,0.097

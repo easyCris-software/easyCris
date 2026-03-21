@@ -1,0 +1,14 @@
+metric,value
+n,4
+value_sum,30
+value_mean,7.5
+category_count,2
+group_count,2
+n_traces,2
+n_points_per_trace,2
+total_points,4
+overall_mean,7.5
+min_mean,5
+max_mean,10
+before_total,15
+after_total,15

@@ -1,0 +1,17 @@
+factor1,factor2,factor3,value
+A,X,Low,23.5
+A,X,Low,25.1
+A,X,High,26.8
+A,X,High,28.2
+A,Y,Low,27.5
+A,Y,Low,29.3
+A,Y,High,30.1
+A,Y,High,31.8
+B,X,Low,26.5
+B,X,Low,28.2
+B,X,High,29.8
+B,X,High,31.5
+B,Y,Low,30.5
+B,Y,Low,32.2
+B,Y,High,33.5
+B,Y,High,35.1

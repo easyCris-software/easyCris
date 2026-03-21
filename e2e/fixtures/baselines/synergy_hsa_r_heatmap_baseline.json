@@ -1,0 +1,10 @@
+{
+  "heatmap_mean_synergy": 9.8,
+  "heatmap_min_synergy": 0,
+  "heatmap_max_synergy": 35,
+  "heatmap_n_doses_a": 5,
+  "heatmap_n_doses_b": 5,
+  "heatmap_total_points": 25,
+  "heatmap_zmin": -35,
+  "heatmap_zmax": 35
+}

@@ -1,0 +1,16 @@
+metric,value
+series_count,2
+category_count,2
+error_bar_type,1
+high_x_mean,29.0667
+high_x_se,0.4554
+high_x_n,5
+high_y_mean,32.6167
+high_y_se,0.4554
+high_y_n,5
+low_x_mean,25.8417
+low_x_se,0.4554
+low_x_n,5
+low_y_mean,29.875
+low_y_se,0.4989
+low_y_n,4

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>easyCris Isolation</title>
+  </head>
+  <body>
+    <script>
+      (() => {
+        const ALLOWED_CUSTOM_COMMANDS = new Set([
+          'add_column',
+          'add_recent_project',
+          'allow_app_close',
+          'bundle_dataset_data_file',
+          'check_ole_registration',
+          'check_project_file_exists',
+          'check_python_health',
+          'cleanup_old_recovery_files',
+          'clear_active_project_id',
+          'clear_all_app_cache',
+          'clear_all_cache',
+          'clear_current_project_cache',
+          'clear_unsaved_app_cache',
+          'get_cache_health_summary',
+          'clear_all_undo_history',
+          'clear_undo_history',
+          'copy_plot_ole',
+          'create_empty_duckdb',
+          'delete_arrow_file',
+          'desktop_auth_clear_session_token',
+          'desktop_auth_load_session_token',
+          'desktop_auth_poll',
+          'desktop_auth_refresh_session',
+          'desktop_auth_revoke_session',
+          'desktop_auth_start',
+          'desktop_auth_store_session_token',
+          'desktop_auth_validate_session',
+          'enable_ole_registration',
+          'ensure_duckdb_dataset',
+          'evaluate_formula_backend',
+          'execute_python_script',
+          'execute_test',
+          'export_columns_to_arrow_hybrid',
+          'export_data_csv',
+          'export_data_excel',
+          'export_data_excel_multi',
+          'export_plot',
+          'export_results_csv',
+          'export_results_excel',
+          'export_results_html',
+          'export_results_json',
+          'export_svg',
+          'finalize_bundled_dataset_file',
+          'flush_dataset_to_arrow',
+          'flush_overlay',
+          'flush_to_arrow_hybrid',
+          'get_active_project_id',
+          'get_aggregates_for_test',
+          'get_all_column_stats',
+          'get_arrow_metadata',
+          'get_available_tests',
+          'get_cached_row_count',
+          'get_column_aggregate',
+          'get_column_aggregate_range',
+          'get_column_aggregate_rows',
+          'get_column_data',
+          'get_column_duplicate_summary',
+          'get_column_statistics',
+          'get_columns_aggregated_data',
+          'get_columns_data',
+          'get_columns_sampled_data',
+          'get_dataset_storage_info',
+          'get_group_rows',
+          'get_grouped_row_order',
+          'get_lazy_group_metadata',
+          'get_overlay_size',
+          'get_rows',
+          'get_rows_hybrid',
+          'get_recent_projects',
+          'get_sample_datasets',
+          'get_sorted_row_indices',
+          'get_undo_redo_state',
+          'has_cached_dataset',
+          'import_csv',
+          'import_excel',
+          'import_large_csv',
+          'import_large_csv_with_project',
+          'import_large_parquet',
+          'import_large_parquet_with_project',
+          'import_parquet',
+          'import_tsv',
+          'insert_row_at',
+          'is_auto_update_disabled',
+          'is_large_dataset',
+          'load_emergency_data',
+          'load_preferences',
+          'load_project',
+          'log_from_frontend',
+          'path_exists_dir',
+          'path_exists_file',
+          'perform_redo',
+          'perform_undo',
+          'push_batch_cell_edit',
+          'push_cell_edit',
+          'push_column_insert',
+          'push_column_rename',
+          'push_row_insert',
+          'read_arrow_file',
+          'read_sample_dataset_preview',
+          'register_existing_duckdb',
+          'remove_column',
+          'remove_row_at',
+          'remove_dataset_cache',
+          'remove_dataset_cache_with_project',
+          'remove_recent_project',
+          'resolve_sample_dataset_path',
+          'run_rnaseq_analysis',
+          'run_plot_backend',
+          'run_statistical_test',
+          'prewarm_statistics_backend',
+          'save_emergency_data',
+          'save_preferences',
+          'save_project',
+          'search_columns_values',
+          'send_native_notification',
+          'set_active_project_id',
+          'set_dataset_cache',
+          'set_project_data_dir',
+          'take_pending_open_project',
+          'update_cell',
+          'update_cells_batch',
+          'update_dataset_metadata',
+          'validate_test',
+          'write_arrow_dataset',
+        ]);
+
+        const MAX_CMD_LENGTH = 128;
+
+        function isAllowedCommand(cmd) {
+          if (typeof cmd !== 'string' || cmd.length === 0 || cmd.length > MAX_CMD_LENGTH) {
+            return false;
+          }
+
+          if (cmd.startsWith('plugin:')) {
+            return true;
+          }
+
+          return ALLOWED_CUSTOM_COMMANDS.has(cmd);
+        }
+
+        function isValidCallbackId(value) {
+          if (typeof value === 'string') {
+            return value.length > 0;
+          }
+          if (typeof value === 'number') {
+            return Number.isFinite(value);
+          }
+          return false;
+        }
+
+        window.__TAURI_ISOLATION_HOOK__ = (payload) => {
+          if (!payload || typeof payload !== 'object') {
+            throw new Error('[isolation] Rejected invoke: invalid payload object');
+          }
+
+          if (!isAllowedCommand(payload.cmd)) {
+            throw new Error(`[isolation] Rejected invoke: disallowed command "${String(payload.cmd)}"`);
+          }
+
+          if (!isValidCallbackId(payload.callback) || !isValidCallbackId(payload.error)) {
+            throw new Error('[isolation] Rejected invoke: invalid callback/error identifiers');
+          }
+
+          return payload;
+        };
+      })();
+    </script>
+  </body>
+</html>

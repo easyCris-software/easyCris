@@ -1,0 +1,15 @@
+metric,value
+n,4
+value_sum,10
+value_mean,2.5
+category_count,2
+group_count,2
+n_traces,2
+n_points_per_trace,2
+total_points,4
+overall_mean,2.5
+min_mean,1
+max_mean,4
+table_rows,2
+table_cols,2
+table_total,10

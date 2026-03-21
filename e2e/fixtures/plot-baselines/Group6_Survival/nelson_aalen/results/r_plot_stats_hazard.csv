@@ -1,0 +1,5 @@
+metric,value
+n_curves,1
+n_points,10
+max_time,55
+max_hazard,0.5

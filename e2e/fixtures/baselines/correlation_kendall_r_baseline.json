@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "test_type": "kendall_correlation",
+  "kendall_tau": 1,
+  "kendall_z_statistic": 4.0249,
+  "kendall_p_value": 5.69941162333185e-05,
+  "n": 10,
+  "alpha": 0.05
+}

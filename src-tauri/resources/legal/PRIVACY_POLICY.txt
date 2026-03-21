@@ -1,0 +1,46 @@
+PRIVACY POLICY
+Effective Date: March 7, 2026
+
+easyCris ("we," "our," or "us") is a desktop application. This policy explains what data we collect and how we use it.
+
+Intended Use and Medical Disclaimer
+easyCris is for research and analytical support only. It is not a medical device and is not intended to diagnose, treat, cure, or prevent any disease. Do not use this software as a substitute for professional medical judgment, diagnosis, or treatment.
+
+1. Data We Collect
+We do not collect general usage analytics or telemetry from your device.
+
+If you choose to link this desktop to your easyCris account, the app will contact easycris.com to:
+
+- start device linking
+- validate or refresh the linked device session
+- revoke the linked device session when you sign out this device
+
+These optional account-linking requests may include your IP address, device-linking identifiers, client version, and account-linked device metadata needed to manage that device.
+
+2. Third-Party Services (Outbound Requests)
+The app may contact third-party services for specific features. These requests are made directly from your device and may include your IP address and standard request metadata:
+
+- RNA-seq gene annotation (offline bundled cache)
+  - RNA-seq annotation runs offline from bundled cache.
+  - No runtime gene-ID transmission to third parties.
+
+- cdn.plot.ly (Plotly for HTML plot export)
+  When exporting interactive plot HTML files, the exported file may load Plotly from the CDN.
+
+- github.com (update checks and support links)
+  The app can check for updates and open support links to GitHub. Update checks are user-initiated.
+
+- easycris.com (optional account/device linking)
+  If you choose to link this desktop to an easyCris account, the app communicates with easycris.com to approve, validate, refresh, and revoke the linked desktop session. This does not upload your datasets or analysis results.
+
+3. Local Data
+Your datasets, results, and logs remain on your device. We do not upload them as part of device linking.
+
+4. Children's Privacy
+The app is not intended for children under 13.
+
+5. Changes to This Policy
+If we change this policy, we will update the effective date and make the revised policy available within the app.
+
+6. Contact
+For questions, contact: contact@easycris.com

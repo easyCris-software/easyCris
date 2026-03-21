@@ -1,0 +1,8 @@
+metric,value
+heatmap_ready,1
+heatmap_n_genes,50
+heatmap_n_samples,24
+heatmap_top_genes,50
+heatmap_use_padj,1
+heatmap_cluster_rows,1
+heatmap_cluster_cols,1

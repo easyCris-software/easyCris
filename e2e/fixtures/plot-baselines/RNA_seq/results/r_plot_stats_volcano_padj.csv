@@ -1,0 +1,9 @@
+metric,value
+volcano_total,9275
+volcano_up,0
+volcano_down,0
+volcano_not_sig,9275
+volcano_pval_threshold,0.05
+volcano_lfc_threshold,1
+volcano_use_padj,1
+volcano_label_count,10

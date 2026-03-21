@@ -1,0 +1,10 @@
+{
+  "contour_mean_synergy": 6.9582,
+  "contour_min_synergy": 0,
+  "contour_max_synergy": 27.0315,
+  "contour_n_doses_a": 6,
+  "contour_n_doses_b": 6,
+  "contour_total_points": 36,
+  "contour_zmin": -27.0315,
+  "contour_zmax": 27.0315
+}

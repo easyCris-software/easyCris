@@ -1,0 +1,15 @@
+EASYCRIS OPEN-SOURCE TERMS
+
+This build of easyCris source code is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0-only).
+
+- You may use, modify, and redistribute this source code under AGPL-3.0-only.
+- If you deploy a modified networked version, AGPL obligations apply.
+- This file summarizes distribution terms for the open-source lane and does not replace the full AGPL text.
+
+For commercial licensing options, contact: hello@easycris.com
+
+See also:
+- LICENSE
+- COMMERCIAL_LICENSE.md
+- legal/PRIVACY_POLICY.txt
+- legal/THIRD_PARTY_LICENSES.txt

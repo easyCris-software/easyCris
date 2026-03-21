@@ -40,7 +40,10 @@ easyCris is a free desktop application for scientific data analysis — covering
 
 ## ⬇️ Download
 
-**[Download Latest Release](https://github.com/easyCris-software/easyCris/releases/latest)**
+Official install options:
+
+- Official signed installer (recommended): **[GitHub Releases](https://github.com/easyCris-software/easyCris/releases/latest)**
+- Official website: **[easycris.com](https://www.easycris.com)**
 
 Windows x64 installer (`.exe`). Once installed, the app supports in-app updates through signed release packages.
 easyCris is currently free to use.
@@ -326,6 +329,13 @@ easyCris ships with three built-in reference guides accessible from the Help men
 4. Select a statistical test or analysis workflow
 5. Review your results table and auto-generated plots
 
+### Build from Source (Contributors)
+
+1. Install Node.js, Python 3.12, and Rust toolchain (`rustup` + MSVC build tools on Windows)
+2. Run `npm ci`
+3. Run `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1`
+4. Run `npm run -s typecheck`
+
 ---
 
 ## 📚 Citations
@@ -346,9 +356,16 @@ If you use easyCris in published research, please cite the underlying methods:
 
 ## ⚖️ License
 
-easyCris is currently free to use. All rights reserved.
-Copyright © easyCris Software. Unauthorized copying, distribution, or modification is prohibited.
-By downloading and using easyCris you agree to the Terms of Use included with the installer.
+easyCris is dual-licensed:
+
+- **Open source:** [AGPL-3.0-only](LICENSE) for open-source use and redistribution
+- **Commercial:** see [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md) for organizations that need a non-AGPL license
+
+Commercial inquiries: hello@easycris.com
+
+## 🤝 Contributing & Security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## ⚠️ Disclaimer
 

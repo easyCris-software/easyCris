@@ -1,0 +1,11 @@
+metric,value
+roc_point_count,151
+roc_auc,0.7864
+roc_fpr_min,0
+roc_fpr_max,1
+roc_tpr_min,0
+roc_tpr_max,1
+roc_fpr_median,0.26
+roc_tpr_median,0.62
+roc_threshold_min,0.0212
+roc_threshold_max,0.9693

@@ -1,0 +1,20 @@
+{
+  "success": true,
+  "test_type": "paired",
+  "t_statistic": -77.522,
+  "p_value": 2.04805665483943e-16,
+  "degrees_of_freedom": 11,
+  "is_significant": true,
+  "alpha": 0.05,
+  "t_critical": 2.201,
+  "lower_t_critical": -2.201,
+  "upper_t_critical": 2.201,
+  "n": 12,
+  "mean_difference": -4.9083,
+  "std_difference": 0.2193,
+  "sem_difference": 0.0633,
+  "min_difference": -5.5,
+  "max_difference": -4.7,
+  "ci_95_lower": -5.0477,
+  "ci_95_upper": -4.769
+}

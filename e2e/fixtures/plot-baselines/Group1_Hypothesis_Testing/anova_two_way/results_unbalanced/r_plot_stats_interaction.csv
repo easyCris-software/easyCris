@@ -1,0 +1,16 @@
+metric,value
+series_count,2
+category_count,2
+error_bar_type,1
+x_a_mean,24.08
+x_a_se,0.4819
+x_a_n,5
+y_a_mean,28.6
+y_a_se,0.6222
+y_a_n,3
+x_b_mean,26.9
+x_b_se,0.5388
+x_b_n,4
+y_b_mean,33.35
+y_b_se,0.762
+y_b_n,2

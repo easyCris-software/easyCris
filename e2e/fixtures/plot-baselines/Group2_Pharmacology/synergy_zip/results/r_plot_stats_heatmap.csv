@@ -1,0 +1,9 @@
+metric,value
+heatmap_mean_synergy,4.5066
+heatmap_min_synergy,0
+heatmap_max_synergy,13.8857
+heatmap_n_doses_a,5
+heatmap_n_doses_b,5
+heatmap_total_points,25
+heatmap_zmin,-13.8857
+heatmap_zmax,13.8857

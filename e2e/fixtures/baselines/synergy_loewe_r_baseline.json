@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "test_type": "synergy_loewe",
+  "method": "Loewe",
+  "mean_synergy_score": 6.9582,
+  "max_synergy_score": 27.0315,
+  "min_synergy_score": 0,
+  "synergistic_fraction": 69.4444,
+  "interpretation": "weak synergy",
+  "n_combinations": 36,
+  "n_drug_a_doses": 6,
+  "n_drug_b_doses": 6,
+  "drug_a_hill": -0.4036,
+  "drug_a_bottom": -2.2553,
+  "drug_a_top": 140.5885,
+  "drug_a_ic50": 5475.7825,
+  "drug_b_hill": -0.5333,
+  "drug_b_bottom": 0.7144,
+  "drug_b_top": 110.9091,
+  "drug_b_ic50": 2568.0072
+}

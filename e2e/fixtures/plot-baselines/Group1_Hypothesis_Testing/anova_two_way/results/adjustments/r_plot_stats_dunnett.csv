@@ -1,0 +1,8 @@
+metric,value
+n_traces,3
+n_points_per_trace,3
+total_points,9
+overall_mean,15.5667
+mean_se,0.4028
+min_mean,10.65
+max_mean,19.8

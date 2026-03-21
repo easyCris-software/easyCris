@@ -1,0 +1,12 @@
+{
+  "plot_type": "bar",
+  "n_points": 5,
+  "n_traces": 1,
+  "n_categories": 5,
+  "value_range": [119, 236],
+  "n": 5,
+  "value_sum": 853,
+  "value_mean": 170.6,
+  "value_std": 47.0776,
+  "category_count": 5
+}

@@ -1,0 +1,9 @@
+metric,value
+isobologram_n_synergistic,24
+isobologram_n_additive,1
+isobologram_n_antagonistic,0
+isobologram_total_points,25
+isobologram_ci_min,0.1495
+isobologram_ci_max,1.0583
+isobologram_drug_a_ic50,5475.7825
+isobologram_drug_b_ic50,2568.0072

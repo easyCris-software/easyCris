@@ -1,0 +1,14 @@
+metric,value
+n,8
+value_sum,200
+value_mean,25
+category_count,4
+group_count,2
+n_traces,2
+n_points_per_trace,4
+total_points,8
+overall_mean,25
+min_mean,18
+max_mean,35
+observed_total,100
+expected_total,100

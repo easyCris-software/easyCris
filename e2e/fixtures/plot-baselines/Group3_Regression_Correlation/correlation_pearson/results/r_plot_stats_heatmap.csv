@@ -1,0 +1,15 @@
+metric,value
+heatmap_min,0.998
+heatmap_max,1
+heatmap_mean,0.9992
+heatmap_n_rows,5
+heatmap_n_cols,5
+heatmap_total_points,25
+heatmap_zmin,-1
+heatmap_zmax,1
+n_vars,5
+min_corr,0.998
+max_corr,1
+mean_corr,0.999
+diag_mean,1
+n_points,10

@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "test_type": "one_sample",
+  "t_statistic": 45.3809,
+  "p_value": 5.1866637507582e-24,
+  "degrees_of_freedom": 23,
+  "is_significant": true,
+  "alpha": 0.05,
+  "t_critical": 2.0687,
+  "lower_t_critical": -2.0687,
+  "upper_t_critical": 2.0687,
+  "n": 24,
+  "sample_mean": 26.5458,
+  "sample_std": 2.8657,
+  "sample_sem": 0.585,
+  "sample_min": 21.9,
+  "sample_max": 31.2,
+  "ci_95_lower": 25.3358,
+  "ci_95_upper": 27.7559,
+  "population_mean": 0
+}

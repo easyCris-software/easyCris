@@ -1,0 +1,10 @@
+metric,value
+n_traces,1
+total_points,12
+differences_n,12
+differences_mean,-4.9083
+differences_median,-4.9
+differences_q1,-5
+differences_q3,-4.775
+differences_min,-5.5
+differences_max,-4.7

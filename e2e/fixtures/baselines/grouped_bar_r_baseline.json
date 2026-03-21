@@ -1,0 +1,13 @@
+{
+  "plot_type": "grouped_bar",
+  "n_points": 15,
+  "n_traces": 3,
+  "n_categories": 5,
+  "n_groups": 3,
+  "value_range": [38, 82],
+  "n": 15,
+  "value_sum": 853,
+  "value_mean": 56.8667,
+  "category_count": 5,
+  "group_count": 3
+}

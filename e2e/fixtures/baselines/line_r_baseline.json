@@ -1,0 +1,13 @@
+{
+  "plot_type": "line",
+  "n_points": 100,
+  "n_traces": 1,
+  "x_range": [0, 12.5664],
+  "y_range": [-54.5203, 53.8137],
+  "n": 100,
+  "x_mean": 6.2832,
+  "y_mean": 0.065,
+  "x_std": 3.6825,
+  "y_std": 35.6428,
+  "correlation": -0.3816
+}

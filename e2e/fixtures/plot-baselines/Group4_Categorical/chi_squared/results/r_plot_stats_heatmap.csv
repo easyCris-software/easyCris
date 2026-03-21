@@ -1,0 +1,12 @@
+metric,value
+heatmap_min,-0.768
+heatmap_max,0.9299
+heatmap_mean,0.0035
+heatmap_n_rows,3
+heatmap_n_cols,2
+heatmap_total_points,6
+heatmap_zmin,-0.9299
+heatmap_zmax,0.9299
+table_rows,3
+table_cols,2
+table_total,17

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "easyCris",
+  "version": "0.1.24",
+  "identifier": "com.easycris.app",
+  "build": {
+    "removeUnusedCommands": false,
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "easyCris",
+        "width": 1280,
+        "height": 720,
+        "minWidth": 900,
+        "minHeight": 640,
+        "resizable": true,
+        "fullscreen": false,
+        "maximized": false,
+        "center": true,
+        "decorations": true,
+        "alwaysOnTop": false,
+        "transparent": false,
+        "shadow": true,
+        "dragDropEnabled": true
+      }
+    ],
+    "security": {
+      "pattern": {
+        "use": "isolation",
+        "options": {
+          "dir": "isolation"
+        }
+      },
+      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost https: http: ws: wss:; img-src 'self' asset: data: blob: https: http:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+    },
+    "macOSPrivateApi": true
+  },
+  "bundle": {
+      "createUpdaterArtifacts": "v1Compatible",
+    "active": true,
+    "targets": "all",
+    "resources": [
+      "resources/legal/OSS_TERMS.txt",
+      "resources/legal/PRIVACY_POLICY.txt",
+      "resources/legal/THIRD_PARTY_LICENSES.txt",
+      "../bundle_resources/python_embedded",
+      "../ole-server/target/release/ole-server.exe",
+      "../scripts/register_ole_server.ps1",
+      "../scripts/unregister_ole_server.ps1",
+      "resources/datasets"
+    ],
+    "fileAssociations": [
+      {
+        "name": "easyCris.Project",
+        "ext": ["ecp"],
+        "mimeType": "application/x-easycris-project",
+        "description": "easyCris Project",
+        "role": "Editor"
+      }
+    ],
+    "icon": [
+      "icons/icon.ico",
+      "icons/icon.icns",
+      "icons/icon.png"
+    ],
+    "publisher": "easyCris Project",
+    "category": "Education",
+    "shortDescription": "Statistical analysis software for scientific research",
+    "longDescription": "easyCris is a cross-platform statistical analysis application built with Tauri. Features comprehensive statistical tests, interactive visualizations, and seamless Python integration for biomedical and scientific research.",
+    "copyright": "Copyright © 2026 easyCris Software.",
+    "licenseFile": "resources/legal/OSS_TERMS.txt",
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "installerHooks": "nsis/installer-hooks.nsh"
+      }
+    },
+    "macOS": {
+      "frameworks": [],
+      "minimumSystemVersion": "10.15",
+      "signingIdentity": "-",
+      "providerShortName": null,
+      "entitlements": null,
+      "exceptionDomain": ""
+    }
+  },
+    "plugins": {
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://github.com/easyCris-software/easyCris/releases/latest/download/latest.json"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU1RDMxQzJCRTM1MjEwNjcKUldSbkVGTGpLeHpUVmVtVERuRGZQRzRXNjhmbGlEOGpQam96V2VEalhOR1hUY1dRaFFRYWk1TnYK"
+    }
+    }
+}
+

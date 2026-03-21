@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "test_type": "spearman_correlation",
+  "spearman_rho": 1,
+  "spearman_s_statistic": 3.66373598126302e-14,
+  "spearman_p_value": 1.0635035875251e-62,
+  "n": 10,
+  "alpha": 0.05
+}

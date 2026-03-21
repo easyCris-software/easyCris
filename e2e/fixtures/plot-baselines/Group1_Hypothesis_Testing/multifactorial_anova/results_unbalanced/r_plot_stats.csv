@@ -1,0 +1,9 @@
+metric,value
+n_facets,2
+n_traces_per_facet,2
+n_points_per_trace,2
+total_points,8
+overall_mean,29.35
+mean_se,0.6569
+min_mean,24.3333
+max_mean,34.3

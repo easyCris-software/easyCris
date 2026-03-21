@@ -1,0 +1,62 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gates:
+    name: pr-quality-gates
+    runs-on: windows-latest
+    steps:
+      - name: Enable Git long paths
+        shell: pwsh
+        run: git config --global core.longpaths true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install JS dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Bootstrap Python runtime
+        shell: pwsh
+        run: ./scripts/bootstrap-python.ps1
+
+      - name: Typecheck
+        run: npm run -s typecheck
+
+      - name: License summary sync check
+        run: npm run -s license:summary:check
+
+      - name: LMM smoke tests
+        run: npm run -s test:run -- src/lib/analysis/__tests__/resultParser.lmmAnova.test.ts src/utils/__tests__/lmmAnovaTables.test.ts
+
+      - name: Isolation allowlist check
+        run: npm run -s isolation:allowlist:check
+
+      - name: Forbidden path hygiene check
+        shell: pwsh
+        run: |
+          $matches = git ls-files | rg "^(backup/|old_documentation/|_documentation/|memory/|memory_db/|playwright-report/|edgedriver_win|\.env$|\.env\.production$|\.claude/|AGENTS\.md$|CLAUDE\.md$|\.mcp\.json$|python_embedded/python_dependencies/|python_embedded/python\.exe|python_embedded/python312\.dll|python_embedded/.*\.pyd$|python_embedded/.*\.dll$|python_embedded/.*embed.*\.zip$|python_embedded/.*runtime.*\.zip$|src-tauri/resources/legal/EULA\.txt$|^(_test_validation/|RNA_seq/validation/))"
+          if ($matches) {
+            Write-Host $matches
+            throw "Forbidden tracked paths detected in PR"
+          }

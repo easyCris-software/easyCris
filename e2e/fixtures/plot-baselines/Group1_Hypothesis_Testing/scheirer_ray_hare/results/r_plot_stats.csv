@@ -1,0 +1,9 @@
+metric,value
+n_traces,2
+n_points_per_trace,2
+total_points,4
+overall_median,27.775
+overall_mean,28.125
+mean_iqr,1.1875
+min_median,23.9
+max_median,32.8

@@ -1,0 +1,4286 @@
+Rust Crate Notices (Cargo)
+---------------------------
+
+adler2 2.0.1
+License: 0BSD OR Apache-2.0 OR MIT
+Authors: Jonas Schievink <jonasschievink@gmail.com>|oyvindln <oyvindln@users.noreply.github.com>
+Repository: https://github.com/oyvindln/adler2
+Description: A simple clean-room implementation of the Adler-32 checksum
+
+ahash 0.7.8
+License: Apache-2.0 OR MIT
+Authors: Tom Kaitchuck <Tom.Kaitchuck@gmail.com>
+Repository: https://github.com/tkaitchuck/ahash
+Description: A non-cryptographic hash function using AES-NI for high performance
+
+ahash 0.8.12
+License: Apache-2.0 OR MIT
+Authors: Tom Kaitchuck <Tom.Kaitchuck@gmail.com>
+Repository: https://github.com/tkaitchuck/ahash
+Description: A non-cryptographic hash function using AES-NI for high performance
+
+aho-corasick 1.1.4
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/BurntSushi/aho-corasick
+Description: Fast multiple substring searching.
+
+alloc-no-stdlib 2.0.4
+License: BSD-3-Clause
+Authors: Daniel Reiter Horn <danielrh@dropbox.com>
+Repository: https://github.com/dropbox/rust-alloc-no-stdlib
+Description: A dynamic allocator that may be used with or without the stdlib. This allows a package with nostd to allocate memory dynamically and be used either with a custom allocator, items on the stack, or by a package that wishes to simply use Box<>. It also provides options to use calloc or a mutable global variable for pre-zeroed memory
+
+alloc-stdlib 0.2.2
+License: BSD-3-Clause
+Authors: Daniel Reiter Horn <danielrh@dropbox.com>
+Repository: https://github.com/dropbox/rust-alloc-no-stdlib
+Description: A dynamic allocator example that may be used with the stdlib
+
+android_log-sys 0.3.2
+License: Apache-2.0 OR MIT
+Authors: The android_log_sys Developers
+Repository: https://github.com/rust-mobile/android_log-sys-rs
+Description: FFI bindings to Android log Library.
+
+android_logger 0.15.1
+License: Apache-2.0 OR MIT
+Authors: The android_logger Developers
+Repository: https://github.com/rust-mobile/android_logger-rs
+Description: A logging implementation for `log` which hooks to android log output.
+
+android_system_properties 0.1.5
+License: Apache-2.0 OR MIT
+Authors: Nicolas Silva <nical@fastmail.com>
+Repository: https://github.com/nical/android_system_properties
+Description: Minimal Android system properties wrapper
+
+anyhow 1.0.100
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/anyhow
+Description: Flexible concrete Error type built on std::error::Error
+
+arbitrary 1.4.2
+License: Apache-2.0 OR MIT
+Authors: The Rust-Fuzz Project Developers|Nick Fitzgerald <fitzgen@gmail.com>|Manish Goregaokar <manishsmail@gmail.com>|Simonas Kazlauskas <arbitrary@kazlauskas.me>|Brian L. Troutwine <brian@troutwine.us>|Corey Farwell <coreyf@rwell.org>
+Repository: https://github.com/rust-fuzz/arbitrary/
+Description: The trait for generating structured data from unstructured data
+
+arboard 3.6.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/1Password/arboard
+Description: Image and text handling for the OS clipboard.
+
+array-init-cursor 0.2.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/planus-org/planus
+Description: Utility crate to help keep track of arrays of MaybeUninit
+
+arrayvec 0.7.6
+License: Apache-2.0 OR MIT
+Authors: bluss
+Repository: https://github.com/bluss/arrayvec
+Description: A vector with fixed capacity, backed by an array (it can be stored on the stack too). Implements fixed capacity ArrayVec and ArrayString.
+
+arrow 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Rust implementation of Apache Arrow
+
+arrow-arith 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Arrow arithmetic kernels
+
+arrow-array 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Array abstractions for Apache Arrow
+
+arrow-buffer 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Buffer abstractions for Apache Arrow
+
+arrow-cast 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Cast kernel and utilities for Apache Arrow
+
+arrow-csv 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Support for parsing CSV format to and from the Arrow format
+
+arrow-data 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Array data abstractions for Apache Arrow
+
+arrow-format 0.8.1
+License: Apache-2.0
+Authors: Jorge C. Leitao <jorgecarleitao@gmail.com>
+Repository: https://github.com/DataEngineeringLabs/arrow-format
+Description: Unofficial flatbuffers and tonic code of Apache Arrow spec
+
+arrow-ipc 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Support for the Arrow IPC format
+
+arrow-json 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Support for parsing JSON format to and from the Arrow format
+
+arrow-ord 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Ordering kernels for arrow arrays
+
+arrow-row 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Arrow row format
+
+arrow-schema 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Defines the logical types for arrow arrays
+
+arrow-select 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: Selection kernels for arrow arrays
+
+arrow-string 56.2.0
+License: Apache-2.0
+Authors: Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/apache/arrow-rs
+Description: String kernels for arrow arrays
+
+arrow2 0.18.0
+License: Apache-2.0
+Authors: Jorge C. Leitao <jorgecarleitao@gmail.com>|Apache Arrow <dev@arrow.apache.org>
+Repository: https://github.com/jorgecarleitao/arrow2
+Description: Unofficial implementation of Apache Arrow spec in safe Rust
+
+ashpd 0.11.0
+License: MIT
+Authors: Bilal Elmoussaoui <bil.elmoussaoui@gmail.com>
+Repository: https://github.com/bilelmoussaoui/ashpd
+Description: XDG portals wrapper in Rust using zbus
+
+async-broadcast 0.7.2
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|Yoshua Wuyts <yoshuawuyts@gmail.com>|Zeeshan Ali Khan <zeeshanak@gnome.org>
+Repository: https://github.com/smol-rs/async-broadcast
+Description: Async broadcast channels
+
+async-channel 2.5.0
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>
+Repository: https://github.com/smol-rs/async-channel
+Description: Async multi-producer multi-consumer channel
+
+async-executor 1.13.3
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|John Nunley <dev@notgull.net>
+Repository: https://github.com/smol-rs/async-executor
+Description: Async executor
+
+async-io 2.6.0
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>
+Repository: https://github.com/smol-rs/async-io
+Description: Async I/O and timers
+
+async-lock 3.4.1
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>
+Repository: https://github.com/smol-rs/async-lock
+Description: Async synchronization primitives
+
+async-process 2.5.0
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>
+Repository: https://github.com/smol-rs/async-process
+Description: Async interface for working with processes
+
+async-recursion 1.1.1
+License: Apache-2.0 OR MIT
+Authors: Robert Usher <266585+dcchut@users.noreply.github.com>
+Repository: https://github.com/dcchut/async-recursion
+Description: Recursion for async functions
+
+async-signal 0.2.13
+License: Apache-2.0 OR MIT
+Authors: John Nunley <dev@notgull.net>
+Repository: https://github.com/smol-rs/async-signal
+Description: Async signal handling
+
+async-task 4.7.1
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>
+Repository: https://github.com/smol-rs/async-task
+Description: Task abstraction for building executors
+
+async-trait 0.1.89
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/async-trait
+Description: Type erasure for async trait methods
+
+atk 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED Rust bindings for the ATK library
+
+atk-sys 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED FFI bindings to libatk-1
+
+atoi 2.0.0
+License: MIT
+Authors: Markus Klein
+Repository: https://github.com/pacman82/atoi-rs
+Description: Parse integers directly from `[u8]` slices in safe code
+
+atomic-waker 1.1.2
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|Contributors to futures-rs
+Repository: https://github.com/smol-rs/atomic-waker
+Description: A synchronization primitive for task wakeup
+
+autocfg 1.5.0
+License: Apache-2.0 OR MIT
+Authors: Josh Stone <cuviper@gmail.com>
+Repository: https://github.com/cuviper/autocfg
+Description: Automatic cfg for Rust compiler features
+
+base64 0.21.7
+License: Apache-2.0 OR MIT
+Authors: Alice Maz <alice@alicemaz.com>|Marshall Pierce <marshall@mpierce.org>
+Repository: https://github.com/marshallpierce/rust-base64
+Description: encodes and decodes base64 as bytes or utf8
+
+base64 0.22.1
+License: Apache-2.0 OR MIT
+Authors: Marshall Pierce <marshall@mpierce.org>
+Repository: https://github.com/marshallpierce/rust-base64
+Description: encodes and decodes base64 as bytes or utf8
+
+bincode 1.3.3
+License: MIT
+Authors: Ty Overby <ty@pre-alpha.com>|Francesco Mazzoli <f@mazzo.li>|David Tolnay <dtolnay@gmail.com>|Zoey Riordan <zoey@dos.cafe>
+Repository: https://github.com/servo/bincode
+Description: A binary serialization / deserialization strategy that uses Serde for transforming structs into bytes and vice versa!
+
+bitflags 1.3.2
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/bitflags/bitflags
+Description: A macro to generate structures which behave like bitflags.
+
+bitflags 2.10.0
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/bitflags/bitflags
+Description: A macro to generate structures which behave like bitflags.
+
+bitvec 1.0.1
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/bitvecto-rs/bitvec
+Description: Addresses memory by bits, for packed collections and bitfields
+
+block-buffer 0.10.4
+License: Apache-2.0 OR MIT
+Authors: RustCrypto Developers
+Repository: https://github.com/RustCrypto/utils
+Description: Buffer type for block processing of data
+
+block2 0.5.1
+License: MIT
+Authors: Steven Sheldon|Mads Marquart <mads@marquart.dk>
+Repository: https://github.com/madsmtm/objc2
+Description: Apple's C language extension of blocks
+
+block2 0.6.2
+License: MIT
+Authors: Mads Marquart <mads@marquart.dk>
+Repository: https://github.com/madsmtm/objc2
+Description: Apple's C language extension of blocks
+
+blocking 1.6.2
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>
+Repository: https://github.com/smol-rs/blocking
+Description: A thread pool for isolating blocking I/O in async programs
+
+borsh 1.5.7
+License: Apache-2.0 OR MIT
+Authors: Near Inc <hello@near.org>
+Repository: https://github.com/near/borsh-rs
+Description: Binary Object Representation Serializer for Hashing
+
+borsh-derive 1.5.7
+License: Apache-2.0
+Authors: Near Inc <hello@nearprotocol.com>
+Repository: https://github.com/near/borsh-rs
+Description: Binary Object Representation Serializer for Hashing
+
+brotli 8.0.2
+License: BSD-3-Clause AND MIT
+Authors: Daniel Reiter Horn <danielrh@dropbox.com>|The Brotli Authors
+Repository: https://github.com/dropbox/rust-brotli
+Description: A brotli compressor and decompressor that with an interface avoiding the rust stdlib. This makes it suitable for embedded devices and kernels. It is designed with a pluggable allocator so that the standard lib's allocator may be employed. The default build also includes a stdlib allocator and stream interface. Disable this with --features=no-stdlib. All included code is safe.
+
+brotli-decompressor 5.0.0
+License: BSD-3-Clause OR MIT
+Authors: Daniel Reiter Horn <danielrh@dropbox.com>|The Brotli Authors
+Repository: https://github.com/dropbox/rust-brotli-decompressor
+Description: A brotli decompressor that with an interface avoiding the rust stdlib. This makes it suitable for embedded devices and kernels. It is designed with a pluggable allocator so that the standard lib's allocator may be employed. The default build also includes a stdlib allocator and stream interface. Disable this with --features=no-stdlib. Alternatively, --features=unsafe turns off array bounds checks and memory initialization but provides a safe interface for the caller.  Without adding the --features=unsafe argument, all included code is safe. For compression in addition to this library, download https://github.com/dropbox/rust-brotli
+
+bumpalo 3.19.0
+License: Apache-2.0 OR MIT
+Authors: Nick Fitzgerald <fitzgen@gmail.com>
+Repository: https://github.com/fitzgen/bumpalo
+Description: A fast bump allocation arena for Rust.
+
+byte-unit 5.1.6
+License: MIT
+Authors: Magic Len <len@magiclen.org>
+Repository: https://github.com/magiclen/byte-unit
+Description: A library for interacting with units of bytes.
+
+bytecheck 0.6.12
+License: MIT
+Authors: David Koloski <djkoloski@gmail.com>
+Repository: https://github.com/djkoloski/bytecheck
+Description: Derive macro for bytecheck
+
+bytecheck_derive 0.6.12
+License: MIT
+Authors: David Koloski <djkoloski@gmail.com>
+Repository: https://github.com/djkoloski/bytecheck
+Description: Derive macro for bytecheck
+
+bytemuck 1.24.0
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Lokathor <zefria@gmail.com>
+Repository: https://github.com/Lokathor/bytemuck
+Description: A crate for mucking around with piles of bytes.
+
+bytemuck_derive 1.10.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Lokathor <zefria@gmail.com>
+Repository: https://github.com/Lokathor/bytemuck
+Description: derive proc-macros for `bytemuck`
+
+byteorder 1.5.0
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/BurntSushi/byteorder
+Description: Library for reading/writing numbers in big-endian and little-endian.
+
+byteorder-lite 0.1.0
+License: MIT OR Unlicense
+Authors: UNKNOWN
+Repository: https://github.com/image-rs/byteorder-lite
+Description: Library for reading/writing numbers in big-endian and little-endian.
+
+bytes 1.10.1
+License: MIT
+Authors: Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/tokio-rs/bytes
+Description: Types and traits for working with bytes
+
+cairo-rs 0.18.5
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: Rust bindings for the Cairo library
+
+cairo-sys-rs 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: FFI bindings to libcairo
+
+calamine 0.24.0
+License: MIT
+Authors: Johann Tuffe <tafia973@gmail.com>
+Repository: https://github.com/tafia/calamine
+Description: An Excel/OpenDocument Spreadsheets reader and deserializer in pure rust
+
+camino 1.2.1
+License: Apache-2.0 OR MIT
+Authors: Without Boats <saoirse@without.boats>|Ashley Williams <ashley666ashley@gmail.com>|Steve Klabnik <steve@steveklabnik.com>|Rain <rain@sunshowers.io>
+Repository: https://github.com/camino-rs/camino
+Description: UTF-8 paths
+
+cargo-platform 0.1.9
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/cargo
+Description: Cargo's representation of a target platform.
+
+cargo_metadata 0.19.2
+License: MIT
+Authors: Oliver Schneider <git-spam-no-reply9815368754983@oli-obk.de>
+Repository: https://github.com/oli-obk/cargo_metadata
+Description: structured access to the output of `cargo metadata`
+
+cargo_toml 0.22.3
+License: Apache-2.0 OR MIT
+Authors: Kornel <kornel@geekhood.net>
+Repository: https://gitlab.com/lib.rs/cargo_toml
+Description: `Cargo.toml` struct definitions for parsing with Serde
+
+cast 0.3.0
+License: Apache-2.0 OR MIT
+Authors: Jorge Aparicio <jorge@japaric.io>
+Repository: https://github.com/japaric/cast.rs
+Description: Ergonomic, checked cast functions for primitive types
+
+cc 1.2.44
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/rust-lang/cc-rs
+Description: A build-time dependency for Cargo build scripts to assist in invoking the native C compiler to compile native C code into a static archive to be linked into Rust code.
+
+cesu8 1.1.0
+License: Apache-2.0 OR MIT
+Authors: Eric Kidd <git@randomhacks.net>
+Repository: https://github.com/emk/cesu8-rs
+Description: Convert to and from CESU-8 encoding (similar to UTF-8)
+
+cfb 0.7.3
+License: MIT
+Authors: Matthew D. Steele <mdsteele@alum.mit.edu>
+Repository: https://github.com/mdsteele/rust-cfb
+Description: Read/write Compound File Binary (structured storage) files
+
+cfg-expr 0.15.8
+License: Apache-2.0 OR MIT
+Authors: Embark <opensource@embark-studios.com>|Jake Shadle <jake.shadle@embark-studios.com>
+Repository: https://github.com/EmbarkStudios/cfg-expr
+Description: A parser and evaluator for Rust `cfg()` expressions.
+
+cfg-if 1.0.4
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/rust-lang/cfg-if
+Description: A macro to ergonomically define an item depending on a large number of #[cfg] parameters. Structured like an if-else chain, the first matching branch is the item that gets emitted.
+
+cfg_aliases 0.2.1
+License: MIT
+Authors: Zicklag <zicklag@katharostech.com>
+Repository: https://github.com/katharostech/cfg_aliases
+Description: A tiny utility to help save you a lot of effort with long winded `#[cfg()]` checks.
+
+chrono 0.4.42
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/chronotope/chrono
+Description: Date and time library for Rust
+
+clipboard-win 5.4.1
+License: BSL-1.0
+Authors: Douman <douman@gmx.se>
+Repository: https://github.com/DoumanAsh/clipboard-win
+Description: Provides simple way to interact with Windows clipboard.
+
+codepage 0.1.2
+License: Apache-2.0 OR MIT
+Authors: Henri Sivonen <hsivonen@hsivonen.fi>
+Repository: https://github.com/hsivonen/codepage
+Description: Mapping between Windows code page numbers and encoding_rs character encodings
+
+combine 4.6.7
+License: MIT
+Authors: Markus Westerlind <marwes91@gmail.com>
+Repository: https://github.com/Marwes/combine
+Description: Fast parser combinators on arbitrary streams with zero-copy support.
+
+comfy-table 7.1.2
+License: MIT
+Authors: Arne Beer <contact@arne.beer>
+Repository: https://github.com/nukesor/comfy-table
+Description: An easy to use library for building beautiful tables with automatic content wrapping
+
+concurrent-queue 2.5.0
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|Taiki Endo <te316e89@gmail.com>|John Nunley <dev@notgull.net>
+Repository: https://github.com/smol-rs/concurrent-queue
+Description: Concurrent multi-producer multi-consumer queue
+
+const-random 0.1.18
+License: Apache-2.0 OR MIT
+Authors: Tom Kaitchuck <Tom.Kaitchuck@gmail.com>
+Repository: https://github.com/tkaitchuck/constrandom
+Description: Provides compile time random number generation.
+
+const-random-macro 0.1.16
+License: Apache-2.0 OR MIT
+Authors: Tom Kaitchuck <Tom.Kaitchuck@gmail.com>
+Repository: https://github.com/tkaitchuck/constrandom
+Description: Provides the procedural macro used by const-random
+
+convert_case 0.4.0
+License: MIT
+Authors: David Purdum <purdum41@gmail.com>
+Repository: https://github.com/rutrum/convert-case
+Description: Convert strings into any case
+
+cookie 0.18.1
+License: Apache-2.0 OR MIT
+Authors: Sergio Benitez <sb@sergio.bz>|Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/SergioBenitez/cookie-rs
+Description: HTTP cookie parsing and cookie jar management. Supports signed and private (encrypted, authenticated) jars.
+
+core-foundation 0.10.1
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/core-foundation-rs
+Description: Bindings to Core Foundation for macOS
+
+core-foundation-sys 0.8.7
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/core-foundation-rs
+Description: Bindings to Core Foundation for macOS
+
+core-graphics 0.24.0
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/core-foundation-rs
+Description: Bindings to Core Graphics for macOS
+
+core-graphics-types 0.2.0
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/core-foundation-rs
+Description: Bindings for some fundamental Core Graphics types
+
+cpufeatures 0.2.17
+License: Apache-2.0 OR MIT
+Authors: RustCrypto Developers
+Repository: https://github.com/RustCrypto/utils
+Description: Lightweight runtime CPU feature detection for aarch64, loongarch64, and x86/x86_64 targets,  with no_std support and support for mobile targets including Android and iOS
+
+crc32fast 1.5.0
+License: Apache-2.0 OR MIT
+Authors: Sam Rijs <srijs@airpost.net>|Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/srijs/rust-crc32fast
+Description: Fast, SIMD-accelerated CRC32 (IEEE) checksum computation
+
+crossbeam-channel 0.5.15
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/crossbeam-rs/crossbeam
+Description: Multi-producer multi-consumer channels for message passing
+
+crossbeam-deque 0.8.6
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/crossbeam-rs/crossbeam
+Description: Concurrent work-stealing deque
+
+crossbeam-epoch 0.9.18
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/crossbeam-rs/crossbeam
+Description: Epoch-based garbage collection
+
+crossbeam-utils 0.8.21
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/crossbeam-rs/crossbeam
+Description: Utilities for concurrent programming
+
+crunchy 0.2.4
+License: MIT
+Authors: Eira Fransham <jackefransham@gmail.com>
+Repository: https://github.com/eira-fransham/crunchy
+Description: Crunchy unroller: deterministically unroll constant loops
+
+crypto-common 0.1.6
+License: Apache-2.0 OR MIT
+Authors: RustCrypto Developers
+Repository: https://github.com/RustCrypto/traits
+Description: Common cryptographic traits
+
+cssparser 0.29.6
+License: MPL-2.0
+Authors: Simon Sapin <simon.sapin@exyr.org>
+Repository: https://github.com/servo/rust-cssparser
+Description: Rust implementation of CSS Syntax Level 3
+
+cssparser-macros 0.6.1
+License: MPL-2.0
+Authors: Simon Sapin <simon.sapin@exyr.org>
+Repository: https://github.com/servo/rust-cssparser
+Description: Procedural macros for cssparser
+
+csv 1.4.0
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/BurntSushi/rust-csv
+Description: Fast CSV parsing with support for serde.
+
+csv-core 0.1.13
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/BurntSushi/rust-csv
+Description: Bare bones CSV parsing with no_std support.
+
+ctor 0.2.9
+License: Apache-2.0 OR MIT
+Authors: Matt Mastracci <matthew@mastracci.com>
+Repository: https://github.com/mmastrac/rust-ctor
+Description: __attribute__((constructor)) for Rust
+
+darling 0.21.3
+License: MIT
+Authors: Ted Driggs <ted.driggs@outlook.com>
+Repository: https://github.com/TedDriggs/darling
+Description: A proc-macro library for reading attributes into structs when implementing custom derives.
+
+darling_core 0.21.3
+License: MIT
+Authors: Ted Driggs <ted.driggs@outlook.com>
+Repository: https://github.com/TedDriggs/darling
+Description: Helper crate for proc-macro library for reading attributes into structs when implementing custom derives. Use https://crates.io/crates/darling in your code.
+
+darling_macro 0.21.3
+License: MIT
+Authors: Ted Driggs <ted.driggs@outlook.com>
+Repository: https://github.com/TedDriggs/darling
+Description: Internal support for a proc-macro library for reading attributes into structs when implementing custom derives. Use https://crates.io/crates/darling in your code.
+
+dashmap 6.1.0
+License: MIT
+Authors: Acrimon <joel.wejdenstal@gmail.com>
+Repository: https://github.com/xacrimon/dashmap
+Description: Blazing fast concurrent HashMap for Rust.
+
+deranged 0.5.5
+License: Apache-2.0 OR MIT
+Authors: Jacob Pratt <jacob@jhpratt.dev>
+Repository: https://github.com/jhpratt/deranged
+Description: Ranged integers
+
+derive_arbitrary 1.4.2
+License: Apache-2.0 OR MIT
+Authors: The Rust-Fuzz Project Developers|Nick Fitzgerald <fitzgen@gmail.com>|Manish Goregaokar <manishsmail@gmail.com>|Andre Bogus <bogusandre@gmail.com>|Corey Farwell <coreyf@rwell.org>
+Repository: https://github.com/rust-fuzz/arbitrary
+Description: Derives arbitrary traits
+
+derive_more 0.99.20
+License: MIT
+Authors: Jelte Fennema <github-tech@jeltef.nl>
+Repository: https://github.com/JelteF/derive_more
+Description: Adds #[derive(x)] macros for more traits
+
+digest 0.10.7
+License: Apache-2.0 OR MIT
+Authors: RustCrypto Developers
+Repository: https://github.com/RustCrypto/traits
+Description: Traits for cryptographic hash functions and message authentication codes
+
+dirs 5.0.1
+License: Apache-2.0 OR MIT
+Authors: Simon Ochsenreither <simon@ochsenreither.de>
+Repository: https://github.com/soc/dirs-rs
+Description: A tiny low-level library that provides platform-specific standard locations of directories for config, cache and other data on Linux, Windows, macOS and Redox by leveraging the mechanisms defined by the XDG base/user directory specifications on Linux, the Known Folder API on Windows, and the Standard Directory guidelines on macOS.
+
+dirs 6.0.0
+License: Apache-2.0 OR MIT
+Authors: Simon Ochsenreither <simon@ochsenreither.de>
+Repository: https://github.com/soc/dirs-rs
+Description: A tiny low-level library that provides platform-specific standard locations of directories for config, cache and other data on Linux, Windows, macOS and Redox by leveraging the mechanisms defined by the XDG base/user directory specifications on Linux, the Known Folder API on Windows, and the Standard Directory guidelines on macOS.
+
+dirs-sys 0.4.1
+License: Apache-2.0 OR MIT
+Authors: Simon Ochsenreither <simon@ochsenreither.de>
+Repository: https://github.com/dirs-dev/dirs-sys-rs
+Description: System-level helper functions for the dirs and directories crates.
+
+dirs-sys 0.5.0
+License: Apache-2.0 OR MIT
+Authors: Simon Ochsenreither <simon@ochsenreither.de>
+Repository: https://github.com/dirs-dev/dirs-sys-rs
+Description: System-level helper functions for the dirs and directories crates.
+
+dispatch 0.2.0
+License: MIT
+Authors: Steven Sheldon
+Repository: http://github.com/SSheldon/rust-dispatch
+Description: Rust wrapper for Apple's Grand Central Dispatch.
+
+dispatch2 0.3.0
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Mads Marquart <mads@marquart.dk>|Mary <mary@mary.zone>
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings and wrappers for Apple's Grand Central Dispatch (GCD)
+
+displaydoc 0.2.5
+License: Apache-2.0 OR MIT
+Authors: Jane Lusby <jlusby@yaah.dev>
+Repository: https://github.com/yaahc/displaydoc
+Description: A derive macro for implementing the display Trait via a doc comment and string interpolation
+
+dlib 0.5.2
+License: MIT
+Authors: Elinor Berger <elinor@safaradeg.net>
+Repository: https://github.com/elinorbgr/dlib
+Description: Helper macros for handling manually loading optional system libraries.
+
+dlopen2 0.8.0
+License: UNKNOWN
+Authors: Szymon Wieloch <szymon.wieloch@gmail.com>|Ahmed Masud <ahmed.masud@saf.ai>|OpenByte <development.openbyte@gmail.com>
+Repository: https://github.com/OpenByteDev/dlopen2
+Description: Library for opening and operating on dynamic link libraries (also known as shared objects or shared libraries).
+
+dlopen2_derive 0.4.1
+License: UNKNOWN
+Authors: Szymon Wieloch <szymon.wieloch@gmail.com>|OpenByte <development.openbyte@gmail.com>
+Repository: https://github.com/OpenByteDev/dlopen2
+Description: Derive macros for the dlopen2 crate.
+
+downcast-rs 1.2.1
+License: Apache-2.0 OR MIT
+Authors: Ashish Myles <marcianx@gmail.com>|Runji Wang <wangrunji0408@163.com>
+Repository: https://github.com/marcianx/downcast-rs
+Description: Trait object downcasting support using only safe Rust. It supports type parameters, associated types, and type constraints.
+
+dpi 0.1.2
+License: Apache-2.0 AND MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-windowing/winit
+Description: Types for handling UI scaling
+
+dtoa 1.0.10
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/dtoa
+Description: Fast floating point primitive to string conversion
+
+dtoa-short 0.3.5
+License: MPL-2.0
+Authors: Xidorn Quan <me@upsuper.org>
+Repository: https://github.com/upsuper/dtoa-short
+Description: Serialize float number and truncate to certain precision
+
+duckdb 1.4.3
+License: MIT
+Authors: wangfenjin <wangfenj@gmail.com>
+Repository: https://github.com/duckdb/duckdb-rs
+Description: Ergonomic wrapper for DuckDB
+
+dunce 1.0.5
+License: Apache-2.0 OR CC0-1.0 OR MIT-0
+Authors: Kornel <kornel@geekhood.net>
+Repository: https://gitlab.com/kornelski/dunce
+Description: Normalize Windows paths to the most compatible format, avoiding UNC where possible
+
+dyn-clone 1.0.20
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/dyn-clone
+Description: Clone trait that is dyn-compatible
+
+easycris 0.1.0
+License: UNKNOWN
+Authors: you
+Repository: UNKNOWN
+Description: A Tauri App
+
+either 1.15.0
+License: Apache-2.0 OR MIT
+Authors: bluss
+Repository: https://github.com/rayon-rs/either
+Description: The enum `Either` with variants `Left` and `Right` is a general purpose sum type with two cases.
+
+embed-resource 3.0.6
+License: MIT
+Authors: наб <nabijaczleweli@nabijaczleweli.xyz>|Cat Plus Plus <piotrlegnica@piotrl.pl>|Liigo <liigo@qq.com>|azyobuzin <azyobuzin@users.sourceforge.jp>|Peter Atashian <retep998@gmail.com>|pravic <ehysta@gmail.com>|Gabriel Majeri <gabriel.majeri6@gmail.com>|SonnyX|Johan Andersson <repi@repi.se>|Jordan Poles <jpdev.noreply@gmail.com>|MSxDOS <melcodos@gmail.com>|Jim McGrath <jimmc2@gmail.com>|roblabla <unfiltered@roblab.la>|Jasper Bekkers <jasper@traverseresearch.nl>|Richard Markiewicz <rmarkiewicz@devolutions.net>|Emerson de Freitas Barcelos <emersonfxbx@gmail.com>|Li Keqing <me@kaze.ai>|Alexis Bourget <alexis.bourget@gmail.com>|Michael Farrell <micolous+git@gmail.com>|Jacob Okamoto <oko@oko.io>|Marijn Suijten <marijn@traverseresearch.nl>|Lucas Nogueira <lucas@tauri.app>|CharlesChen0823 <yongchen0823@gmail.com>|Daniel Schaefer <dhs@frame.work>|Rene Leonhardt|ssrlive
+Repository: https://github.com/nabijaczleweli/rust-embed-resource
+Description: A Cargo library to handle compilation and inclusion of Windows resources in the most resilient fashion imaginable
+
+embed_plist 1.2.2
+License: Apache-2.0 OR MIT
+Authors: Nikolai Vazquez <hello@nikolaivazquez.com>
+Repository: https://github.com/nvzqz/embed-plist-rs
+Description: Embed property list files like Info.plist directly in your executable binary.
+
+encoding_rs 0.8.35
+License: (Apache-2.0 OR MIT) AND BSD-3-Clause
+Authors: Henri Sivonen <hsivonen@hsivonen.fi>
+Repository: https://github.com/hsivonen/encoding_rs
+Description: A Gecko-oriented implementation of the Encoding Standard
+
+endi 1.1.0
+License: MIT
+Authors: Zeeshan Ali Khan <zeenix@gmail.com>
+Repository: https://github.com/zeenix/endi
+Description: A simple endian-handling library
+
+enumflags2 0.7.12
+License: Apache-2.0 OR MIT
+Authors: maik klein <maikklein@googlemail.com>|Maja Kądziołka <maya@compilercrim.es>
+Repository: https://github.com/meithecatte/enumflags2
+Description: Enum-based bit flags
+
+enumflags2_derive 0.7.12
+License: Apache-2.0 OR MIT
+Authors: maik klein <maikklein@googlemail.com>|Maja Kądziołka <maya@compilercrim.es>
+Repository: https://github.com/meithecatte/enumflags2
+Description: Do not use directly, use the reexport in the `enumflags2` crate. This allows for better compatibility across versions.
+
+env_filter 0.1.4
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-cli/env_logger
+Description: Filter log events using environment variables
+
+equivalent 1.0.2
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/indexmap-rs/equivalent
+Description: Traits for key comparison in maps.
+
+erased-serde 0.4.8
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/erased-serde
+Description: Type-erased Serialize and Serializer traits
+
+errno 0.3.14
+License: Apache-2.0 OR MIT
+Authors: Chris Wong <lambda.fairy@gmail.com>|Dan Gohman <dev@sunfishcode.online>
+Repository: https://github.com/lambda-fairy/rust-errno
+Description: Cross-platform interface to the `errno` variable.
+
+error-code 3.3.2
+License: BSL-1.0
+Authors: Douman <douman@gmx.se>
+Repository: https://github.com/DoumanAsh/error-code
+Description: Error code
+
+ethnum 1.5.2
+License: Apache-2.0 OR MIT
+Authors: Nicholas Rodrigues Lordello <nlordell@gmail.com>
+Repository: https://github.com/nlordell/ethnum-rs
+Description: 256-bit integer implementation
+
+event-listener 5.4.1
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|John Nunley <dev@notgull.net>
+Repository: https://github.com/smol-rs/event-listener
+Description: Notify async tasks or threads
+
+event-listener-strategy 0.5.4
+License: Apache-2.0 OR MIT
+Authors: John Nunley <dev@notgull.net>
+Repository: https://github.com/smol-rs/event-listener-strategy
+Description: Block or poll on event_listener easily
+
+fallible-iterator 0.3.0
+License: Apache-2.0 OR MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-fallible-iterator
+Description: Fallible iterator traits
+
+fallible-streaming-iterator 0.1.9
+License: Apache-2.0 OR MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/fallible-streaming-iterator
+Description: Fallible streaming iteration
+
+fastrand 2.3.0
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>
+Repository: https://github.com/smol-rs/fastrand
+Description: A simple and fast random number generator
+
+fax 0.2.6
+License: MIT
+Authors: Sebastian K <s3bk@protonmail.com>
+Repository: https://github.com/pdf-rs/fax
+Description: Decoder and Encoder for CCITT Group 3 and 4 bi-level image encodings used by fax machines TIFF and PDF.
+
+fax_derive 0.2.0
+License: MIT
+Authors: Sebastian K <s3bk@protonmail.com>
+Repository: https://github.com/pdf-rs/fax
+Description: Bitstream matcher for the fax crate
+
+fdeflate 0.3.7
+License: Apache-2.0 OR MIT
+Authors: The image-rs Developers
+Repository: https://github.com/image-rs/fdeflate
+Description: Fast specialized deflate implementation
+
+fern 0.7.1
+License: MIT
+Authors: David Ross <daboross@daboross.net>
+Repository: https://github.com/daboross/fern
+Description: Simple, efficient logging
+
+field-offset 0.3.6
+License: Apache-2.0 OR MIT
+Authors: Diggory Blake <diggsey@googlemail.com>
+Repository: https://github.com/Diggsey/rust-field-offset
+Description: Safe pointer-to-member implementation
+
+filetime 0.2.26
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/alexcrichton/filetime
+Description: Platform-agnostic accessors of timestamps in File metadata
+
+find-msvc-tools 0.1.4
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/cc-rs
+Description: Find windows-specific tools, read MSVC versions from the registry and from COM interfaces
+
+fixedbitset 0.4.2
+License: Apache-2.0 OR MIT
+Authors: bluss
+Repository: https://github.com/petgraph/fixedbitset
+Description: FixedBitSet is a simple bitset collection
+
+flatbuffers 25.12.19
+License: Apache-2.0
+Authors: Robert Winslow <hello@rwinslow.com>|FlatBuffers Maintainers
+Repository: https://github.com/google/flatbuffers
+Description: Official FlatBuffers Rust runtime library.
+
+flate2 1.1.5
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>|Josh Triplett <josh@joshtriplett.org>
+Repository: https://github.com/rust-lang/flate2-rs
+Description: DEFLATE compression and decompression exposed as Read/BufRead/Write streams. Supports miniz_oxide and multiple zlib implementations. Supports zlib, gzip, and raw deflate streams.
+
+fnv 1.0.7
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/servo/rust-fnv
+Description: Fowler–Noll–Vo hash function
+
+foldhash 0.1.5
+License: Zlib
+Authors: Orson Peters <orsonpeters@gmail.com>
+Repository: https://github.com/orlp/foldhash
+Description: A fast, non-cryptographic, minimally DoS-resistant hashing algorithm.
+
+foreign-types 0.5.0
+License: Apache-2.0 OR MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/foreign-types
+Description: A framework for Rust wrappers over C APIs
+
+foreign-types-macros 0.2.3
+License: Apache-2.0 OR MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/foreign-types
+Description: An internal crate used by foreign-types
+
+foreign-types-shared 0.3.1
+License: Apache-2.0 OR MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/foreign-types
+Description: An internal crate used by foreign-types
+
+foreign_vec 0.1.0
+License: MIT
+Authors: Jorge C. Leitao <jorgecarleitao@gmail.com>
+Repository: https://github.com/DataEngineeringLabs/foreign_vec
+Description: Unofficial implementation of Apache Arrow spec in safe Rust
+
+form_urlencoded 1.2.2
+License: Apache-2.0 OR MIT
+Authors: The rust-url developers
+Repository: https://github.com/servo/rust-url
+Description: Parser and serializer for the application/x-www-form-urlencoded syntax, as used by HTML forms.
+
+formualizer-common 1.1.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/psu3d0/formualizer
+Description: Core value, reference, and error types shared across the Formualizer parser and engine
+
+formualizer-eval 0.4.3
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/psu3d0/formualizer
+Description: High-performance Arrow-backed Excel formula engine with dependency graph and incremental recalculation
+
+formualizer-macros 0.4.3
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/psu3d0/formualizer
+Description: Proc macros for authoring Formualizer built-ins (caps, schemas, and validation)
+
+formualizer-parse 1.1.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/psu3d0/formualizer
+Description: High-performance Excel/OpenFormula tokenizer + parser with a stable AST surface
+
+funty 2.0.0
+License: MIT
+Authors: myrrlyn <self@myrrlyn.dev>
+Repository: https://github.com/myrrlyn/funty
+Description: Trait generalization over the primitive types
+
+futf 0.1.5
+License: Apache-2.0 OR MIT
+Authors: Keegan McAllister <kmcallister@mozilla.com>
+Repository: https://github.com/servo/futf
+Description: Handling fragments of UTF-8
+
+futures-channel 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: Channels for asynchronous communication using futures-rs.
+
+futures-core 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: The core traits and types in for the `futures` library.
+
+futures-executor 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: Executors for asynchronous tasks based on the futures-rs library.
+
+futures-io 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: The `AsyncRead`, `AsyncWrite`, `AsyncSeek`, and `AsyncBufRead` traits for the futures-rs library.
+
+futures-lite 2.6.1
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|Contributors to futures-rs
+Repository: https://github.com/smol-rs/futures-lite
+Description: Futures, streams, and async I/O combinators
+
+futures-macro 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: The futures-rs procedural macro implementations.
+
+futures-sink 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: The asynchronous `Sink` trait for the futures-rs library.
+
+futures-task 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: Tools for working with tasks.
+
+futures-util 0.3.31
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-lang/futures-rs
+Description: Common utilities and extension traits for the futures-rs library.
+
+fxhash 0.2.1
+License: Apache-2.0 OR MIT
+Authors: cbreeden <github@u.breeden.cc>
+Repository: https://github.com/cbreeden/fxhash
+Description: A fast, non-secure, hashing algorithm derived from an internal hasher used in FireFox and Rustc.
+
+gdk 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED Rust bindings for the GDK 3 library (use gdk4 instead)
+
+gdk-pixbuf 0.18.5
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: Rust bindings for the GdkPixbuf library
+
+gdk-pixbuf-sys 0.18.0
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: FFI bindings to libgdk_pixbuf-2.0
+
+gdk-sys 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED FFI bindings to libgdk-3 (use gdk4-sys instead)
+
+gdkwayland-sys 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED FFI bindings to libgdk-3-wayland (use gdk4-wayland-sys instead)
+
+gdkx11 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED Rust bindings for the GDK X11 library (use gdk4-x11 instead)
+
+gdkx11-sys 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED FFI binding for libgdkx11 (use gdk4-x11-sys instead)
+
+generic-array 0.14.9
+License: MIT
+Authors: Bartłomiej Kamiński <fizyk20@gmail.com>|Aaron Trent <novacrazy@gmail.com>
+Repository: https://github.com/fizyk20/generic-array.git
+Description: Generic types implementing functionality of arrays
+
+gethostname 1.1.0
+License: Apache-2.0
+Authors: Sebastian Wiesner <sebastian@swsnr.de>
+Repository: https://codeberg.org/swsnr/gethostname.rs.git
+Description: gethostname for all platforms
+
+getrandom 0.1.16
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers
+Repository: https://github.com/rust-random/getrandom
+Description: A small cross-platform library for retrieving random data from system source
+
+getrandom 0.2.16
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers
+Repository: https://github.com/rust-random/getrandom
+Description: A small cross-platform library for retrieving random data from system source
+
+getrandom 0.3.4
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers
+Repository: https://github.com/rust-random/getrandom
+Description: A small cross-platform library for retrieving random data from system source
+
+gio 0.18.4
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: Rust bindings for the Gio library
+
+gio-sys 0.18.1
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: FFI bindings to libgio-2.0
+
+glib 0.18.5
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: Rust bindings for the GLib library
+
+glib-macros 0.18.5
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: Rust bindings for the GLib library, proc macros crate
+
+glib-sys 0.18.1
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: FFI bindings to libglib-2.0
+
+glob 0.3.3
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-lang/glob
+Description: Support for matching file paths against Unix shell style patterns.
+
+gobject-sys 0.18.0
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: FFI bindings to libgobject-2.0
+
+gtk 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED Rust bindings for the GTK+ 3 library (use gtk4 instead)
+
+gtk-sys 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED FFI bindings to libgtk-3 (use gtk4-sys instead)
+
+gtk3-macros 0.18.2
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk3-rs
+Description: UNMAINTAINED Rust bindings for the GTK 3 library (use gtk4-macros instead)
+
+half 2.7.1
+License: Apache-2.0 OR MIT
+Authors: Kathryn Long <squeeself@gmail.com>
+Repository: https://github.com/VoidStarKat/half-rs
+Description: Half-precision floating point f16 and bf16 types for Rust implementing the IEEE 754-2008 standard binary16 and bfloat16 types.
+
+hash_hasher 2.0.4
+License: Apache-2.0 OR MIT
+Authors: Fraser Hutchison <fraser@astria.org>
+Repository: https://github.com/Fraser999/Hash-Hasher.git
+Description: A hasher which is designed to work with already-hashed or hash-like data.
+
+hashbrown 0.12.3
+License: Apache-2.0 OR MIT
+Authors: Amanieu d'Antras <amanieu@gmail.com>
+Repository: https://github.com/rust-lang/hashbrown
+Description: A Rust port of Google's SwissTable hash map
+
+hashbrown 0.14.5
+License: Apache-2.0 OR MIT
+Authors: Amanieu d'Antras <amanieu@gmail.com>
+Repository: https://github.com/rust-lang/hashbrown
+Description: A Rust port of Google's SwissTable hash map
+
+hashbrown 0.15.5
+License: Apache-2.0 OR MIT
+Authors: Amanieu d'Antras <amanieu@gmail.com>
+Repository: https://github.com/rust-lang/hashbrown
+Description: A Rust port of Google's SwissTable hash map
+
+hashbrown 0.16.0
+License: Apache-2.0 OR MIT
+Authors: Amanieu d'Antras <amanieu@gmail.com>
+Repository: https://github.com/rust-lang/hashbrown
+Description: A Rust port of Google's SwissTable hash map
+
+hashlink 0.10.0
+License: Apache-2.0 OR MIT
+Authors: kyren <kerriganw@gmail.com>
+Repository: https://github.com/kyren/hashlink
+Description: HashMap-like containers that hold their key-value pairs in a user controllable order
+
+heck 0.4.1
+License: Apache-2.0 OR MIT
+Authors: Without Boats <woboats@gmail.com>
+Repository: https://github.com/withoutboats/heck
+Description: heck is a case conversion library.
+
+heck 0.5.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/withoutboats/heck
+Description: heck is a case conversion library.
+
+hermit-abi 0.5.2
+License: Apache-2.0 OR MIT
+Authors: Stefan Lankes
+Repository: https://github.com/hermit-os/hermit-rs
+Description: Hermit system calls definitions.
+
+hex 0.4.3
+License: Apache-2.0 OR MIT
+Authors: KokaKiwi <kokakiwi@kokakiwi.net>
+Repository: https://github.com/KokaKiwi/rust-hex
+Description: Encoding and decoding data into/from hexadecimal representation.
+
+html5ever 0.29.1
+License: Apache-2.0 OR MIT
+Authors: The html5ever Project Developers
+Repository: https://github.com/servo/html5ever
+Description: High-performance browser-grade HTML5 parser
+
+http 1.3.1
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>|Carl Lerche <me@carllerche.com>|Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/hyperium/http
+Description: A set of types for representing HTTP requests and responses.
+
+http-body 1.0.1
+License: MIT
+Authors: Carl Lerche <me@carllerche.com>|Lucio Franco <luciofranco14@gmail.com>|Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/hyperium/http-body
+Description: Trait representing an asynchronous, streaming, HTTP request or response body.
+
+http-body-util 0.1.3
+License: MIT
+Authors: Carl Lerche <me@carllerche.com>|Lucio Franco <luciofranco14@gmail.com>|Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/hyperium/http-body
+Description: Combinators and adapters for HTTP request or response bodies.
+
+httparse 1.10.1
+License: Apache-2.0 OR MIT
+Authors: Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/seanmonstar/httparse
+Description: A tiny, safe, speedy, zero-copy HTTP/1.x parser.
+
+hyper 1.7.0
+License: MIT
+Authors: Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/hyperium/hyper
+Description: A protective and efficient HTTP library for all.
+
+hyper-rustls 0.27.7
+License: Apache-2.0 OR ISC OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rustls/hyper-rustls
+Description: Rustls+hyper integration for pure rust HTTPS
+
+hyper-util 0.1.17
+License: MIT
+Authors: Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/hyperium/hyper-util
+Description: hyper utilities
+
+iana-time-zone 0.1.64
+License: Apache-2.0 OR MIT
+Authors: Andrew Straw <strawman@astraw.com>|René Kijewski <rene.kijewski@fu-berlin.de>|Ryan Lopopolo <rjl@hyperbo.la>
+Repository: https://github.com/strawlab/iana-time-zone
+Description: get the IANA time zone for the current system
+
+iana-time-zone-haiku 0.1.2
+License: Apache-2.0 OR MIT
+Authors: René Kijewski <crates.io@k6i.de>
+Repository: https://github.com/strawlab/iana-time-zone
+Description: iana-time-zone support crate for Haiku OS
+
+ico 0.4.0
+License: MIT
+Authors: Matthew D. Steele <mdsteele@alum.mit.edu>
+Repository: https://github.com/mdsteele/rust-ico
+Description: A library for encoding/decoding ICO image files
+
+icu_collections 2.1.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: Collection of API for use in ICU libraries.
+
+icu_locale_core 2.1.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: API for managing Unicode Language and Locale Identifiers
+
+icu_normalizer 2.1.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: API for normalizing text into Unicode Normalization Forms
+
+icu_normalizer_data 2.1.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: Data for the icu_normalizer crate
+
+icu_properties 2.1.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: Definitions for Unicode properties
+
+icu_properties_data 2.1.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: Data for the icu_properties crate
+
+icu_provider 2.1.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: Trait and struct definitions for the ICU data provider
+
+ident_case 1.0.1
+License: Apache-2.0 OR MIT
+Authors: Ted Driggs <ted.driggs@outlook.com>
+Repository: https://github.com/TedDriggs/ident_case
+Description: Utility for applying case rules to Rust identifiers.
+
+idna 1.1.0
+License: Apache-2.0 OR MIT
+Authors: The rust-url developers
+Repository: https://github.com/servo/rust-url/
+Description: IDNA (Internationalizing Domain Names in Applications) and Punycode.
+
+idna_adapter 1.2.1
+License: Apache-2.0 OR MIT
+Authors: The rust-url developers
+Repository: https://github.com/hsivonen/idna_adapter
+Description: Back end adapter for idna
+
+image 0.25.8
+License: Apache-2.0 OR MIT
+Authors: The image-rs Developers
+Repository: https://github.com/image-rs/image
+Description: Imaging library. Provides basic image processing and encoders/decoders for common image formats.
+
+indexmap 1.9.3
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/bluss/indexmap
+Description: A hash table with consistent order and fast iteration.
+
+indexmap 2.12.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/indexmap-rs/indexmap
+Description: A hash table with consistent order and fast iteration.
+
+infer 0.19.0
+License: MIT
+Authors: Bojan <dbojan@gmail.com>
+Repository: https://github.com/bojand/infer
+Description: Small crate to infer file type based on magic number signatures
+
+ipnet 2.11.0
+License: Apache-2.0 OR MIT
+Authors: Kris Price <kris@krisprice.nz>
+Repository: https://github.com/krisprice/ipnet
+Description: Provides types and useful methods for working with IPv4 and IPv6 network addresses, commonly called IP prefixes. The new `IpNet`, `Ipv4Net`, and `Ipv6Net` types build on the existing `IpAddr`, `Ipv4Addr`, and `Ipv6Addr` types already provided in Rust's standard library and align to their design to stay consistent. The module also provides useful traits that extend `Ipv4Addr` and `Ipv6Addr` with methods for `Add`, `Sub`, `BitAnd`, and `BitOr` operations. The module only uses stable feature so it is guaranteed to compile using the stable toolchain.
+
+iri-string 0.7.9
+License: Apache-2.0 OR MIT
+Authors: YOSHIOKA Takuma <nop_thread@nops.red>
+Repository: https://github.com/lo48576/iri-string
+Description: IRI as string types
+
+is-docker 0.2.0
+License: MIT
+Authors: Sean Larkin <TheLarkInn@users.noreply.github.com>
+Repository: https://github.com/TheLarkInn/is-docker
+Description: Checks if the process is running inside a Docker container.
+
+is-wsl 0.4.0
+License: MIT
+Authors: Sean Larkin <TheLarkInn@users.noreply.github.com>
+Repository: https://github.com/TheLarkInn/is-wsl
+Description: Checks if the process is running inside Windows Subsystem for Linux.
+
+itoa 1.0.15
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/itoa
+Description: Fast integer primitive to string conversion
+
+javascriptcore-rs 1.1.2
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/tauri-apps/javascriptcore-rs
+Description: Rust bindings for the javacriptcore library
+
+javascriptcore-rs-sys 1.1.1
+License: MIT
+Authors: The Gtk-rs Project Developers
+Repository: https://github.com/tauri-apps/javascriptcore-rs
+Description: Sys functions for the Rust bindings of the javacriptcore library
+
+jni 0.21.1
+License: Apache-2.0 OR MIT
+Authors: Josh Chase <josh@prevoty.com>
+Repository: https://github.com/jni-rs/jni-rs
+Description: Rust bindings to the JNI
+
+jni-sys 0.3.0
+License: Apache-2.0 OR MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-jni-sys
+Description: Rust definitions corresponding to jni.h
+
+jobserver 0.1.34
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/rust-lang/jobserver-rs
+Description: An implementation of the GNU Make jobserver for Rust.
+
+js-sys 0.3.82
+License: Apache-2.0 OR MIT
+Authors: The wasm-bindgen Developers
+Repository: https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/js-sys
+Description: Bindings for all JS global objects and functions in all JS environments like Node.js and browsers, built on `#[wasm_bindgen]` using the `wasm-bindgen` crate.
+
+json-patch 3.0.1
+License: Apache-2.0 OR MIT
+Authors: Ivan Dubrov <dubrov.ivan@gmail.com>
+Repository: https://github.com/idubrov/json-patch
+Description: RFC 6902, JavaScript Object Notation (JSON) Patch
+
+jsonptr 0.6.3
+License: Apache-2.0 OR MIT
+Authors: chance dinkins|André Sá de Mello <codasm@pm.me>
+Repository: https://github.com/chanced/jsonptr
+Description: Data structures and logic for resolving, assigning, and deleting by JSON Pointers (RFC 6901)
+
+keyboard-types 0.7.0
+License: Apache-2.0 OR MIT
+Authors: Pyfisch <pyfisch@posteo.org>
+Repository: https://github.com/pyfisch/keyboard-types
+Description: Contains types to define keyboard related events.
+
+kuchikiki 0.8.8-speedreader
+License: MIT
+Authors: Brave Authors|Ralph Giles <rgiles@brave.com>|Simon Sapin <simon.sapin@exyr.org>
+Repository: https://github.com/brave/kuchikiki
+Description: (口利き) HTML tree manipulation library
+
+lazy_static 1.5.0
+License: Apache-2.0 OR MIT
+Authors: Marvin Löbel <loebel.marvin@gmail.com>
+Repository: https://github.com/rust-lang-nursery/lazy-static.rs
+Description: A macro for declaring lazily evaluated statics in Rust.
+
+lexical-core 0.8.5
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Lexical, to- and from-string conversion routines.
+
+lexical-core 1.0.6
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Lexical, to- and from-string conversion routines.
+
+lexical-parse-float 0.8.5
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient parsing of floats from strings.
+
+lexical-parse-float 1.0.6
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient parsing of floats from strings.
+
+lexical-parse-integer 0.8.6
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient parsing of integers from strings.
+
+lexical-parse-integer 1.0.6
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient parsing of integers from strings.
+
+lexical-util 0.8.5
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Shared utilities for lexical creates.
+
+lexical-util 1.0.7
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Shared utilities for lexical creates.
+
+lexical-write-float 0.8.5
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient formatting of floats to strings.
+
+lexical-write-float 1.0.6
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient formatting of floats to strings.
+
+lexical-write-integer 0.8.5
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient formatting of integers to strings.
+
+lexical-write-integer 1.0.6
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/rust-lexical
+Description: Efficient formatting of integers to strings.
+
+libappindicator 0.9.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: UNKNOWN
+Description: Rust safe bindings for libappindicator
+
+libappindicator-sys 0.9.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: UNKNOWN
+Description: Rust sys bindings for libappindicator
+
+libc 0.2.177
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-lang/libc
+Description: Raw FFI bindings to platform libraries like libc.
+
+libduckdb-sys 1.4.3
+License: MIT
+Authors: wangfenjin <wangfenj@gmail.com>
+Repository: https://github.com/duckdb/duckdb-rs
+Description: Native bindings to the libduckdb library, C API
+
+libloading 0.7.4
+License: ISC
+Authors: Simonas Kazlauskas <libloading@kazlauskas.me>
+Repository: https://github.com/nagisa/rust_libloading/
+Description: Bindings around the platform's dynamic library loading primitives with greatly improved memory safety.
+
+libloading 0.8.9
+License: ISC
+Authors: Simonas Kazlauskas <libloading@kazlauskas.me>
+Repository: https://github.com/nagisa/rust_libloading/
+Description: Bindings around the platform's dynamic library loading primitives with greatly improved memory safety.
+
+libm 0.2.15
+License: MIT
+Authors: Jorge Aparicio <jorge@japaric.io>
+Repository: https://github.com/rust-lang/compiler-builtins
+Description: libm in pure Rust
+
+libredox 0.1.10
+License: MIT
+Authors: 4lDO2 <4lDO2@protonmail.com>
+Repository: https://gitlab.redox-os.org/redox-os/libredox.git
+Description: Redox stable ABI
+
+libz-rs-sys 0.5.4
+License: Zlib
+Authors: UNKNOWN
+Repository: https://github.com/trifectatechfoundation/zlib-rs
+Description: A memory-safe zlib implementation written in rust
+
+linux-raw-sys 0.11.0
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: Dan Gohman <dev@sunfishcode.online>
+Repository: https://github.com/sunfishcode/linux-raw-sys
+Description: Generated bindings for Linux's userspace API
+
+linux-raw-sys 0.4.15
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: Dan Gohman <dev@sunfishcode.online>
+Repository: https://github.com/sunfishcode/linux-raw-sys
+Description: Generated bindings for Linux's userspace API
+
+litemap 0.8.1
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: A key-value Map implementation based on a flat, sorted Vec.
+
+lock_api 0.4.14
+License: Apache-2.0 OR MIT
+Authors: Amanieu d'Antras <amanieu@gmail.com>
+Repository: https://github.com/Amanieu/parking_lot
+Description: Wrappers to create fully-featured Mutex and RwLock types. Compatible with no_std.
+
+log 0.4.28
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-lang/log
+Description: A lightweight logging facade for Rust
+
+lru-slab 0.1.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Benjamin Saunders <ben.e.saunders@gmail.com>
+Repository: https://github.com/Ralith/lru-slab
+Description: Pre-allocated storage with constant-time LRU tracking
+
+mac 0.1.1
+License: Apache-2.0 OR MIT
+Authors: Jonathan Reem <jonathan.reem@gmail.com>
+Repository: https://github.com/reem/rust-mac.git
+Description: A collection of great and ubiqutitous macros.
+
+mac-notification-sys 0.6.8
+License: Apache-2.0 OR MIT
+Authors: Felix Döring <development@felixdoering.com>|Hendrik Sollich <hendrik@hoodie.de>
+Repository: https://github.com/h4llow3En/mac-notification-sys
+Description: Thin wrapper around macOS Notifications.
+
+markup5ever 0.14.1
+License: Apache-2.0 OR MIT
+Authors: The html5ever Project Developers
+Repository: https://github.com/servo/html5ever
+Description: Common code for xml5ever and html5ever
+
+match_token 0.1.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/servo/html5ever
+Description: Procedural macro for html5ever.
+
+matches 0.1.10
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/SimonSapin/rust-std-candidates
+Description: A macro to evaluate, as a boolean, whether an expression matches a pattern.
+
+memchr 2.7.6
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>|bluss
+Repository: https://github.com/BurntSushi/memchr
+Description: Provides extremely fast (uses SIMD on x86_64, aarch64 and wasm32) routines for 1, 2 or 3 byte search and single substring search.
+
+memoffset 0.9.1
+License: MIT
+Authors: Gilad Naaman <gilad.naaman@gmail.com>
+Repository: https://github.com/Gilnaa/memoffset
+Description: offset_of functionality for Rust structs.
+
+mime 0.3.17
+License: Apache-2.0 OR MIT
+Authors: Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/hyperium/mime
+Description: Strongly Typed Mimes
+
+minimal-lexical 0.2.1
+License: Apache-2.0 OR MIT
+Authors: Alex Huszagh <ahuszagh@gmail.com>
+Repository: https://github.com/Alexhuszagh/minimal-lexical
+Description: Fast float parsing conversion routines.
+
+minisign-verify 0.2.4
+License: MIT
+Authors: Frank Denis <github@pureftpd.org>
+Repository: https://github.com/jedisct1/rust-minisign-verify
+Description: A small, zero-dependencies crate to verify Minisign signatures.
+
+miniz_oxide 0.8.9
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Frommi <daniil.liferenko@gmail.com>|oyvindln <oyvindln@users.noreply.github.com>|Rich Geldreich richgel99@gmail.com
+Repository: https://github.com/Frommi/miniz_oxide/tree/master/miniz_oxide
+Description: DEFLATE compression and decompression library rewritten in Rust based on miniz
+
+mio 1.1.0
+License: MIT
+Authors: Carl Lerche <me@carllerche.com>|Thomas de Zeeuw <thomasdezeeuw@gmail.com>|Tokio Contributors <team@tokio.rs>
+Repository: https://github.com/tokio-rs/mio
+Description: Lightweight non-blocking I/O.
+
+moka 0.12.12
+License: (Apache-2.0 OR MIT) AND Apache-2.0
+Authors: UNKNOWN
+Repository: https://github.com/moka-rs/moka
+Description: A fast and concurrent cache library inspired by Java Caffeine
+
+moxcms 0.7.9
+License: Apache-2.0 OR BSD-3-Clause
+Authors: Radzivon Bartoshyk
+Repository: https://github.com/awxkee/moxcms.git
+Description: Simple Color Management in Rust
+
+muda 0.17.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/amrbashir/muda
+Description: Menu Utilities for Desktop Applications
+
+ndk 0.9.0
+License: Apache-2.0 OR MIT
+Authors: The Rust Mobile contributors
+Repository: https://github.com/rust-mobile/ndk
+Description: Safe Rust bindings to the Android NDK
+
+ndk-context 0.1.1
+License: Apache-2.0 OR MIT
+Authors: The Rust Windowing contributors
+Repository: https://github.com/rust-windowing/android-ndk-rs
+Description: Handles for accessing Android APIs
+
+ndk-sys 0.6.0+11769913
+License: Apache-2.0 OR MIT
+Authors: The Rust Windowing contributors
+Repository: https://github.com/rust-mobile/ndk
+Description: FFI bindings for the Android NDK
+
+new_debug_unreachable 1.0.6
+License: MIT
+Authors: Matt Brubeck <mbrubeck@limpet.net>|Jonathan Reem <jonathan.reem@gmail.com>
+Repository: https://github.com/mbrubeck/rust-debug-unreachable
+Description: panic in debug, intrinsics::unreachable() in release (fork of debug_unreachable)
+
+nix 0.30.1
+License: MIT
+Authors: The nix-rust Project Developers
+Repository: https://github.com/nix-rust/nix
+Description: Rust friendly bindings to *nix APIs
+
+nodrop 0.1.14
+License: Apache-2.0 OR MIT
+Authors: bluss
+Repository: https://github.com/bluss/arrayvec
+Description: A wrapper type to inhibit drop (destructor).  ***Deprecated: Use ManuallyDrop or MaybeUninit instead!***
+
+nom 7.1.3
+License: MIT
+Authors: contact@geoffroycouprie.com
+Repository: https://github.com/Geal/nom
+Description: A byte-oriented, zero-copy, parser combinators library
+
+notify-rust 4.11.7
+License: Apache-2.0 OR MIT
+Authors: Hendrik Sollich <hendrik@hoodie.de>
+Repository: https://github.com/hoodie/notify-rust
+Description: Show desktop notifications (linux, bsd, mac). Pure Rust dbus client and server.
+
+num 0.4.3
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-num/num
+Description: A collection of numeric types and traits for Rust, including bigint, complex, rational, range iterators, generic integers, and more!
+
+num-bigint 0.4.6
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-num/num-bigint
+Description: Big integer implementation for Rust
+
+num-complex 0.4.6
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-num/num-complex
+Description: Complex numbers implementation for Rust
+
+num-conv 0.1.0
+License: Apache-2.0 OR MIT
+Authors: Jacob Pratt <jacob@jhpratt.dev>
+Repository: https://github.com/jhpratt/num-conv
+Description: `num_conv` is a crate to convert between integer types without using `as` casts. This provides better certainty when refactoring, makes the exact behavior of code more explicit, and allows using turbofish syntax.
+
+num-integer 0.1.46
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-num/num-integer
+Description: Integer traits and functions
+
+num-iter 0.1.45
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-num/num-iter
+Description: External iterators for generic mathematics
+
+num-rational 0.4.2
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-num/num-rational
+Description: Rational numbers implementation for Rust
+
+num-traits 0.2.19
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-num/num-traits
+Description: Numeric traits for generic mathematics
+
+num_enum 0.7.5
+License: Apache-2.0 OR BSD-3-Clause OR MIT
+Authors: Daniel Wagner-Hall <dawagner@gmail.com>|Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>|Vincent Esche <regexident@gmail.com>
+Repository: https://github.com/illicitonion/num_enum
+Description: Procedural macros to make inter-operation between primitives and enums easier.
+
+num_enum_derive 0.7.5
+License: Apache-2.0 OR BSD-3-Clause OR MIT
+Authors: Daniel Wagner-Hall <dawagner@gmail.com>|Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>|Vincent Esche <regexident@gmail.com>
+Repository: https://github.com/illicitonion/num_enum
+Description: Internal implementation details for ::num_enum (Procedural macros to make inter-operation between primitives and enums easier)
+
+num_threads 0.1.7
+License: Apache-2.0 OR MIT
+Authors: Jacob Pratt <open-source@jhpratt.dev>
+Repository: https://github.com/jhpratt/num_threads
+Description: A minimal library that determines the number of running threads for the current process.
+
+objc-sys 0.3.5
+License: MIT
+Authors: Mads Marquart <mads@marquart.dk>
+Repository: https://github.com/madsmtm/objc2
+Description: Raw bindings to the Objective-C runtime and ABI
+
+objc2 0.5.2
+License: MIT
+Authors: Steven Sheldon|Mads Marquart <mads@marquart.dk>
+Repository: https://github.com/madsmtm/objc2
+Description: Objective-C interface and runtime bindings
+
+objc2 0.6.3
+License: MIT
+Authors: Mads Marquart <mads@marquart.dk>
+Repository: https://github.com/madsmtm/objc2
+Description: Objective-C interface and runtime bindings
+
+objc2-app-kit 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the AppKit framework
+
+objc2-cloud-kit 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the CloudKit framework
+
+objc2-core-data 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the CoreData framework
+
+objc2-core-foundation 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the CoreFoundation framework
+
+objc2-core-graphics 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the CoreGraphics framework
+
+objc2-core-image 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the CoreImage framework
+
+objc2-core-text 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the CoreText framework
+
+objc2-core-video 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the CoreVideo framework
+
+objc2-encode 4.1.0
+License: MIT
+Authors: Mads Marquart <mads@marquart.dk>
+Repository: https://github.com/madsmtm/objc2
+Description: Objective-C type-encoding representation and parsing
+
+objc2-exception-helper 0.1.1
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Mads Marquart <mads@marquart.dk>
+Repository: https://github.com/madsmtm/objc2
+Description: External helper function for catching Objective-C exceptions
+
+objc2-foundation 0.2.2
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the Foundation framework
+
+objc2-foundation 0.3.2
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the Foundation framework
+
+objc2-io-surface 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the IOSurface framework
+
+objc2-javascript-core 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the JavaScriptCore framework
+
+objc2-metal 0.2.2
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the Metal framework
+
+objc2-osa-kit 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the OSAKit framework
+
+objc2-quartz-core 0.2.2
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the QuartzCore/CoreAnimation framework
+
+objc2-quartz-core 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the QuartzCore/CoreAnimation framework
+
+objc2-security 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the Security framework
+
+objc2-ui-kit 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the UIKit framework
+
+objc2-web-kit 0.3.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: https://github.com/madsmtm/objc2
+Description: Bindings to the WebKit framework
+
+once_cell 1.21.3
+License: Apache-2.0 OR MIT
+Authors: Aleksey Kladov <aleksey.kladov@gmail.com>
+Repository: https://github.com/matklad/once_cell
+Description: Single assignment cells and lazy values.
+
+open 5.3.2
+License: MIT
+Authors: Sebastian Thiel <byronimo@gmail.com>
+Repository: https://github.com/Byron/open-rs
+Description: Open a path or URL using the program configured on the system
+
+option-ext 0.2.0
+License: MPL-2.0
+Authors: Simon Ochsenreither <simon@ochsenreither.de>
+Repository: https://github.com/soc/option-ext.git
+Description: Extends `Option` with additional operations
+
+ordered-stream 0.2.0
+License: Apache-2.0 OR MIT
+Authors: Daniel De Graaf <code@danieldg.net>|Zeeshan Ali Khan <zeeshanak@gnome.org>
+Repository: https://github.com/danieldg/ordered-stream
+Description: Streams that are ordered relative to external events
+
+os_pipe 1.2.3
+License: MIT
+Authors: Jack O'Connor
+Repository: https://github.com/oconnor663/os_pipe.rs
+Description: a cross-platform library for opening OS pipes
+
+osakit 0.3.1
+License: Apache-2.0 OR MIT
+Authors: Marat Dulin <mdevils@gmail.com>
+Repository: https://github.com/mdevils/rust-osakit
+Description: OSAKit macOS Framework adapted for Rust
+
+pango 0.18.3
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: Rust bindings for the Pango library
+
+pango-sys 0.18.0
+License: MIT
+Authors: The gtk-rs Project Developers
+Repository: https://github.com/gtk-rs/gtk-rs-core
+Description: FFI bindings to libpango-1.0
+
+parking 2.2.1
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|The Rust Project Developers
+Repository: https://github.com/smol-rs/parking
+Description: Thread parking and unparking
+
+parking_lot 0.12.5
+License: Apache-2.0 OR MIT
+Authors: Amanieu d'Antras <amanieu@gmail.com>
+Repository: https://github.com/Amanieu/parking_lot
+Description: More compact and efficient implementations of the standard synchronization primitives.
+
+parking_lot_core 0.9.12
+License: Apache-2.0 OR MIT
+Authors: Amanieu d'Antras <amanieu@gmail.com>
+Repository: https://github.com/Amanieu/parking_lot
+Description: An advanced API for creating custom synchronization primitives.
+
+pathdiff 0.2.3
+License: Apache-2.0 OR MIT
+Authors: Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/Manishearth/pathdiff
+Description: Library for diffing paths to obtain relative paths
+
+percent-encoding 2.3.2
+License: Apache-2.0 OR MIT
+Authors: The rust-url developers
+Repository: https://github.com/servo/rust-url/
+Description: Percent encoding and decoding
+
+petgraph 0.6.5
+License: Apache-2.0 OR MIT
+Authors: bluss|mitchmindtree
+Repository: https://github.com/petgraph/petgraph
+Description: Graph data structure library. Provides graph types and graph algorithms.
+
+phf 0.10.1
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: Runtime support for perfect hash function data structures
+
+phf 0.11.3
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/rust-phf/rust-phf
+Description: Runtime support for perfect hash function data structures
+
+phf 0.8.0
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: Runtime support for perfect hash function data structures
+
+phf_codegen 0.11.3
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/rust-phf/rust-phf
+Description: Codegen library for PHF types
+
+phf_codegen 0.8.0
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: Codegen library for PHF types
+
+phf_generator 0.10.0
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: PHF generation logic
+
+phf_generator 0.11.3
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/rust-phf/rust-phf
+Description: PHF generation logic
+
+phf_generator 0.8.0
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: PHF generation logic
+
+phf_macros 0.10.0
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: Macros to generate types in the phf crate
+
+phf_macros 0.11.3
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/rust-phf/rust-phf
+Description: Macros to generate types in the phf crate
+
+phf_shared 0.10.0
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: Support code shared by PHF libraries
+
+phf_shared 0.11.3
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/rust-phf/rust-phf
+Description: Support code shared by PHF libraries
+
+phf_shared 0.8.0
+License: MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/rust-phf
+Description: Support code shared by PHF libraries
+
+pin-project-lite 0.2.16
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/taiki-e/pin-project-lite
+Description: A lightweight version of pin-project written with declarative macros.
+
+pin-utils 0.1.0
+License: Apache-2.0 OR MIT
+Authors: Josef Brandl <mail@josefbrandl.de>
+Repository: https://github.com/rust-lang-nursery/pin-utils
+Description: Utilities for pinning
+
+piper 0.2.4
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|John Nunley <dev@notgull.net>
+Repository: https://github.com/smol-rs/piper
+Description: Async pipes, channels, mutexes, and more.
+
+pkg-config 0.3.32
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/rust-lang/pkg-config-rs
+Description: A library to run the pkg-config system tool at build time in order to be used in Cargo build scripts.
+
+planus 0.3.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/planus-org/planus
+Description: Planus is an alternative compiler for flatbuffers, an efficient cross platform serialization library.
+
+plist 1.8.0
+License: MIT
+Authors: Ed Barnard <eabarnard@gmail.com>
+Repository: https://github.com/ebarnard/rust-plist/
+Description: A rusty plist parser. Supports Serde serialization.
+
+png 0.17.16
+License: Apache-2.0 OR MIT
+Authors: The image-rs Developers
+Repository: https://github.com/image-rs/image-png
+Description: PNG decoding and encoding library in pure Rust
+
+png 0.18.0
+License: Apache-2.0 OR MIT
+Authors: The image-rs Developers
+Repository: https://github.com/image-rs/image-png
+Description: PNG decoding and encoding library in pure Rust
+
+polling 3.11.0
+License: Apache-2.0 OR MIT
+Authors: Stjepan Glavina <stjepang@gmail.com>|John Nunley <dev@notgull.net>
+Repository: https://github.com/smol-rs/polling
+Description: Portable interface to epoll, kqueue, event ports, and IOCP
+
+portable-atomic 1.13.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/taiki-e/portable-atomic
+Description: Portable atomic types including support for 128-bit atomics, atomic float, etc.
+
+potential_utf 0.1.4
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: Unvalidated string and character types
+
+powerfmt 0.2.0
+License: Apache-2.0 OR MIT
+Authors: Jacob Pratt <jacob@jhpratt.dev>
+Repository: https://github.com/jhpratt/powerfmt
+Description: `powerfmt` is a library that provides utilities for formatting values. This crate makes it     significantly easier to support filling to a minimum width with alignment, avoid heap     allocation, and avoid repetitive calculations.
+
+ppv-lite86 0.2.21
+License: Apache-2.0 OR MIT
+Authors: The CryptoCorrosion Contributors
+Repository: https://github.com/cryptocorrosion/cryptocorrosion
+Description: Cross-platform cryptography-oriented low-level SIMD library.
+
+precomputed-hash 0.1.1
+License: MIT
+Authors: Emilio Cobos Álvarez <emilio@crisal.io>
+Repository: https://github.com/emilio/precomputed-hash
+Description: A library intending to be a base dependency to expose a precomputed hash
+
+proc-macro-crate 1.3.1
+License: Apache-2.0 OR MIT
+Authors: Bastian Köcher <git@kchr.de>
+Repository: https://github.com/bkchr/proc-macro-crate
+Description: Replacement for crate (macro_rules keyword) in proc-macros
+
+proc-macro-crate 2.0.2
+License: Apache-2.0 OR MIT
+Authors: Bastian Köcher <git@kchr.de>
+Repository: https://github.com/bkchr/proc-macro-crate
+Description: Replacement for crate (macro_rules keyword) in proc-macros
+
+proc-macro-crate 3.4.0
+License: Apache-2.0 OR MIT
+Authors: Bastian Köcher <git@kchr.de>
+Repository: https://github.com/bkchr/proc-macro-crate
+Description: Replacement for crate (macro_rules keyword) in proc-macros
+
+proc-macro-error 1.0.4
+License: Apache-2.0 OR MIT
+Authors: CreepySkeleton <creepy-skeleton@yandex.ru>
+Repository: https://gitlab.com/CreepySkeleton/proc-macro-error
+Description: Almost drop-in replacement to panics in proc-macros
+
+proc-macro-error-attr 1.0.4
+License: Apache-2.0 OR MIT
+Authors: CreepySkeleton <creepy-skeleton@yandex.ru>
+Repository: https://gitlab.com/CreepySkeleton/proc-macro-error
+Description: Attribute macro for proc-macro-error crate
+
+proc-macro-hack 0.5.20+deprecated
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/proc-macro-hack
+Description: Procedural macros in expression position
+
+proc-macro2 1.0.103
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>|Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/dtolnay/proc-macro2
+Description: A substitute implementation of the compiler's `proc_macro` API to decouple token-based libraries from the procedural macro use case.
+
+ptr_meta 0.1.4
+License: MIT
+Authors: David Koloski <djkoloski@gmail.com>
+Repository: https://github.com/djkoloski/ptr_meta
+Description: A radioactive stabilization of the ptr_meta rfc
+
+ptr_meta_derive 0.1.4
+License: MIT
+Authors: David Koloski <djkoloski@gmail.com>
+Repository: https://github.com/djkoloski/ptr_meta
+Description: Macros for ptr_meta
+
+pxfm 0.1.25
+License: Apache-2.0 OR BSD-3-Clause
+Authors: Radzivon Bartoshyk
+Repository: https://github.com/awxkee/pxfm
+Description: Fast and accurate math
+
+quick-error 2.0.1
+License: Apache-2.0 OR MIT
+Authors: Paul Colomiets <paul@colomiets.name>|Colin Kiegel <kiegel@gmx.de>
+Repository: http://github.com/tailhook/quick-error
+Description: A macro which makes error types pleasant to write.
+
+quick-xml 0.31.0
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/tafia/quick-xml
+Description: High performance xml reader and writer
+
+quick-xml 0.37.5
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/tafia/quick-xml
+Description: High performance xml reader and writer
+
+quick-xml 0.38.3
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/tafia/quick-xml
+Description: High performance xml reader and writer
+
+quinn 0.11.9
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/quinn-rs/quinn
+Description: Versatile QUIC transport protocol implementation
+
+quinn-proto 0.11.13
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/quinn-rs/quinn
+Description: State machine for the QUIC transport protocol
+
+quinn-udp 0.5.14
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/quinn-rs/quinn
+Description: UDP sockets with ECN information for the QUIC transport protocol
+
+quote 1.0.41
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/quote
+Description: Quasi-quoting macro quote!(...)
+
+r-efi 5.3.0
+License: Apache-2.0 OR LGPL-2.1-or-later OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/r-efi/r-efi
+Description: UEFI Reference Specification Protocol Constants and Definitions
+
+radium 0.7.0
+License: MIT
+Authors: Nika Layzell <nika@thelayzells.com>|myrrlyn <self@myrrlyn.dev>
+Repository: https://github.com/bitvecto-rs/radium
+Description: Portable interfaces for maybe-atomic types
+
+rand 0.7.3
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers
+Repository: https://github.com/rust-random/rand
+Description: Random number generators and other randomness functionality.
+
+rand 0.8.5
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers
+Repository: https://github.com/rust-random/rand
+Description: Random number generators and other randomness functionality.
+
+rand 0.9.2
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers
+Repository: https://github.com/rust-random/rand
+Description: Random number generators and other randomness functionality.
+
+rand_chacha 0.2.2
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers|The CryptoCorrosion Contributors
+Repository: https://github.com/rust-random/rand
+Description: ChaCha random number generator
+
+rand_chacha 0.3.1
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers|The CryptoCorrosion Contributors
+Repository: https://github.com/rust-random/rand
+Description: ChaCha random number generator
+
+rand_chacha 0.9.0
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers|The CryptoCorrosion Contributors
+Repository: https://github.com/rust-random/rand
+Description: ChaCha random number generator
+
+rand_core 0.5.1
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers
+Repository: https://github.com/rust-random/rand
+Description: Core random number generator traits and tools for implementation.
+
+rand_core 0.6.4
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers
+Repository: https://github.com/rust-random/rand
+Description: Core random number generator traits and tools for implementation.
+
+rand_core 0.9.3
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers|The Rust Project Developers
+Repository: https://github.com/rust-random/rand
+Description: Core random number generator traits and tools for implementation.
+
+rand_hc 0.2.0
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers
+Repository: https://github.com/rust-random/rand
+Description: HC128 random number generator
+
+rand_pcg 0.2.1
+License: Apache-2.0 OR MIT
+Authors: The Rand Project Developers
+Repository: https://github.com/rust-random/rand
+Description: Selected PCG random number generators
+
+raw-window-handle 0.6.2
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Osspial <osspial@gmail.com>
+Repository: https://github.com/rust-windowing/raw-window-handle
+Description: Interoperability library for Rust Windowing applications.
+
+rayon 1.11.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rayon-rs/rayon
+Description: Simple work-stealing parallelism for Rust
+
+rayon-core 1.13.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rayon-rs/rayon
+Description: Core APIs for Rayon
+
+redox_syscall 0.5.18
+License: MIT
+Authors: Jeremy Soller <jackpot51@gmail.com>
+Repository: https://gitlab.redox-os.org/redox-os/syscall
+Description: A Rust library to access raw Redox system calls
+
+redox_users 0.4.6
+License: MIT
+Authors: Jose Narvaez <goyox86@gmail.com>|Wesley Hershberger <mggmugginsmc@gmail.com>
+Repository: https://gitlab.redox-os.org/redox-os/users
+Description: A Rust library to access Redox users and groups functionality
+
+redox_users 0.5.2
+License: MIT
+Authors: Jose Narvaez <goyox86@gmail.com>|Wesley Hershberger <mggmugginsmc@gmail.com>
+Repository: https://gitlab.redox-os.org/redox-os/users
+Description: A Rust library to access Redox users and groups functionality
+
+ref-cast 1.0.25
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/ref-cast
+Description: Safely cast &T to &U where the struct U contains a single field of type T.
+
+ref-cast-impl 1.0.25
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/ref-cast
+Description: Derive implementation for ref_cast::RefCast.
+
+regex 1.12.2
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers|Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/rust-lang/regex
+Description: An implementation of regular expressions for Rust. This implementation uses finite automata and guarantees linear time matching on all inputs.
+
+regex-automata 0.4.13
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers|Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/rust-lang/regex
+Description: Automata construction and matching using regular expressions.
+
+regex-syntax 0.8.8
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers|Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/rust-lang/regex
+Description: A regular expression parser.
+
+rend 0.4.2
+License: MIT
+Authors: David Koloski <djkoloski@gmail.com>
+Repository: https://github.com/djkoloski/rend
+Description: Endian-aware primitives for Rust
+
+reqwest 0.12.24
+License: Apache-2.0 OR MIT
+Authors: Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/seanmonstar/reqwest
+Description: higher level HTTP client library
+
+rfd 0.15.4
+License: MIT
+Authors: Poly <marynczak.bartlomiej@gmail.com>
+Repository: https://github.com/PolyMeilex/rfd
+Description: Rusty File Dialog
+
+ring 0.17.14
+License: Apache-2.0 AND ISC
+Authors: UNKNOWN
+Repository: https://github.com/briansmith/ring
+Description: An experiment.
+
+rkyv 0.7.45
+License: MIT
+Authors: David Koloski <djkoloski@gmail.com>
+Repository: https://github.com/rkyv/rkyv
+Description: Zero-copy deserialization framework for Rust
+
+rkyv_derive 0.7.45
+License: MIT
+Authors: David Koloski <djkoloski@gmail.com>
+Repository: https://github.com/rkyv/rkyv
+Description: Derive macro for rkyv
+
+rust_decimal 1.39.0
+License: MIT
+Authors: Paul Mason <paul@form1.co.nz>
+Repository: https://github.com/paupino/rust-decimal
+Description: Decimal number implementation written in pure Rust suitable for financial and fixed-precision calculations.
+
+rust_xlsxwriter 0.64.2
+License: Apache-2.0 OR MIT
+Authors: John McNamara <jmcnamara@cpan.org>
+Repository: https://github.com/jmcnamara/rust_xlsxwriter
+Description: A Rust library for writing Excel 2007 xlsx files
+
+rustc-hash 1.1.0
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-lang-nursery/rustc-hash
+Description: speed, non-cryptographic hash used in rustc
+
+rustc-hash 2.1.1
+License: Apache-2.0 OR MIT
+Authors: The Rust Project Developers
+Repository: https://github.com/rust-lang/rustc-hash
+Description: A speedy, non-cryptographic hashing algorithm used by rustc
+
+rustc_version 0.4.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/djc/rustc-version-rs
+Description: A library for querying the version of a installed rustc compiler
+
+rustix 0.38.44
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: Dan Gohman <dev@sunfishcode.online>|Jakub Konka <kubkon@jakubkonka.com>
+Repository: https://github.com/bytecodealliance/rustix
+Description: Safe Rust bindings to POSIX/Unix/Linux/Winsock-like syscalls
+
+rustix 1.1.2
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: Dan Gohman <dev@sunfishcode.online>|Jakub Konka <kubkon@jakubkonka.com>
+Repository: https://github.com/bytecodealliance/rustix
+Description: Safe Rust bindings to POSIX/Unix/Linux/Winsock-like syscalls
+
+rustls 0.23.35
+License: Apache-2.0 OR ISC OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rustls/rustls
+Description: Rustls is a modern TLS library written in Rust.
+
+rustls-pki-types 1.13.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rustls/pki-types
+Description: Shared types for the rustls PKI ecosystem
+
+rustls-webpki 0.103.8
+License: ISC
+Authors: UNKNOWN
+Repository: https://github.com/rustls/webpki
+Description: Web PKI X.509 Certificate Verification.
+
+rustversion 1.0.22
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/rustversion
+Description: Conditional compilation according to rustc compiler version
+
+ryu 1.0.20
+License: Apache-2.0 OR BSL-1.0
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/ryu
+Description: Fast floating point to string conversion
+
+same-file 1.0.6
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/BurntSushi/same-file
+Description: A simple crate for determining whether two file paths point to the same file.
+
+schemars 0.8.22
+License: MIT
+Authors: Graham Esau <gesau@hotmail.co.uk>
+Repository: https://github.com/GREsau/schemars
+Description: Generate JSON Schemas from Rust code
+
+schemars 0.9.0
+License: MIT
+Authors: Graham Esau <gesau@hotmail.co.uk>
+Repository: https://github.com/GREsau/schemars
+Description: Generate JSON Schemas from Rust code
+
+schemars 1.0.5
+License: MIT
+Authors: Graham Esau <gesau@hotmail.co.uk>
+Repository: https://github.com/GREsau/schemars
+Description: Generate JSON Schemas from Rust code
+
+schemars_derive 0.8.22
+License: MIT
+Authors: Graham Esau <gesau@hotmail.co.uk>
+Repository: https://github.com/GREsau/schemars
+Description: Macros for #[derive(JsonSchema)], for use with schemars
+
+scoped-tls 1.0.1
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/alexcrichton/scoped-tls
+Description: Library implementation of the standard library's old `scoped_thread_local!` macro for providing scoped access to thread local storage (TLS) so any type can be stored into TLS.
+
+scopeguard 1.2.0
+License: Apache-2.0 OR MIT
+Authors: bluss
+Repository: https://github.com/bluss/scopeguard
+Description: A RAII scope guard that will run a given closure when it goes out of scope, even if the code between panics (assuming unwinding panic).  Defines the macros `defer!`, `defer_on_unwind!`, `defer_on_success!` as shorthands for guards with one of the implemented strategies.
+
+seahash 4.1.0
+License: MIT
+Authors: ticki <ticki@users.noreply.github.com>|Tom Almeida <tom@tommoa.me>
+Repository: https://gitlab.redox-os.org/redox-os/seahash
+Description: A blazingly fast, portable hash function with proven statistical guarantees.
+
+selectors 0.24.0
+License: MPL-2.0
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/servo
+Description: CSS Selectors matching for Rust
+
+semver 1.0.27
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/semver
+Description: Parser and evaluator for Cargo's flavor of Semantic Versioning
+
+serde 1.0.228
+License: Apache-2.0 OR MIT
+Authors: Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/serde-rs/serde
+Description: A generic serialization/deserialization framework
+
+serde-untagged 0.1.9
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/serde-untagged
+Description: Serde `Visitor` implementation for deserializing untagged enums
+
+serde_core 1.0.228
+License: Apache-2.0 OR MIT
+Authors: Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/serde-rs/serde
+Description: Serde traits only, with no support for derive -- use the `serde` crate instead
+
+serde_derive 1.0.228
+License: Apache-2.0 OR MIT
+Authors: Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/serde-rs/serde
+Description: Macros 1.1 implementation of #[derive(Serialize, Deserialize)]
+
+serde_derive_internals 0.29.1
+License: Apache-2.0 OR MIT
+Authors: Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/serde-rs/serde
+Description: AST representation used by Serde derive macros. Unstable.
+
+serde_json 1.0.145
+License: Apache-2.0 OR MIT
+Authors: Erick Tryzelaar <erick.tryzelaar@gmail.com>|David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/serde-rs/json
+Description: A JSON serialization file format
+
+serde_repr 0.1.20
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/serde-repr
+Description: Derive Serialize and Deserialize that delegates to the underlying repr of a C-like enum.
+
+serde_spanned 0.6.9
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/toml-rs/toml
+Description: Serde-compatible spanned Value
+
+serde_spanned 1.0.3
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/toml-rs/toml
+Description: Serde-compatible spanned Value
+
+serde_urlencoded 0.7.1
+License: Apache-2.0 OR MIT
+Authors: Anthony Ramine <n.oxyde@gmail.com>
+Repository: https://github.com/nox/serde_urlencoded
+Description: `x-www-form-urlencoded` meets Serde
+
+serde_with 3.15.1
+License: Apache-2.0 OR MIT
+Authors: Jonas Bushart|Marcin Kaźmierczak
+Repository: https://github.com/jonasbb/serde_with/
+Description: Custom de/serialization functions for Rust's serde
+
+serde_with_macros 3.15.1
+License: Apache-2.0 OR MIT
+Authors: Jonas Bushart
+Repository: https://github.com/jonasbb/serde_with/
+Description: proc-macro library for serde_with
+
+serialize-to-javascript 0.1.2
+License: Apache-2.0 OR MIT
+Authors: Chip Reed <chip@chip.sh>
+Repository: https://github.com/chippers/serialize-to-javascript
+Description: Serialize a serde::Serialize item to a JavaScript literal template using serde_json
+
+serialize-to-javascript-impl 0.1.2
+License: Apache-2.0 OR MIT
+Authors: Chip Reed <chip@chip.sh>
+Repository: https://github.com/chippers/serialize-to-javascript
+Description: Implementation detail of `serialize-to-javascript`
+
+servo_arc 0.2.0
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/servo
+Description: A fork of std::sync::Arc with some extra functionality and without weak references
+
+sha2 0.10.9
+License: Apache-2.0 OR MIT
+Authors: RustCrypto Developers
+Repository: https://github.com/RustCrypto/hashes
+Description: Pure Rust implementation of the SHA-2 hash function family including SHA-224, SHA-256, SHA-384, and SHA-512.
+
+shlex 1.3.0
+License: Apache-2.0 OR MIT
+Authors: comex <comexk@gmail.com>|Fenhl <fenhl@fenhl.net>|Adrian Taylor <adetaylor@chromium.org>|Alex Touchet <alextouchet@outlook.com>|Daniel Parks <dp+git@oxidized.org>|Garrett Berg <googberg@gmail.com>
+Repository: https://github.com/comex/rust-shlex
+Description: Split a string into shell words, like Python's shlex.
+
+signal-hook-registry 1.4.6
+License: Apache-2.0 OR MIT
+Authors: Michal 'vorner' Vaner <vorner@vorner.cz>|Masaki Hara <ackie.h.gmai@gmail.com>
+Repository: https://github.com/vorner/signal-hook
+Description: Backend crate for signal-hook
+
+simd-adler32 0.3.7
+License: MIT
+Authors: Marvin Countryman <me@maar.vin>
+Repository: https://github.com/mcountryman/simd-adler32
+Description: A SIMD-accelerated Adler-32 hash algorithm implementation.
+
+simdutf8 0.1.5
+License: Apache-2.0 OR MIT
+Authors: Hans Kratz <hans@appfour.com>
+Repository: https://github.com/rusticstuff/simdutf8
+Description: SIMD-accelerated UTF-8 validation.
+
+siphasher 0.3.11
+License: Apache-2.0 OR MIT
+Authors: Frank Denis <github@pureftpd.org>
+Repository: https://github.com/jedisct1/rust-siphash
+Description: SipHash-2-4, SipHash-1-3 and 128-bit variants in pure Rust
+
+siphasher 1.0.1
+License: Apache-2.0 OR MIT
+Authors: Frank Denis <github@pureftpd.org>
+Repository: https://github.com/jedisct1/rust-siphash
+Description: SipHash-2-4, SipHash-1-3 and 128-bit variants in pure Rust
+
+slab 0.4.11
+License: MIT
+Authors: Carl Lerche <me@carllerche.com>
+Repository: https://github.com/tokio-rs/slab
+Description: Pre-allocated storage for a uniform data type
+
+smallvec 1.15.1
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/rust-smallvec
+Description: 'Small vector' optimization: store up to a small number of items on the stack
+
+socket2 0.6.1
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>|Thomas de Zeeuw <thomasdezeeuw@gmail.com>
+Repository: https://github.com/rust-lang/socket2
+Description: Utilities for handling networking sockets with a maximal amount of configuration possible intended.
+
+softbuffer 0.4.6
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rust-windowing/softbuffer
+Description: Cross-platform software buffer
+
+soup3 0.5.0
+License: MIT
+Authors: UNKNOWN
+Repository: https://gitlab.gnome.org/World/Rust/soup3-rs
+Description: Soup crate for Rust
+
+soup3-sys 0.5.0
+License: MIT
+Authors: The Gtk-rs Project Developers
+Repository: https://gitlab.gnome.org/World/Rust/soup3-rs
+Description: Sys functions for the Rust bindings of the javacriptcore library
+
+stable_deref_trait 1.2.1
+License: Apache-2.0 OR MIT
+Authors: Robert Grosse <n210241048576@gmail.com>
+Repository: https://github.com/storyyeller/stable_deref_trait
+Description: An unsafe marker trait for types like Box and Rc that dereference to a stable address even when moved, and hence can be used with libraries such as owning_ref and rental.
+
+static_assertions 1.1.0
+License: Apache-2.0 OR MIT
+Authors: Nikolai Vazquez
+Repository: https://github.com/nvzqz/static-assertions-rs
+Description: Compile-time assertions to ensure that invariants are met.
+
+streaming-iterator 0.1.9
+License: Apache-2.0 OR MIT
+Authors: Steven Fackler <sfackler@gmail.com>
+Repository: https://github.com/sfackler/streaming-iterator
+Description: Streaming iterators
+
+string_cache 0.8.9
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/string-cache
+Description: A string interning library for Rust, developed as part of the Servo project.
+
+string_cache_codegen 0.5.4
+License: Apache-2.0 OR MIT
+Authors: The Servo Project Developers
+Repository: https://github.com/servo/string-cache
+Description: A codegen library for string-cache, developed as part of the Servo project.
+
+strsim 0.11.1
+License: MIT
+Authors: Danny Guo <danny@dannyguo.com>|maxbachmann <oss@maxbachmann.de>
+Repository: https://github.com/rapidfuzz/strsim-rs
+Description: Implementations of string similarity metrics. Includes Hamming, Levenshtein, OSA, Damerau-Levenshtein, Jaro, Jaro-Winkler, and Sørensen-Dice.
+
+strum 0.26.3
+License: MIT
+Authors: Peter Glotfelty <peter.glotfelty@microsoft.com>
+Repository: https://github.com/Peternator7/strum
+Description: Helpful macros for working with enums and strings
+
+strum 0.27.2
+License: MIT
+Authors: Peter Glotfelty <peter.glotfelty@microsoft.com>
+Repository: https://github.com/Peternator7/strum
+Description: Helpful macros for working with enums and strings
+
+strum_macros 0.26.4
+License: MIT
+Authors: Peter Glotfelty <peter.glotfelty@microsoft.com>
+Repository: https://github.com/Peternator7/strum
+Description: Helpful macros for working with enums and strings
+
+strum_macros 0.27.2
+License: MIT
+Authors: Peter Glotfelty <peter.glotfelty@microsoft.com>
+Repository: https://github.com/Peternator7/strum
+Description: Helpful macros for working with enums and strings
+
+subtle 2.6.1
+License: BSD-3-Clause
+Authors: Isis Lovecruft <isis@patternsinthevoid.net>|Henry de Valence <hdevalence@hdevalence.ca>
+Repository: https://github.com/dalek-cryptography/subtle
+Description: Pure-Rust traits and utilities for constant-time cryptographic implementations.
+
+swift-rs 1.0.7
+License: Apache-2.0 OR MIT
+Authors: The swift-rs contributors
+Repository: https://github.com/Brendonovich/swift-rs
+Description: Call Swift from Rust with ease!
+
+syn 1.0.109
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/syn
+Description: Parser for Rust source code
+
+syn 2.0.108
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/syn
+Description: Parser for Rust source code
+
+sync_wrapper 1.0.2
+License: Apache-2.0
+Authors: Actyx AG <developer@actyx.io>
+Repository: https://github.com/Actyx/sync_wrapper
+Description: A tool for enlisting the compiler's help in proving the absence of concurrency
+
+synstructure 0.13.2
+License: MIT
+Authors: Nika Layzell <nika@thelayzells.com>
+Repository: https://github.com/mystor/synstructure
+Description: Helper methods and macros for custom derives
+
+system-deps 6.2.2
+License: Apache-2.0 OR MIT
+Authors: Guillaume Desmottes <guillaume.desmottes@collabora.com>|Josh Triplett <josh@joshtriplett.org>
+Repository: https://github.com/gdesmott/system-deps
+Description: Discover and configure system dependencies from declarative dependencies in Cargo.toml
+
+tagptr 0.2.0
+License: Apache-2.0 OR MIT
+Authors: Oliver Giersch
+Repository: https://github.com/oliver-giersch/tagptr.git
+Description: Strongly typed atomic and non-atomic tagged pointers
+
+tao 0.34.5
+License: Apache-2.0
+Authors: Tauri Programme within The Commons Conservancy|The winit contributors
+Repository: https://github.com/tauri-apps/tao
+Description: Cross-platform window manager library.
+
+tao-macros 0.1.3
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tao
+Description: Proc macros for tao
+
+tap 1.0.1
+License: MIT
+Authors: Elliott Linder <elliott.darfink@gmail.com>|myrrlyn <self@myrrlyn.dev>
+Repository: https://github.com/myrrlyn/tap
+Description: Generic extensions for tapping values in Rust
+
+tar 0.4.44
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/alexcrichton/tar-rs
+Description: A Rust implementation of a TAR file reader and writer. This library does not currently handle compression, but it is abstract over all I/O readers and writers. Additionally, great lengths are taken to ensure that the entire contents are never required to be entirely resident in memory all at once.
+
+target-lexicon 0.12.16
+License: Apache-2.0 WITH LLVM-exception
+Authors: Dan Gohman <sunfish@mozilla.com>
+Repository: https://github.com/bytecodealliance/target-lexicon
+Description: Targeting utilities for compilers and related tools
+
+tauri 2.9.2
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: Make tiny, secure apps for all desktop platforms with Tauri
+
+tauri-build 2.5.1
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: build time code to pair with https://crates.io/crates/tauri
+
+tauri-codegen 2.5.0
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: code generation meant to be consumed inside of `tauri` through `tauri-build` or `tauri-macros`
+
+tauri-macros 2.5.0
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: Macros for the tauri crate.
+
+tauri-plugin 2.5.1
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: Build script and runtime Tauri plugin definitions
+
+tauri-plugin-clipboard-manager 2.3.2
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Read and write to the system clipboard.
+
+tauri-plugin-dialog 2.4.2
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Native system dialogs for opening and saving files along with message dialogs on your Tauri application.
+
+tauri-plugin-fs 2.4.4
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Access the file system.
+
+tauri-plugin-log 2.7.1
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Configurable logging for your Tauri app.
+
+tauri-plugin-notification 2.3.3
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Send desktop and mobile notifications on your Tauri application.
+
+tauri-plugin-opener 2.5.2
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Open files and URLs using their default application.
+
+tauri-plugin-persisted-scope 2.3.4
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Save filesystem and asset scopes and restore them when the app is reopened.
+
+tauri-plugin-process 2.3.1
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Access the current process of your Tauri application.
+
+tauri-plugin-single-instance 2.3.6
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: Ensure a single instance of your tauri app is running.
+
+tauri-plugin-updater 2.9.0
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/plugins-workspace
+Description: In-app updates for Tauri applications.
+
+tauri-runtime 2.9.1
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: Runtime for Tauri applications
+
+tauri-runtime-wry 2.9.1
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: Wry bindings to the Tauri runtime
+
+tauri-utils 2.8.0
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri
+Description: Utilities for Tauri
+
+tauri-winres 0.3.3
+License: MIT
+Authors: Tauri Programme within The Commons Conservancy|Max Resch <resch.max@gmail.com>
+Repository: https://github.com/tauri-apps/winres
+Description: Create and set windows icons and metadata for executables
+
+tauri-winrt-notification 0.7.2
+License: Apache-2.0 OR MIT
+Authors: allenbenz|Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/winrt-notification
+Description: An incomplete wrapper over the WinRT toast api
+
+tempfile 3.23.0
+License: Apache-2.0 OR MIT
+Authors: Steven Allen <steven@stebalien.com>|The Rust Project Developers|Ashley Mannix <ashleymannix@live.com.au>|Jason White <me@jasonwhite.io>
+Repository: https://github.com/Stebalien/tempfile
+Description: A library for managing temporary files and directories.
+
+tendril 0.4.3
+License: Apache-2.0 OR MIT
+Authors: Keegan McAllister <mcallister.keegan@gmail.com>|Simon Sapin <simon.sapin@exyr.org>|Chris Morgan <me@chrismorgan.info>
+Repository: https://github.com/servo/tendril
+Description: Compact buffer/string type for zero-copy parsing
+
+thiserror 1.0.69
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/thiserror
+Description: derive(Error)
+
+thiserror 2.0.17
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/thiserror
+Description: derive(Error)
+
+thiserror-impl 1.0.69
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/thiserror
+Description: Implementation detail of the `thiserror` crate
+
+thiserror-impl 2.0.17
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/thiserror
+Description: Implementation detail of the `thiserror` crate
+
+tiff 0.10.3
+License: MIT
+Authors: The image-rs Developers
+Repository: https://github.com/image-rs/image-tiff
+Description: TIFF decoding and encoding library in pure Rust
+
+time 0.3.44
+License: Apache-2.0 OR MIT
+Authors: Jacob Pratt <open-source@jhpratt.dev>|Time contributors
+Repository: https://github.com/time-rs/time
+Description: Date and time library. Fully interoperable with the standard library. Mostly compatible with #![no_std].
+
+time-core 0.1.6
+License: Apache-2.0 OR MIT
+Authors: Jacob Pratt <open-source@jhpratt.dev>|Time contributors
+Repository: https://github.com/time-rs/time
+Description: This crate is an implementation detail and should not be relied upon directly.
+
+time-macros 0.2.24
+License: Apache-2.0 OR MIT
+Authors: Jacob Pratt <open-source@jhpratt.dev>|Time contributors
+Repository: https://github.com/time-rs/time
+Description: Procedural macros for the time crate.     This crate is an implementation detail and should not be relied upon directly.
+
+tiny-keccak 2.0.2
+License: CC0-1.0
+Authors: debris <marek.kotewicz@gmail.com>
+Repository: UNKNOWN
+Description: An implementation of Keccak derived functions.
+
+tinystr 0.8.2
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: A small ASCII-only bounded length string representation.
+
+tinyvec 1.10.0
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Lokathor <zefria@gmail.com>
+Repository: https://github.com/Lokathor/tinyvec
+Description: `tinyvec` provides 100% safe vec-like data structures.
+
+tinyvec_macros 0.1.1
+License: Apache-2.0 OR MIT OR Zlib
+Authors: Soveu <marx.tomasz@gmail.com>
+Repository: https://github.com/Soveu/tinyvec_macros
+Description: Some macros for tiny containers
+
+tokio 1.48.0
+License: MIT
+Authors: Tokio Contributors <team@tokio.rs>
+Repository: https://github.com/tokio-rs/tokio
+Description: An event-driven, non-blocking I/O platform for writing asynchronous I/O backed applications.
+
+tokio-macros 2.6.0
+License: MIT
+Authors: Tokio Contributors <team@tokio.rs>
+Repository: https://github.com/tokio-rs/tokio
+Description: Tokio's proc macros.
+
+tokio-rustls 0.26.4
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/rustls/tokio-rustls
+Description: Asynchronous TLS/SSL streams for Tokio using Rustls.
+
+tokio-util 0.7.17
+License: MIT
+Authors: Tokio Contributors <team@tokio.rs>
+Repository: https://github.com/tokio-rs/tokio
+Description: Additional utilities for working with Tokio.
+
+toml 0.8.2
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/toml-rs/toml
+Description: A native Rust encoder and decoder of TOML-formatted files and streams. Provides implementations of the standard Serialize/Deserialize traits for TOML data to facilitate deserializing and serializing Rust structures.
+
+toml 0.9.8
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/toml-rs/toml
+Description: A native Rust encoder and decoder of TOML-formatted files and streams. Provides implementations of the standard Serialize/Deserialize traits for TOML data to facilitate deserializing and serializing Rust structures.
+
+toml_datetime 0.6.3
+License: Apache-2.0 OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/toml-rs/toml
+Description: A TOML-compatible datetime type
+
+toml_datetime 0.7.3
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/toml-rs/toml
+Description: A TOML-compatible datetime type
+
+toml_edit 0.19.15
+License: Apache-2.0 OR MIT
+Authors: Andronik Ordian <write@reusable.software>|Ed Page <eopage@gmail.com>
+Repository: https://github.com/toml-rs/toml
+Description: Yet another format-preserving TOML parser.
+
+toml_edit 0.20.2
+License: Apache-2.0 OR MIT
+Authors: Andronik Ordian <write@reusable.software>|Ed Page <eopage@gmail.com>
+Repository: https://github.com/toml-rs/toml
+Description: Yet another format-preserving TOML parser.
+
+toml_edit 0.23.7
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/toml-rs/toml
+Description: Yet another format-preserving TOML parser.
+
+toml_parser 1.0.4
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/toml-rs/toml
+Description: Yet another format-preserving TOML parser.
+
+toml_writer 1.0.4
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/toml-rs/toml
+Description: A low-level interface for writing out TOML
+
+tower 0.5.2
+License: MIT
+Authors: Tower Maintainers <team@tower-rs.com>
+Repository: https://github.com/tower-rs/tower
+Description: Tower is a library of modular and reusable components for building robust clients and servers.
+
+tower-http 0.6.6
+License: MIT
+Authors: Tower Maintainers <team@tower-rs.com>
+Repository: https://github.com/tower-rs/tower-http
+Description: Tower middleware and utilities for HTTP clients and servers
+
+tower-layer 0.3.3
+License: MIT
+Authors: Tower Maintainers <team@tower-rs.com>
+Repository: https://github.com/tower-rs/tower
+Description: Decorates a `Service` to allow easy composition between `Service`s.
+
+tower-service 0.3.3
+License: MIT
+Authors: Tower Maintainers <team@tower-rs.com>
+Repository: https://github.com/tower-rs/tower
+Description: Trait representing an asynchronous, request / response based, client or server.
+
+tracing 0.1.41
+License: MIT
+Authors: Eliza Weisman <eliza@buoyant.io>|Tokio Contributors <team@tokio.rs>
+Repository: https://github.com/tokio-rs/tracing
+Description: Application-level tracing for Rust.
+
+tracing-attributes 0.1.30
+License: MIT
+Authors: Tokio Contributors <team@tokio.rs>|Eliza Weisman <eliza@buoyant.io>|David Barsky <dbarsky@amazon.com>
+Repository: https://github.com/tokio-rs/tracing
+Description: Procedural macro attributes for automatically instrumenting functions.
+
+tracing-core 0.1.34
+License: MIT
+Authors: Tokio Contributors <team@tokio.rs>
+Repository: https://github.com/tokio-rs/tracing
+Description: Core primitives for application-level tracing.
+
+tracing-log 0.2.0
+License: MIT
+Authors: Tokio Contributors <team@tokio.rs>
+Repository: https://github.com/tokio-rs/tracing
+Description: Provides compatibility between `tracing` and the `log` crate.
+
+tray-icon 0.21.2
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/tauri-apps/tray-icon
+Description: Create tray icons for desktop applications
+
+tree_magic_mini 3.2.0
+License: MIT
+Authors: Matt Brubeck <mbrubeck@limpet.net>|Allison Hancock <aahancoc@umich.edu>
+Repository: https://github.com/mbrubeck/tree_magic/
+Description: Determines the MIME type of a file by traversing a filetype tree.
+
+try-lock 0.2.5
+License: MIT
+Authors: Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/seanmonstar/try-lock
+Description: A lightweight atomic lock.
+
+typeid 1.0.3
+License: Apache-2.0 OR MIT
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/typeid
+Description: Const TypeId and non-'static TypeId
+
+typenum 1.19.0
+License: Apache-2.0 OR MIT
+Authors: Paho Lurie-Gregg <paho@paholg.com>|Andre Bogus <bogusandre@gmail.com>
+Repository: https://github.com/paholg/typenum
+Description: Typenum is a Rust library for type-level numbers evaluated at     compile time. It currently supports bits, unsigned integers, and signed     integers. It also provides a type-level array of type-level numbers, but its     implementation is incomplete.
+
+uds_windows 1.1.0
+License: MIT
+Authors: Azure IoT Edge Devs|Harald Hoyer <harald@redhat.com>
+Repository: https://github.com/haraldh/rust_uds_windows
+Description: Unix Domain Sockets for Windows!
+
+unic-char-property 0.9.0
+License: Apache-2.0 OR MIT
+Authors: The UNIC Project Developers
+Repository: https://github.com/open-i18n/rust-unic/
+Description: UNIC — Unicode Character Tools — Character Property taxonomy, contracts and build macros
+
+unic-char-range 0.9.0
+License: Apache-2.0 OR MIT
+Authors: The UNIC Project Developers
+Repository: https://github.com/open-i18n/rust-unic/
+Description: UNIC — Unicode Character Tools — Character Range and Iteration
+
+unic-common 0.9.0
+License: Apache-2.0 OR MIT
+Authors: The UNIC Project Developers
+Repository: https://github.com/open-i18n/rust-unic/
+Description: UNIC — Common Utilities
+
+unic-ucd-ident 0.9.0
+License: Apache-2.0 OR MIT
+Authors: The UNIC Project Developers
+Repository: https://github.com/open-i18n/rust-unic/
+Description: UNIC — Unicode Character Database — Identifier Properties
+
+unic-ucd-version 0.9.0
+License: Apache-2.0 OR MIT
+Authors: The UNIC Project Developers
+Repository: https://github.com/open-i18n/rust-unic/
+Description: UNIC — Unicode Character Database — Version
+
+unicode-ident 1.0.22
+License: (Apache-2.0 OR MIT) AND Unicode-3.0
+Authors: David Tolnay <dtolnay@gmail.com>
+Repository: https://github.com/dtolnay/unicode-ident
+Description: Determine whether characters have the XID_Start or XID_Continue properties according to Unicode Standard Annex #31
+
+unicode-segmentation 1.12.0
+License: Apache-2.0 OR MIT
+Authors: kwantam <kwantam@gmail.com>|Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/unicode-rs/unicode-segmentation
+Description: This crate provides Grapheme Cluster, Word and Sentence boundaries according to Unicode Standard Annex #29 rules.
+
+unicode-width 0.2.2
+License: Apache-2.0 OR MIT
+Authors: kwantam <kwantam@gmail.com>|Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/unicode-rs/unicode-width
+Description: Determine displayed width of `char` and `str` types according to Unicode Standard Annex #11 rules.
+
+untrusted 0.9.0
+License: ISC
+Authors: Brian Smith <brian@briansmith.org>
+Repository: https://github.com/briansmith/untrusted
+Description: Safe, fast, zero-panic, zero-crashing, zero-allocation parsing of untrusted inputs in Rust.
+
+url 2.5.7
+License: Apache-2.0 OR MIT
+Authors: The rust-url developers
+Repository: https://github.com/servo/rust-url
+Description: URL library for Rust, based on the WHATWG URL Standard
+
+urlpattern 0.3.0
+License: MIT
+Authors: the Deno authors|crowlKats <crowlkats@toaxl.com>
+Repository: https://github.com/denoland/rust-urlpattern
+Description: rust-urlpattern is a Rust implementation of the URLPattern standard
+
+utf-8 0.7.6
+License: Apache-2.0 OR MIT
+Authors: Simon Sapin <simon.sapin@exyr.org>
+Repository: https://github.com/SimonSapin/rust-utf8
+Description: Incremental, zero-copy UTF-8 decoding with error handling
+
+utf8-width 0.1.7
+License: MIT
+Authors: Magic Len <len@magiclen.org>
+Repository: https://github.com/magiclen/utf8-width
+Description: To determine the width of a UTF-8 character by providing its first byte.
+
+utf8_iter 1.0.4
+License: Apache-2.0 OR MIT
+Authors: Henri Sivonen <hsivonen@hsivonen.fi>
+Repository: https://github.com/hsivonen/utf8_iter
+Description: Iterator by char over potentially-invalid UTF-8 in &[u8]
+
+uuid 1.18.1
+License: Apache-2.0 OR MIT
+Authors: Ashley Mannix<ashleymannix@live.com.au>|Dylan DPC<dylan.dpc@gmail.com>|Hunar Roop Kahlon<hunar.roop@gmail.com>
+Repository: https://github.com/uuid-rs/uuid
+Description: A library to generate and parse UUIDs.
+
+valuable 0.1.1
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/tokio-rs/valuable
+Description: Object-safe value inspection, used to pass un-typed structured data across trait-object boundaries.
+
+value-bag 1.11.1
+License: Apache-2.0 OR MIT
+Authors: Ashley Mannix <ashleymannix@live.com.au>
+Repository: https://github.com/sval-rs/value-bag
+Description: Anonymous structured values
+
+vcpkg 0.2.15
+License: Apache-2.0 OR MIT
+Authors: Jim McGrath <jimmc2@gmail.com>
+Repository: https://github.com/mcgoo/vcpkg-rs
+Description: A library to find native dependencies in a vcpkg tree at build time in order to be used in Cargo build scripts.
+
+version-compare 0.2.1
+License: MIT
+Authors: Tim Visee <3a4fb3964f@sinenomine.email>
+Repository: https://gitlab.com/timvisee/version-compare
+Description: Rust library to easily compare version numbers with no specific format, and test against various comparison operators.
+
+version_check 0.9.5
+License: Apache-2.0 OR MIT
+Authors: Sergio Benitez <sb@sergio.bz>
+Repository: https://github.com/SergioBenitez/version_check
+Description: Tiny crate to check the version of the installed/running rustc.
+
+vswhom 0.1.0
+License: MIT
+Authors: nabijaczleweli <nabijaczleweli@gmail.com>
+Repository: https://github.com/nabijaczleweli/vswhom.rs
+Description: FFI to Jon Blow's VS discovery script
+
+vswhom-sys 0.1.3
+License: MIT
+Authors: наб <nabijaczleweli@nabijaczleweli.xyz>|forrestsmithfb <forrest.smith@fb.com>
+Repository: https://github.com/nabijaczleweli/vswhom-sys.rs
+Description: Pure FFI to Jon Blow's VS discovery script
+
+walkdir 2.5.0
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/BurntSushi/walkdir
+Description: Recursively walk a directory.
+
+want 0.3.1
+License: MIT
+Authors: Sean McArthur <sean@seanmonstar.com>
+Repository: https://github.com/seanmonstar/want
+Description: Detect when another Future wants a result.
+
+wasi 0.11.1+wasi-snapshot-preview1
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: The Cranelift Project Developers
+Repository: https://github.com/bytecodealliance/wasi
+Description: Experimental WASI API bindings for Rust
+
+wasi 0.9.0+wasi-snapshot-preview1
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: The Cranelift Project Developers
+Repository: https://github.com/bytecodealliance/wasi
+Description: Experimental WASI API bindings for Rust
+
+wasip2 1.0.1+wasi-0.2.4
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/bytecodealliance/wasi-rs
+Description: WASIp2 API bindings for Rust
+
+wasm-bindgen 0.2.105
+License: Apache-2.0 OR MIT
+Authors: The wasm-bindgen Developers
+Repository: https://github.com/wasm-bindgen/wasm-bindgen
+Description: Easy support for interacting between JS and Rust.
+
+wasm-bindgen-futures 0.4.55
+License: Apache-2.0 OR MIT
+Authors: The wasm-bindgen Developers
+Repository: https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/futures
+Description: Bridging the gap between Rust Futures and JavaScript Promises
+
+wasm-bindgen-macro 0.2.105
+License: Apache-2.0 OR MIT
+Authors: The wasm-bindgen Developers
+Repository: https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/macro
+Description: Definition of the `#[wasm_bindgen]` attribute, an internal dependency
+
+wasm-bindgen-macro-support 0.2.105
+License: Apache-2.0 OR MIT
+Authors: The wasm-bindgen Developers
+Repository: https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/macro-support
+Description: Implementation APIs for the `#[wasm_bindgen]` attribute
+
+wasm-bindgen-shared 0.2.105
+License: Apache-2.0 OR MIT
+Authors: The wasm-bindgen Developers
+Repository: https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/shared
+Description: Shared support between wasm-bindgen and wasm-bindgen cli, an internal dependency.
+
+wasm-streams 0.4.2
+License: Apache-2.0 OR MIT
+Authors: Mattias Buelens <mattias@buelens.com>
+Repository: https://github.com/MattiasBuelens/wasm-streams/
+Description: Bridging between web streams and Rust streams using WebAssembly
+
+wayland-backend 0.3.11
+License: MIT
+Authors: Elinor Berger <elinor@safaradeg.net>
+Repository: https://github.com/smithay/wayland-rs
+Description: Low-level bindings to the Wayland protocol
+
+wayland-client 0.31.11
+License: MIT
+Authors: Elinor Berger <elinor@safaradeg.net>
+Repository: https://github.com/smithay/wayland-rs
+Description: Bindings to the standard C implementation of the wayland protocol, client side.
+
+wayland-protocols 0.32.9
+License: MIT
+Authors: Elinor Berger <elinor@safaradeg.net>
+Repository: https://github.com/smithay/wayland-rs
+Description: Generated API for the officials wayland protocol extensions
+
+wayland-protocols-wlr 0.3.9
+License: MIT
+Authors: Elinor Berger <elinor@safaradeg.net>
+Repository: https://github.com/smithay/wayland-rs
+Description: Generated API for the WLR wayland protocol extensions
+
+wayland-scanner 0.31.7
+License: MIT
+Authors: Elinor Berger <elinor@safaradeg.net>
+Repository: https://github.com/smithay/wayland-rs
+Description: Wayland Scanner for generating rust APIs from XML wayland protocol files.
+
+wayland-sys 0.31.7
+License: MIT
+Authors: Elinor Berger <elinor@safaradeg.net>
+Repository: https://github.com/smithay/wayland-rs
+Description: FFI bindings to the various libwayland-*.so libraries. You should only need this crate if you are working on custom wayland protocol extensions. Look at the crate wayland-client for usable bindings.
+
+web-sys 0.3.82
+License: Apache-2.0 OR MIT
+Authors: The wasm-bindgen Developers
+Repository: https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/web-sys
+Description: Bindings for all Web APIs, a procedurally generated crate from WebIDL
+
+web-time 1.1.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/daxpedda/web-time
+Description: Drop-in replacement for std::time for Wasm in browsers
+
+webkit2gtk 2.0.1
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/tauri-apps/webkit2gtk-rs
+Description: Rust bindings for webkit-gtk library
+
+webkit2gtk-sys 2.0.1
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/tauri-apps/webkit2gtk-rs
+Description: Rust binding for webkit-gtk library
+
+webpki-roots 1.0.4
+License: CDLA-Permissive-2.0
+Authors: UNKNOWN
+Repository: https://github.com/rustls/webpki-roots
+Description: Mozilla's CA root certificates for use with webpki
+
+webview2-com 0.38.0
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/wravery/webview2-rs
+Description: Rust bindings for the WebView2 COM APIs
+
+webview2-com-macros 0.8.0
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/wravery/webview2-rs
+Description: Macros which generate callback implementations for WebView2 COM APIs
+
+webview2-com-sys 0.38.0
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/wravery/webview2-rs
+Description: Bindings generated with the windows crate for the WebView2 COM APIs
+
+weezl 0.1.10
+License: Apache-2.0 OR MIT
+Authors: The image-rs Developers
+Repository: https://github.com/image-rs/weezl
+Description: Fast LZW compression and decompression.
+
+winapi 0.3.9
+License: Apache-2.0 OR MIT
+Authors: Peter Atashian <retep998@gmail.com>
+Repository: https://github.com/retep998/winapi-rs
+Description: Raw FFI bindings for all of Windows API.
+
+winapi-i686-pc-windows-gnu 0.4.0
+License: Apache-2.0 OR MIT
+Authors: Peter Atashian <retep998@gmail.com>
+Repository: https://github.com/retep998/winapi-rs
+Description: Import libraries for the i686-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead.
+
+winapi-util 0.1.11
+License: MIT OR Unlicense
+Authors: Andrew Gallant <jamslam@gmail.com>
+Repository: https://github.com/BurntSushi/winapi-util
+Description: A dumping ground for high level safe wrappers over windows-sys.
+
+winapi-x86_64-pc-windows-gnu 0.4.0
+License: Apache-2.0 OR MIT
+Authors: Peter Atashian <retep998@gmail.com>
+Repository: https://github.com/retep998/winapi-rs
+Description: Import libraries for the x86_64-pc-windows-gnu target. Please don't use this crate directly, depend on winapi instead.
+
+window-vibrancy 0.6.0
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/tauri-plugin-vibrancy
+Description: Make your windows vibrant.
+
+windows 0.61.3
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Rust for Windows
+
+windows-collections 0.2.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows collection types
+
+windows-core 0.61.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Core type support for COM and Windows
+
+windows-core 0.62.2
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Core type support for COM and Windows
+
+windows-future 0.2.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows async types
+
+windows-implement 0.60.2
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: The implement macro for the Windows crates
+
+windows-interface 0.59.3
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: The interface macro for the Windows crates
+
+windows-link 0.1.3
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Linking for Windows
+
+windows-link 0.2.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Linking for Windows
+
+windows-numerics 0.2.0
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows numeric types
+
+windows-result 0.3.4
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows error handling
+
+windows-result 0.4.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows error handling
+
+windows-strings 0.4.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows string types
+
+windows-strings 0.5.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows string types
+
+windows-sys 0.45.0
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Rust for Windows
+
+windows-sys 0.48.0
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Rust for Windows
+
+windows-sys 0.52.0
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Rust for Windows
+
+windows-sys 0.59.0
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Rust for Windows
+
+windows-sys 0.60.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Rust for Windows
+
+windows-sys 0.61.2
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Rust for Windows
+
+windows-targets 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import libs for Windows
+
+windows-targets 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import libs for Windows
+
+windows-targets 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import libs for Windows
+
+windows-targets 0.53.5
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import libs for Windows
+
+windows-threading 0.1.0
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows threading
+
+windows-version 0.1.7
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Windows version information
+
+windows_aarch64_gnullvm 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_aarch64_gnullvm 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_aarch64_gnullvm 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_aarch64_gnullvm 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_aarch64_msvc 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_aarch64_msvc 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_aarch64_msvc 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_aarch64_msvc 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_gnu 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_gnu 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_gnu 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_gnu 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_gnullvm 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_gnullvm 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_msvc 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_msvc 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_msvc 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_i686_msvc 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnu 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnu 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnu 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnu 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnullvm 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnullvm 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnullvm 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_gnullvm 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_msvc 0.42.2
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_msvc 0.48.5
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_msvc 0.52.6
+License: Apache-2.0 OR MIT
+Authors: Microsoft
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+windows_x86_64_msvc 0.53.1
+License: Apache-2.0 OR MIT
+Authors: UNKNOWN
+Repository: https://github.com/microsoft/windows-rs
+Description: Import lib for Windows
+
+winnow 0.5.40
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/winnow-rs/winnow
+Description: A byte-oriented, zero-copy, parser combinators library
+
+winnow 0.7.13
+License: MIT
+Authors: UNKNOWN
+Repository: https://github.com/winnow-rs/winnow
+Description: A byte-oriented, zero-copy, parser combinators library
+
+winreg 0.55.0
+License: MIT
+Authors: Igor Shaula <gentoo90@gmail.com>
+Repository: https://github.com/gentoo90/winreg-rs
+Description: Rust bindings to MS Windows Registry API
+
+wit-bindgen 0.46.0
+License: Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT
+Authors: Alex Crichton <alex@alexcrichton.com>
+Repository: https://github.com/bytecodealliance/wit-bindgen
+Description: Rust bindings generator and runtime support for WIT and the component model. Used when compiling Rust programs to the component model.
+
+wl-clipboard-rs 0.9.2
+License: Apache-2.0 OR MIT
+Authors: Ivan Molodetskikh <yalterz@gmail.com>
+Repository: https://github.com/YaLTeR/wl-clipboard-rs
+Description: Access to the Wayland clipboard for terminal and other window-less applications.
+
+writeable 0.6.2
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: A more efficient alternative to fmt::Display
+
+wry 0.53.5
+License: Apache-2.0 OR MIT
+Authors: Tauri Programme within The Commons Conservancy
+Repository: https://github.com/tauri-apps/wry
+Description: Cross-platform WebView rendering library
+
+wyz 0.5.1
+License: MIT
+Authors: myrrlyn <self@myrrlyn.dev>
+Repository: https://github.com/myrrlyn/wyz
+Description: myrrlyn’s utility collection
+
+x11 2.21.0
+License: MIT
+Authors: daggerbot <daggerbot@gmail.com>|Erle Pereira <erle@erlepereira.com>|AltF02 <contact@altf2.dev>
+Repository: https://github.com/AltF02/x11-rs.git
+Description: X11 library bindings for Rust
+
+x11-dl 2.21.0
+License: MIT
+Authors: daggerbot <daggerbot@gmail.com>|Erle Pereira <erle@erlepereira.com>|AltF02 <contact@altf2.dev>
+Repository: https://github.com/AltF02/x11-rs.git
+Description: X11 library bindings for Rust
+
+x11rb 0.13.2
+License: Apache-2.0 OR MIT
+Authors: Uli Schlachter <psychon@znc.in>|Eduardo Sánchez Muñoz <eduardosm-dev@e64.io>|notgull <jtnunley01@gmail.com>
+Repository: https://github.com/psychon/x11rb
+Description: Rust bindings to X11
+
+x11rb-protocol 0.13.2
+License: Apache-2.0 OR MIT
+Authors: Uli Schlachter <psychon@znc.in>|Eduardo Sánchez Muñoz <eduardosm-dev@e64.io>|notgull <jtnunley01@gmail.com>
+Repository: https://github.com/psychon/x11rb
+Description: Rust bindings to X11
+
+xattr 1.6.1
+License: Apache-2.0 OR MIT
+Authors: Steven Allen <steven@stebalien.com>
+Repository: https://github.com/Stebalien/xattr
+Description: unix extended filesystem attributes
+
+yoke 0.8.1
+License: Unicode-3.0
+Authors: Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/unicode-org/icu4x
+Description: Abstraction allowing borrowed data to be carried along with the backing data it borrows from
+
+yoke-derive 0.8.1
+License: Unicode-3.0
+Authors: Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/unicode-org/icu4x
+Description: Custom derive for the yoke crate
+
+zbus 5.12.0
+License: MIT
+Authors: Zeeshan Ali Khan <zeeshanak@gnome.org>
+Repository: https://github.com/z-galaxy/zbus/
+Description: API for D-Bus communication
+
+zbus_macros 5.12.0
+License: MIT
+Authors: Marc-André Lureau <marcandre.lureau@redhat.com>|Zeeshan Ali Khan <zeeshanak@gnome.org>
+Repository: https://github.com/z-galaxy/zbus/
+Description: proc-macros for zbus
+
+zbus_names 4.2.0
+License: MIT
+Authors: Zeeshan Ali Khan <zeeshanak@gnome.org>
+Repository: https://github.com/dbus2/zbus/
+Description: A collection of D-Bus bus names types
+
+zerocopy 0.8.27
+License: Apache-2.0 OR BSD-2-Clause OR MIT
+Authors: Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>
+Repository: https://github.com/google/zerocopy
+Description: Zerocopy makes zero-cost memory manipulation effortless. We write "unsafe" so you don't have to.
+
+zerocopy-derive 0.8.27
+License: Apache-2.0 OR BSD-2-Clause OR MIT
+Authors: Joshua Liebow-Feeser <joshlf@google.com>|Jack Wrenn <jswrenn@amazon.com>
+Repository: https://github.com/google/zerocopy
+Description: Custom derive for traits from the zerocopy crate
+
+zerofrom 0.1.6
+License: Unicode-3.0
+Authors: Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/unicode-org/icu4x
+Description: ZeroFrom trait for constructing
+
+zerofrom-derive 0.1.6
+License: Unicode-3.0
+Authors: Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/unicode-org/icu4x
+Description: Custom derive for the zerofrom crate
+
+zeroize 1.8.2
+License: Apache-2.0 OR MIT
+Authors: The RustCrypto Project Developers
+Repository: https://github.com/RustCrypto/utils
+Description: Securely clear secrets from memory with a simple trait built on stable Rust primitives which guarantee memory is zeroed using an operation will not be 'optimized away' by the compiler. Uses a portable pure Rust implementation that works everywhere, even WASM!
+
+zerotrie 0.2.3
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: A data structure that efficiently maps strings to integers
+
+zerovec 0.11.5
+License: Unicode-3.0
+Authors: The ICU4X Project Developers
+Repository: https://github.com/unicode-org/icu4x
+Description: Zero-copy vector backed by a byte array
+
+zerovec-derive 0.11.2
+License: Unicode-3.0
+Authors: Manish Goregaokar <manishsmail@gmail.com>
+Repository: https://github.com/unicode-org/icu4x
+Description: Custom derive for the zerovec crate
+
+zip 0.6.6
+License: MIT
+Authors: Mathijs van de Nes <git@mathijs.vd-nes.nl>|Marli Frost <marli@frost.red>|Ryan Levick <ryan.levick@gmail.com>
+Repository: https://github.com/zip-rs/zip.git
+Description: Library to support the reading and writing of zip files.
+
+zip 4.6.1
+License: MIT
+Authors: Mathijs van de Nes <git@mathijs.vd-nes.nl>|Marli Frost <marli@frost.red>|Ryan Levick <ryan.levick@gmail.com>|Chris Hennick <hennickc@amazon.com>
+Repository: https://github.com/zip-rs/zip2.git
+Description: Library to support the reading and writing of zip files.
+
+zip 6.0.0
+License: MIT
+Authors: Mathijs van de Nes <git@mathijs.vd-nes.nl>|Marli Frost <marli@frost.red>|Ryan Levick <ryan.levick@gmail.com>|Chris Hennick <hennickc@amazon.com>
+Repository: https://github.com/zip-rs/zip2.git
+Description: Library to support the reading and writing of zip files.
+
+zlib-rs 0.5.4
+License: Zlib
+Authors: UNKNOWN
+Repository: https://github.com/trifectatechfoundation/zlib-rs
+Description: A memory-safe zlib implementation written in rust
+
+zopfli 0.8.3
+License: Apache-2.0
+Authors: UNKNOWN
+Repository: https://github.com/zopfli-rs/zopfli
+Description: A Rust implementation of the Zopfli compression algorithm.
+
+zune-core 0.4.12
+License: Apache-2.0 OR MIT OR Zlib
+Authors: UNKNOWN
+Repository: UNKNOWN
+Description: Core utilities for image processing in the zune family of crates
+
+zune-jpeg 0.4.21
+License: Apache-2.0 OR MIT OR Zlib
+Authors: caleb <etemesicaleb@gmail.com>
+Repository: https://github.com/etemesi254/zune-image/tree/dev/crates/zune-jpeg
+Description: A fast, correct and safe jpeg decoder
+
+zvariant 5.8.0
+License: MIT
+Authors: Zeeshan Ali Khan <zeeshanak@gnome.org>
+Repository: https://github.com/dbus2/zbus/
+Description: D-Bus & GVariant encoding & decoding
+
+zvariant_derive 5.8.0
+License: MIT
+Authors: Zeeshan Ali Khan <zeeshanak@gnome.org>
+Repository: https://github.com/dbus2/zbus/
+Description: D-Bus & GVariant encoding & decoding
+
+zvariant_utils 3.2.1
+License: MIT
+Authors: Zeeshan Ali Khan <zeeshanak@gnome.org>|turbocooler <turbocooler@cocaine.ninja>
+Repository: https://github.com/dbus2/zbus/
+Description: Various utilities used internally by the zvariant crate.

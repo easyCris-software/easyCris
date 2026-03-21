@@ -1,0 +1,20 @@
+{
+  "n_total": 20,
+  "n_events": 14,
+  "n_censored": 6,
+  "n_treatment": 10,
+  "n_events_treatment": 6,
+  "n_censored_treatment": 4,
+  "n_control": 10,
+  "n_events_control": 8,
+  "n_censored_control": 2,
+  "median_treatment": 25,
+  "median_ci_lower_treatment": 5,
+  "median_ci_upper_treatment": "NA",
+  "median_control": 17,
+  "median_ci_lower_control": 3,
+  "median_ci_upper_control": "NA",
+  "logrank_chi2": 1.6917,
+  "logrank_df": 1,
+  "logrank_p": 0.1934
+}

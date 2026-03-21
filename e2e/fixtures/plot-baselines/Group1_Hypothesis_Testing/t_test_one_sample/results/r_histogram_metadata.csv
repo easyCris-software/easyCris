@@ -1,0 +1,17 @@
+metric,value
+plot_type,histogram
+n_points,24
+n_traces,2
+n_bins,30
+bin_count,30
+hist_bin_width,0.3207
+value_min,21.9
+value_max,31.2
+value_mean,26.5458
+value_std,2.8657
+min,21.9
+max,31.2
+kde_bandwidth,1.3659
+kde_points,512
+kde_max_density,0.1052
+kde_mean_density,0.057

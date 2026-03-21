@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "test_type": "mann_whitney_u",
+  "U_statistic": 0,
+  "p_value": 0.0002,
+  "is_significant": true,
+  "alpha": 0.05,
+  "n1": 10,
+  "n2": 10,
+  "sum_ranks_group1": 55,
+  "sum_ranks_group2": 155,
+  "expected_U_H0": 50,
+  "std_U_H0": 13.2288,
+  "z_statistic": -3.7796,
+  "rank_biserial_correlation": 1,
+  "effect_size_interpretation": "large",
+  "median1": 23.9,
+  "median2": 28.75,
+  "median_difference": -4.85,
+  "group1_name": "A",
+  "group2_name": "B",
+  "method": "normal_approximation"
+}
