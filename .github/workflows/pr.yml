@@ -55,8 +55,9 @@ jobs:
       - name: Forbidden path hygiene check
         shell: pwsh
         run: |
-          $matches = git ls-files | rg "^(backup/|old_documentation/|_documentation/|memory/|memory_db/|playwright-report/|edgedriver_win|\.env$|\.env\.production$|\.claude/|AGENTS\.md$|CLAUDE\.md$|\.mcp\.json$|python_embedded/python_dependencies/|python_embedded/python\.exe|python_embedded/python312\.dll|python_embedded/.*\.pyd$|python_embedded/.*\.dll$|python_embedded/.*embed.*\.zip$|python_embedded/.*runtime.*\.zip$|src-tauri/resources/legal/EULA\.txt$|^(_test_validation/|RNA_seq/validation/))"
+          $forbiddenPattern = "^(backup/|old_documentation/|_documentation/|memory/|memory_db/|playwright-report/|edgedriver_win|\.env$|\.env\.production$|\.claude/|AGENTS\.md$|CLAUDE\.md$|\.mcp\.json$|python_embedded/python_dependencies/|python_embedded/python\.exe|python_embedded/python312\.dll|python_embedded/python\._pth$|python_embedded/.*\.pyd$|python_embedded/.*\.dll$|python_embedded/.*\.pyc$|python_embedded/.*embed.*\.zip$|python_embedded/.*runtime.*\.zip$|src-tauri/resources/legal/EULA\.txt$|^(_test_validation/|RNA_seq/validation/))"
+          $matches = git ls-files | Where-Object { $_ -match $forbiddenPattern }
           if ($matches) {
-            Write-Host $matches
+            Write-Host ($matches -join "`n")
             throw "Forbidden tracked paths detected in PR"
           }
