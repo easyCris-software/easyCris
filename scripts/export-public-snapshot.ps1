@@ -17,13 +17,19 @@ $includePaths = @(
   "src",
   "src-tauri",
   "python_embedded/statistics_module",
+  "python_embedded/rnaseq_module",
   "python_embedded/stats_backend.py",
+  "python_embedded/rnaseq_backend.py",
   "python_embedded/requirements-validated.txt",
+  "python_embedded/requirements-rnaseq.txt",
+  "python_embedded/.gitignore",
   "scripts",
   "e2e",
   "docs",
   "public",
   "legal",
+  "runtime-licenses-js.json",
+  "runtime-licenses-rust.json",
   "package.json",
   "package-lock.json",
   "tsconfig.json",
@@ -50,6 +56,9 @@ $excludePrefixes = @(
   "python_embedded/python_dependencies/",
   "python_embedded/python.exe",
   "python_embedded/python312.dll",
+  "python_embedded/python._pth",
+  "python_embedded/statistics_module/__pycache__/",
+  "python_embedded/rnaseq_module/__pycache__/",
   "src-tauri/resources/legal/EULA.txt",
   "scripts/check-commercial-license.ps1",
   "scripts/generate-license-key.ps1",
@@ -123,15 +132,15 @@ if (-not $DryRun) {
   git add .
 
   # Hard validation checks (run after staging so git ls-files is authoritative).
-  $forbiddenPattern = "^(backup/|old_documentation/|_documentation/|memory/|memory_db/|playwright-report/|edgedriver_win|\.env$|\.env\.production$|\.claude/|AGENTS\.md$|CLAUDE\.md$|\.mcp\.json$|python_embedded/python_dependencies/|python_embedded/python\.exe|python_embedded/python312\.dll|python_embedded/.*\.pyd$|python_embedded/.*\.dll$|python_embedded/.*embed.*\.zip$|python_embedded/.*runtime.*\.zip$|src-tauri/resources/legal/EULA\.txt$)"
-  $forbidden = git ls-files 2>$null | rg $forbiddenPattern
+  $forbiddenPattern = "^(backup/|old_documentation/|_documentation/|memory/|memory_db/|playwright-report/|edgedriver_win|\.env$|\.env\.production$|\.claude/|AGENTS\.md$|CLAUDE\.md$|\.mcp\.json$|python_embedded/python_dependencies/|python_embedded/python\.exe|python_embedded/python312\.dll|python_embedded/python\._pth$|python_embedded/.*\.pyd$|python_embedded/.*\.dll$|python_embedded/.*\.pyc$|python_embedded/.*embed.*\.zip$|python_embedded/.*runtime.*\.zip$|src-tauri/resources/legal/EULA\.txt$)"
+  $forbidden = git ls-files 2>$null | Where-Object { $_ -match $forbiddenPattern }
   if ($forbidden) {
-    throw "Forbidden paths found in export:`n$forbidden"
+    throw ("Forbidden paths found in export:`n" + ($forbidden -join "`n"))
   }
 
-  $datasetPaths = git ls-files 2>$null | rg "^(_test_validation/|RNA_seq/validation/)"
+  $datasetPaths = git ls-files 2>$null | Where-Object { $_ -match "^(_test_validation/|RNA_seq/validation/)" }
   if ($datasetPaths) {
-    throw "Validation datasets/caches found in export without explicit signoff:`n$datasetPaths"
+    throw ("Validation datasets/caches found in export without explicit signoff:`n" + ($datasetPaths -join "`n"))
   }
 
   $largeFiles = git ls-files | ForEach-Object {

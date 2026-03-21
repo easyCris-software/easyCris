@@ -14,7 +14,7 @@ use crate::modules::errors::{AppErrorEnvelope, CommandResult};
 use litcrypt::lc;
 use serde::Deserialize;
 use serde_json::Value;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use std::sync::OnceLock;
 use tauri::Emitter;
@@ -40,6 +40,35 @@ fn get_python_working_dir() -> PathBuf {
 
     // As a last resort, fall back to the current directory.
     PathBuf::from(".")
+}
+
+fn path_points_to_command_name(path: &Path) -> bool {
+    path.parent().is_none() && path.components().count() == 1
+}
+
+fn resolve_python_script_command(base_dir: &Path) -> PathBuf {
+    if let Some(explicit_python) = std::env::var_os("EASYCRIS_PYTHON_EXE") {
+        let explicit = PathBuf::from(explicit_python);
+        if explicit.exists() {
+            return explicit;
+        }
+        log::warn!(
+            "EASYCRIS_PYTHON_EXE is set but does not exist: {:?}. Falling back to auto-resolution.",
+            explicit
+        );
+    }
+
+    let embedded_python = base_dir.join(python_backend_script_rel());
+    if embedded_python.exists() {
+        return embedded_python;
+    }
+
+    let venv_python = base_dir.join(".venv-public").join("Scripts").join("python.exe");
+    if venv_python.exists() {
+        return venv_python;
+    }
+
+    PathBuf::from("python")
 }
 
 /// Relative paths from executable directory
@@ -556,7 +585,7 @@ pub async fn spawn_python_backend(
     // Determine command based on mode - resolve to absolute paths
     let (cmd, args): (PathBuf, Vec<PathBuf>) = match mode {
         BackendMode::Script => {
-            let python_exe = base_dir.join(python_backend_script_rel());
+            let python_exe = resolve_python_script_command(&base_dir);
             let script_path = base_dir.join(stats_backend_script_rel());
             log::info!(
                 "Using Python script mode: {:?} {:?}",
@@ -573,7 +602,7 @@ pub async fn spawn_python_backend(
     };
 
     // Verify executable exists
-    if !cmd.exists() {
+    if !cmd.exists() && !path_points_to_command_name(&cmd) {
         let detail = match mode {
             BackendMode::CompiledRequired => format!(
                 "{} {}. {} '{}'.",
@@ -823,7 +852,7 @@ pub async fn spawn_rnaseq_backend(
 
     let (cmd, args): (PathBuf, Vec<PathBuf>) = match mode {
         BackendMode::Script => {
-            let python_exe = base_dir.join(python_backend_script_rel());
+            let python_exe = resolve_python_script_command(&base_dir);
             let script_path = base_dir.join(rnaseq_backend_script_rel());
             log::info!(
                 "Using RNA-seq script mode: {:?} {:?}",
@@ -839,7 +868,7 @@ pub async fn spawn_rnaseq_backend(
         }
     };
 
-    if !cmd.exists() {
+    if !cmd.exists() && !path_points_to_command_name(&cmd) {
         let detail = match mode {
             BackendMode::CompiledRequired => format!(
                 "{} {}. {} '{}'.",
@@ -1081,7 +1110,7 @@ fn resolve_plot_backend_command(
 
     let (cmd, args): (PathBuf, Vec<PathBuf>) = match mode {
         BackendMode::Script => {
-            let python_exe = base_dir.join(python_backend_script_rel());
+            let python_exe = resolve_python_script_command(&base_dir);
             let script_path = base_dir.join(plot_backend_script_rel());
             log::info!("Using Plot script mode: {:?} {:?}", python_exe, script_path);
             (python_exe, vec![script_path])
@@ -1093,7 +1122,7 @@ fn resolve_plot_backend_command(
         }
     };
 
-    if !cmd.exists() {
+    if !cmd.exists() && !path_points_to_command_name(&cmd) {
         let detail = match mode {
             BackendMode::CompiledRequired => format!(
                 "{} {}. {} '{}'.",

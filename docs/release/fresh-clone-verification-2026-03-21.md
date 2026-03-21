@@ -85,3 +85,10 @@
 - The only open launch gate is Task 6.3 (release smoke):
   1. NSIS artifact appears in GitHub Release
   2. `latest.json` is accessible at the updater endpoint
+
+## Defer Decision (Approved)
+- Task 6.3 release smoke is explicitly deferred until private release secrets are provisioned.
+- First production tagged release in `easycris_tauri` will be treated as functional release smoke for signing + artifact upload + `latest.json` publication.
+- Release workflow code path has already been hardened and reviewed in:
+  - `1adcd4f02` (`ci: harden release workflow tags and pin action SHAs`)
+  - `28dc73c13` (`ci: make litcrypt key optional and add gitleaks history evidence`)

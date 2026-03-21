@@ -1,6 +1,7 @@
 param(
   [string]$VenvPath = ".venv-public",
-  [switch]$Recreate
+  [switch]$Recreate,
+  [switch]$IncludeRnaseq
 )
 
 $ErrorActionPreference = "Stop"
@@ -25,6 +26,7 @@ $requirementsPath = Join-Path $repoRoot "python_embedded\requirements-validated.
 if (-not (Test-Path $requirementsPath)) {
   throw "Missing requirements file: $requirementsPath"
 }
+$rnaSeqRequirementsPath = Join-Path $repoRoot "python_embedded\requirements-rnaseq.txt"
 
 if ($Recreate -and (Test-Path $VenvPath)) {
   Remove-Item -Recurse -Force $VenvPath
@@ -86,7 +88,18 @@ try {
   }
 }
 
+if ($IncludeRnaseq) {
+  if (-not (Test-Path $rnaSeqRequirementsPath)) {
+    throw "IncludeRnaseq was requested but requirements file is missing: $rnaSeqRequirementsPath"
+  }
+  Invoke-CheckedCommand -FilePath $venvPython -Arguments @("-m", "pip", "install", "-r", $rnaSeqRequirementsPath) -FailureMessage "Failed to install RNA-seq requirements"
+}
+
 # Minimal runtime health check for stats backend stack.
 Invoke-CheckedCommand -FilePath $venvPython -Arguments @("-c", "import numpy, pandas, scipy, statsmodels, lmfit, lifelines, scikit_posthocs; print('python-runtime-ok')") -FailureMessage "Runtime import health check failed"
+
+if ($IncludeRnaseq) {
+  Invoke-CheckedCommand -FilePath $venvPython -Arguments @("-c", "import pydeseq2; print('rnaseq-runtime-ok')") -FailureMessage "RNA-seq runtime import health check failed"
+}
 
 Write-Host "Bootstrap complete: $VenvPath"

@@ -1,0 +1,4 @@
+# Keep RNA-seq overlay minimal and compatible with validated base pins.
+# `anndata==0.11.0` avoids pulling `legacy-api-wrap` in this lane.
+anndata==0.11.0
+pydeseq2==0.4.12

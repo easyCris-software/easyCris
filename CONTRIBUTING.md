@@ -7,9 +7,19 @@
 3. Run local checks:
    - `npm ci`
    - `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1`
+   - For RNA-seq source work: `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1 -IncludeRnaseq`
    - `npm run -s typecheck`
    - `npm run -s license:summary:check`
    - `npm run -s test:run -- src/lib/analysis/__tests__/resultParser.lmmAnova.test.ts src/utils/__tests__/lmmAnovaTables.test.ts`
+
+## Python Dev Setup
+
+- Base setup (`bootstrap-python.ps1`) installs validated stats dependencies.
+- `-IncludeRnaseq` installs pinned RNA-seq-specific dependencies.
+- Backend script mode resolves interpreter in this order: `EASYCRIS_PYTHON_EXE` -> `python_embedded/python.exe` -> `.venv-public/Scripts/python.exe` -> `python` on PATH.
+- Quick verification:
+  - `.venv-public\\Scripts\\python.exe -c "import statistics_module; print('stats-ok')"`
+  - `.venv-public\\Scripts\\python.exe -c "import rnaseq_module; print('rnaseq-ok')"` (after `-IncludeRnaseq`)
 
 ## Pull Request Rules
 

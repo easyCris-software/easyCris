@@ -52,9 +52,8 @@ matplotlib==3.10.7
 seaborn==0.13.2
 kaleido==0.1.0.post1
 # truststore - REMOVED (replaced by certifi MIT stub using Windows cert store)
-#RNAseq
-
-Pydeseq2 and its deps
+# RNA-seq
+# Optional overlay is maintained in requirements-rnaseq.txt
 # Gene Set Enrichment
 gseapy==1.1.11
 

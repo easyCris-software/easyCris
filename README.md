@@ -34,7 +34,7 @@ No usage data, analysis data, or file contents are sent to external servers.
 
 ## 🧪 What is easyCris?
 
-easyCris is a free desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
+easyCris is a free desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required for official installer builds.
 
 ---
 
@@ -333,8 +333,9 @@ easyCris ships with three built-in reference guides accessible from the Help men
 
 1. Install Node.js, Python 3.12, and Rust toolchain (`rustup` + MSVC build tools on Windows)
 2. Run `npm ci`
-3. Run `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1`
+3. Run `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1 -IncludeRnaseq` for full source functionality (use without `-IncludeRnaseq` for stats-only setup)
 4. Run `npm run -s typecheck`
+5. Run `npm run tauri dev`
 
 ---
 
