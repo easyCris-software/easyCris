@@ -1,0 +1,3860 @@
+{
+  "@babel/code-frame@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\code-frame",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\code-frame\\LICENSE"
+  },
+  "@babel/compat-data@7.28.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\compat-data",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\compat-data\\LICENSE"
+  },
+  "@babel/core@7.28.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\core",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\core\\LICENSE"
+  },
+  "@babel/generator@7.28.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\generator",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\generator\\LICENSE"
+  },
+  "@babel/helper-compilation-targets@7.27.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-compilation-targets",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-compilation-targets\\LICENSE"
+  },
+  "@babel/helper-globals@7.28.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-globals",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-globals\\LICENSE"
+  },
+  "@babel/helper-module-imports@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-module-imports",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-module-imports\\LICENSE"
+  },
+  "@babel/helper-module-transforms@7.28.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-module-transforms",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-module-transforms\\LICENSE"
+  },
+  "@babel/helper-plugin-utils@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-plugin-utils",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-plugin-utils\\LICENSE"
+  },
+  "@babel/helper-string-parser@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-string-parser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-string-parser\\LICENSE"
+  },
+  "@babel/helper-validator-identifier@7.28.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-validator-identifier",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-validator-identifier\\LICENSE"
+  },
+  "@babel/helper-validator-option@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-validator-option",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-validator-option\\LICENSE"
+  },
+  "@babel/helpers@7.28.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helpers",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helpers\\LICENSE"
+  },
+  "@babel/parser@7.28.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\parser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\parser\\LICENSE"
+  },
+  "@babel/plugin-proposal-export-namespace-from@7.18.9": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-proposal-export-namespace-from",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-proposal-export-namespace-from\\LICENSE"
+  },
+  "@babel/plugin-syntax-dynamic-import@7.8.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-syntax-dynamic-import",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-syntax-dynamic-import\\LICENSE"
+  },
+  "@babel/plugin-syntax-export-namespace-from@7.8.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-export-namespace-from",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-syntax-export-namespace-from",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-syntax-export-namespace-from\\LICENSE"
+  },
+  "@babel/plugin-transform-modules-commonjs@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-transform-modules-commonjs",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\plugin-transform-modules-commonjs\\LICENSE"
+  },
+  "@babel/template@7.27.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\template",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\template\\LICENSE"
+  },
+  "@babel/traverse@7.28.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\traverse",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\traverse\\LICENSE"
+  },
+  "@babel/types@7.28.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\types",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\types\\LICENSE"
+  },
+  "@choojs/findup@0.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/choojs/findup",
+    "publisher": "Filirom1",
+    "email": "filirom1@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@choojs\\findup",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@choojs\\findup\\README.md"
+  },
+  "@date-fns/tz@1.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/date-fns/tz",
+    "publisher": "Sasha Koss",
+    "email": "koss@nocorp.me",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@date-fns\\tz",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@date-fns\\tz\\LICENSE.md"
+  },
+  "@emotion/is-prop-valid@1.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/emotion-js/emotion/tree/main/packages/is-prop-valid",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@emotion\\is-prop-valid",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@emotion\\is-prop-valid\\LICENSE"
+  },
+  "@emotion/memoize@0.9.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/emotion-js/emotion/tree/main/packages/memoize",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@emotion\\memoize",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@emotion\\memoize\\LICENSE"
+  },
+  "@floating-ui/core@1.7.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/floating-ui/floating-ui",
+    "publisher": "atomiks",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\core",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\core\\LICENSE"
+  },
+  "@floating-ui/dom@1.7.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/floating-ui/floating-ui",
+    "publisher": "atomiks",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\dom",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\dom\\LICENSE"
+  },
+  "@floating-ui/react-dom@2.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/floating-ui/floating-ui",
+    "publisher": "atomiks",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\react-dom",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\react-dom\\LICENSE"
+  },
+  "@floating-ui/utils@0.2.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/floating-ui/floating-ui",
+    "publisher": "atomiks",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\utils",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@floating-ui\\utils\\LICENSE"
+  },
+  "@glideapps/glide-data-grid@6.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/glideapps/glide-data-grid",
+    "publisher": "Glide",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@glideapps\\glide-data-grid",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@glideapps\\glide-data-grid\\LICENSE"
+  },
+  "@jridgewell/gen-mapping@0.3.13": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jridgewell/sourcemaps",
+    "publisher": "Justin Ridgewell",
+    "email": "justin@ridgewell.name",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\gen-mapping",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\gen-mapping\\LICENSE"
+  },
+  "@jridgewell/remapping@2.3.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jridgewell/sourcemaps",
+    "publisher": "Justin Ridgewell",
+    "email": "justin@ridgewell.name",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\remapping",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\remapping\\LICENSE"
+  },
+  "@jridgewell/resolve-uri@3.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jridgewell/resolve-uri",
+    "publisher": "Justin Ridgewell",
+    "email": "justin@ridgewell.name",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\resolve-uri",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\resolve-uri\\LICENSE"
+  },
+  "@jridgewell/sourcemap-codec@1.5.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jridgewell/sourcemaps",
+    "publisher": "Justin Ridgewell",
+    "email": "justin@ridgewell.name",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\sourcemap-codec",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\sourcemap-codec\\LICENSE"
+  },
+  "@jridgewell/trace-mapping@0.3.31": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jridgewell/sourcemaps",
+    "publisher": "Justin Ridgewell",
+    "email": "justin@ridgewell.name",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\trace-mapping",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@jridgewell\\trace-mapping\\LICENSE"
+  },
+  "@linaria/core@4.5.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/callstack/linaria",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\core",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\core\\LICENSE"
+  },
+  "@linaria/logger@4.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/callstack/linaria",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\logger",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\logger\\LICENSE"
+  },
+  "@linaria/react@4.5.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/callstack/linaria",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\react",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\react\\LICENSE"
+  },
+  "@linaria/tags@4.5.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/callstack/linaria",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\tags",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\tags\\LICENSE"
+  },
+  "@linaria/utils@4.5.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/callstack/linaria",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\utils",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@linaria\\utils\\LICENSE"
+  },
+  "@mapbox/geojson-rewind@0.5.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/geojson-rewind",
+    "publisher": "Tom MacWright",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\geojson-rewind",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\geojson-rewind\\LICENSE.txt"
+  },
+  "@mapbox/geojson-types@1.0.2": {
+    "licenses": "ISC",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\geojson-types",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\geojson-types\\LICENSE"
+  },
+  "@mapbox/jsonlint-lines-primitives@2.0.2": {
+    "licenses": "Custom: https://github.com/tmcw/jsonlint",
+    "repository": "https://github.com/mapbox/jsonlint",
+    "publisher": "Zach Carter",
+    "email": "zach@carter.name",
+    "url": "http://zaa.ch",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\jsonlint-lines-primitives",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\jsonlint-lines-primitives\\README.md"
+  },
+  "@mapbox/mapbox-gl-supported@1.5.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/mapbox/mapbox-gl-supported",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\mapbox-gl-supported",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\mapbox-gl-supported\\LICENSE.txt"
+  },
+  "@mapbox/point-geometry@0.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/point-geometry",
+    "publisher": "Tom MacWright",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\point-geometry",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\point-geometry\\LICENSE"
+  },
+  "@mapbox/tiny-sdf@1.2.5": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/mapbox/tiny-sdf",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\tiny-sdf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\tiny-sdf\\LICENSE.txt"
+  },
+  "@mapbox/tiny-sdf@2.0.7": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/mapbox/tiny-sdf",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\@mapbox\\tiny-sdf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\@mapbox\\tiny-sdf\\LICENSE.txt"
+  },
+  "@mapbox/unitbezier@0.0.0": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/mapbox/unitbezier",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\unitbezier",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\unitbezier\\README.md"
+  },
+  "@mapbox/unitbezier@0.0.1": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/mapbox/unitbezier",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\@mapbox\\unitbezier",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\@mapbox\\unitbezier\\LICENSE"
+  },
+  "@mapbox/vector-tile@1.3.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/mapbox/vector-tile-js",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\vector-tile",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\vector-tile\\LICENSE.txt"
+  },
+  "@mapbox/whoots-js@3.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/whoots-js",
+    "publisher": "Bryan Housel",
+    "email": "bryan@mapbox.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\whoots-js",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@mapbox\\whoots-js\\LICENSE.md"
+  },
+  "@maplibre/maplibre-gl-style-spec@20.4.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/maplibre/maplibre-gl-style-spec",
+    "publisher": "MapLibre",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@maplibre\\maplibre-gl-style-spec",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@maplibre\\maplibre-gl-style-spec\\LICENSE.txt"
+  },
+  "@phosphor-icons/react@2.1.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/phosphor-icons/react",
+    "publisher": "Tobias Fried",
+    "email": "friedtm@gmail.com",
+    "url": "https://tobiasfried.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@phosphor-icons\\react",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@phosphor-icons\\react\\LICENSE"
+  },
+  "@plotly/d3-sankey-circular@0.33.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/d3-sankey-circular",
+    "publisher": "Tom Shanley",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\d3-sankey-circular",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\d3-sankey-circular\\LICENSE"
+  },
+  "@plotly/d3-sankey@0.7.2": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-sankey",
+    "publisher": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\d3-sankey",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\d3-sankey\\LICENSE"
+  },
+  "@plotly/d3@3.8.2": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/plotly/d3",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\d3",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\d3\\LICENSE"
+  },
+  "@plotly/mapbox-gl@1.13.4": {
+    "licenses": "MIT*",
+    "repository": "https://github.com/plotly/mapbox-gl-js",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\mapbox-gl",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\mapbox-gl\\LICENSE.txt"
+  },
+  "@plotly/point-cluster@3.1.9": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/point-cluster",
+    "publisher": "Dmitry Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\point-cluster",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@plotly\\point-cluster\\license.md"
+  },
+  "@plotly/regl@2.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/regl",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\plotly.js\\node_modules\\regl",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\plotly.js\\node_modules\\regl\\LICENSE"
+  },
+  "@radix-ui/number@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\number",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\number\\README.md"
+  },
+  "@radix-ui/primitive@1.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\primitive",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\primitive\\LICENSE"
+  },
+  "@radix-ui/react-accordion@1.2.12": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-accordion",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-accordion\\LICENSE"
+  },
+  "@radix-ui/react-alert-dialog@1.1.15": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-alert-dialog",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-alert-dialog\\LICENSE"
+  },
+  "@radix-ui/react-arrow@1.1.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-arrow",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-arrow\\LICENSE"
+  },
+  "@radix-ui/react-checkbox@1.3.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-checkbox",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-checkbox\\LICENSE"
+  },
+  "@radix-ui/react-collapsible@1.1.12": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-collapsible",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-collapsible\\LICENSE"
+  },
+  "@radix-ui/react-collection@1.1.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-collection",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-collection\\LICENSE"
+  },
+  "@radix-ui/react-compose-refs@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-compose-refs",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-compose-refs\\README.md"
+  },
+  "@radix-ui/react-context-menu@2.2.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-context-menu",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-context-menu\\LICENSE"
+  },
+  "@radix-ui/react-context@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-context",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-context\\README.md"
+  },
+  "@radix-ui/react-dialog@1.1.15": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-dialog",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-dialog\\LICENSE"
+  },
+  "@radix-ui/react-direction@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-direction",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-direction\\README.md"
+  },
+  "@radix-ui/react-dismissable-layer@1.1.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-dismissable-layer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-dismissable-layer\\LICENSE"
+  },
+  "@radix-ui/react-dropdown-menu@2.1.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-dropdown-menu",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-dropdown-menu\\LICENSE"
+  },
+  "@radix-ui/react-focus-guards@1.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-focus-guards",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-focus-guards\\LICENSE"
+  },
+  "@radix-ui/react-focus-scope@1.1.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-focus-scope",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-focus-scope\\LICENSE"
+  },
+  "@radix-ui/react-id@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-id",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-id\\README.md"
+  },
+  "@radix-ui/react-label@2.1.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-label",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-label\\LICENSE"
+  },
+  "@radix-ui/react-menu@2.1.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-menu",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-menu\\LICENSE"
+  },
+  "@radix-ui/react-menubar@1.1.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-menubar",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-menubar\\LICENSE"
+  },
+  "@radix-ui/react-popover@1.1.15": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-popover",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-popover\\LICENSE"
+  },
+  "@radix-ui/react-popper@1.2.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-popper",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-popper\\LICENSE"
+  },
+  "@radix-ui/react-portal@1.1.9": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-portal",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-portal\\LICENSE"
+  },
+  "@radix-ui/react-presence@1.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-presence",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-presence\\LICENSE"
+  },
+  "@radix-ui/react-primitive@2.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-primitive",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-primitive\\LICENSE"
+  },
+  "@radix-ui/react-primitive@2.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-label\\node_modules\\@radix-ui\\react-primitive",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-label\\node_modules\\@radix-ui\\react-primitive\\LICENSE"
+  },
+  "@radix-ui/react-radio-group@1.3.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-radio-group",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-radio-group\\LICENSE"
+  },
+  "@radix-ui/react-roving-focus@1.1.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-roving-focus",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-roving-focus\\LICENSE"
+  },
+  "@radix-ui/react-scroll-area@1.2.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-scroll-area",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-scroll-area\\LICENSE"
+  },
+  "@radix-ui/react-select@2.2.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-select",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-select\\LICENSE"
+  },
+  "@radix-ui/react-separator@1.1.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-separator",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-separator\\LICENSE"
+  },
+  "@radix-ui/react-slider@1.3.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-slider",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-slider\\LICENSE"
+  },
+  "@radix-ui/react-slot@1.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-primitive\\node_modules\\@radix-ui\\react-slot",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-primitive\\node_modules\\@radix-ui\\react-slot\\LICENSE"
+  },
+  "@radix-ui/react-slot@1.2.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-slot",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-slot\\LICENSE"
+  },
+  "@radix-ui/react-switch@1.2.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-switch",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-switch\\LICENSE"
+  },
+  "@radix-ui/react-tabs@1.1.13": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-tabs",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-tabs\\LICENSE"
+  },
+  "@radix-ui/react-toggle-group@1.1.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-toggle-group",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-toggle-group\\LICENSE"
+  },
+  "@radix-ui/react-toggle@1.1.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-toggle",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-toggle\\LICENSE"
+  },
+  "@radix-ui/react-tooltip@1.2.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-tooltip",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-tooltip\\LICENSE"
+  },
+  "@radix-ui/react-use-callback-ref@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-callback-ref",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-callback-ref\\README.md"
+  },
+  "@radix-ui/react-use-controllable-state@1.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-controllable-state",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-controllable-state\\LICENSE"
+  },
+  "@radix-ui/react-use-effect-event@0.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-effect-event",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-effect-event\\LICENSE"
+  },
+  "@radix-ui/react-use-escape-keydown@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-escape-keydown",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-escape-keydown\\README.md"
+  },
+  "@radix-ui/react-use-layout-effect@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-layout-effect",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-layout-effect\\README.md"
+  },
+  "@radix-ui/react-use-previous@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-previous",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-previous\\README.md"
+  },
+  "@radix-ui/react-use-rect@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-rect",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-rect\\README.md"
+  },
+  "@radix-ui/react-use-size@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-size",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-use-size\\README.md"
+  },
+  "@radix-ui/react-visually-hidden@1.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-visually-hidden",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\react-visually-hidden\\LICENSE"
+  },
+  "@radix-ui/rect@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/radix-ui/primitives",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\rect",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@radix-ui\\rect\\README.md"
+  },
+  "@rajioba1/managing-software-licensing@1.5.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Rajioba1/managing-software-licensing",
+    "publisher": "Rajioba1",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@rajioba1\\managing-software-licensing",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@rajioba1\\managing-software-licensing\\LICENSE"
+  },
+  "@swc/helpers@0.5.17": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/swc-project/swc",
+    "publisher": "강동윤",
+    "email": "kdy1997.dev@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@swc\\helpers",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@swc\\helpers\\LICENSE"
+  },
+  "@tanstack/query-core@5.90.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TanStack/query",
+    "publisher": "tannerlinsley",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\query-core",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\query-core\\LICENSE"
+  },
+  "@tanstack/query-devtools@5.90.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TanStack/query",
+    "publisher": "tannerlinsley",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\query-devtools",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\query-devtools\\LICENSE"
+  },
+  "@tanstack/react-query-devtools@5.90.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TanStack/query",
+    "publisher": "tannerlinsley",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\react-query-devtools",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\react-query-devtools\\LICENSE"
+  },
+  "@tanstack/react-query@5.90.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TanStack/query",
+    "publisher": "tannerlinsley",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\react-query",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\react-query\\LICENSE"
+  },
+  "@tanstack/react-virtual@3.13.13": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TanStack/virtual",
+    "publisher": "Tanner Linsley",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\react-virtual",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\react-virtual\\LICENSE"
+  },
+  "@tanstack/virtual-core@3.13.13": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TanStack/virtual",
+    "publisher": "Tanner Linsley",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\virtual-core",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tanstack\\virtual-core\\LICENSE"
+  },
+  "@tauri-apps/api@2.9.0": {
+    "licenses": "Apache-2.0 OR MIT",
+    "repository": "https://github.com/tauri-apps/tauri",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\api",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\api\\README.md"
+  },
+  "@tauri-apps/plugin-clipboard-manager@2.3.2": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-clipboard-manager",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-clipboard-manager\\LICENSE.spdx"
+  },
+  "@tauri-apps/plugin-dialog@2.4.2": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-dialog",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-dialog\\LICENSE.spdx"
+  },
+  "@tauri-apps/plugin-fs@2.4.4": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-fs",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-fs\\LICENSE.spdx"
+  },
+  "@tauri-apps/plugin-log@2.7.1": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-log",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-log\\LICENSE.spdx"
+  },
+  "@tauri-apps/plugin-notification@2.3.3": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-notification",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-notification\\LICENSE.spdx"
+  },
+  "@tauri-apps/plugin-opener@2.5.2": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-opener",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-opener\\LICENSE.spdx"
+  },
+  "@tauri-apps/plugin-process@2.3.1": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-process",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-process\\LICENSE.spdx"
+  },
+  "@tauri-apps/plugin-updater@2.9.0": {
+    "licenses": "MIT OR Apache-2.0",
+    "repository": "https://github.com/tauri-apps/plugins-workspace",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-updater",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@tauri-apps\\plugin-updater\\LICENSE.spdx"
+  },
+  "@turf/area@7.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\area",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\area\\LICENSE"
+  },
+  "@turf/bbox@7.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\bbox",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\bbox\\LICENSE"
+  },
+  "@turf/centroid@7.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\centroid",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\centroid\\LICENSE"
+  },
+  "@turf/helpers@7.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\helpers",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\helpers\\LICENSE"
+  },
+  "@turf/meta@7.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\meta",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@turf\\meta\\LICENSE"
+  },
+  "@types/command-line-args@5.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\command-line-args",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\command-line-args\\LICENSE"
+  },
+  "@types/command-line-usage@5.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\command-line-usage",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\command-line-usage\\LICENSE"
+  },
+  "@types/geojson-vt@3.2.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\geojson-vt",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\geojson-vt\\LICENSE"
+  },
+  "@types/geojson@7946.0.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\geojson",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\geojson\\LICENSE"
+  },
+  "@types/mapbox__point-geometry@0.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\mapbox__point-geometry",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\mapbox__point-geometry\\LICENSE"
+  },
+  "@types/mapbox__vector-tile@1.3.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\mapbox__vector-tile",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\mapbox__vector-tile\\LICENSE"
+  },
+  "@types/node@24.10.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\node",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\node\\LICENSE"
+  },
+  "@types/pbf@3.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\pbf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\pbf\\LICENSE"
+  },
+  "@types/react-dom@19.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\react-dom",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\react-dom\\LICENSE"
+  },
+  "@types/react@19.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\react",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\react\\LICENSE"
+  },
+  "@types/supercluster@7.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\supercluster",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@types\\supercluster\\LICENSE"
+  },
+  "@uwdata/flechette@2.2.6": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/uwdata/flechette",
+    "publisher": "Jeffrey Heer",
+    "url": "https://idl.uw.edu",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@uwdata\\flechette",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@uwdata\\flechette\\LICENSE"
+  },
+  "abs-svg-path@0.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jkroso/abs-svg-path",
+    "publisher": "Jake Rosoman",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\abs-svg-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\abs-svg-path\\Readme.md"
+  },
+  "acorn@7.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/acornjs/acorn",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\falafel\\node_modules\\acorn",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\falafel\\node_modules\\acorn\\LICENSE"
+  },
+  "acorn@8.15.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/acornjs/acorn",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\acorn",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\acorn\\LICENSE"
+  },
+  "almost-equal@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/almost-equal",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\almost-equal",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\almost-equal\\LICENSE"
+  },
+  "ansi-styles@4.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chalk/ansi-styles",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ansi-styles",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ansi-styles\\license"
+  },
+  "apache-arrow@21.1.0": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/apache/arrow-js",
+    "publisher": "Apache Software Foundation",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\apache-arrow",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\apache-arrow\\LICENSE.txt",
+    "noticeFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\apache-arrow\\NOTICE.txt"
+  },
+  "aria-hidden@1.2.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/theKashey/aria-hidden",
+    "publisher": "Anton Korzunov",
+    "email": "thekashey@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\aria-hidden",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\aria-hidden\\LICENSE"
+  },
+  "arquero@8.0.3": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/uwdata/arquero",
+    "publisher": "Jeffrey Heer",
+    "url": "http://idl.cs.washington.edu",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\arquero",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\arquero\\LICENSE"
+  },
+  "array-back@6.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/75lb/array-back",
+    "publisher": "Lloyd Brookes",
+    "email": "75pound@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-back",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-back\\LICENSE"
+  },
+  "array-bounds@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/array-bounds",
+    "publisher": "Dima Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-bounds",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-bounds\\readme.md"
+  },
+  "array-find-index@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/array-find-index",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-find-index",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-find-index\\license"
+  },
+  "array-normalize@1.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/array-normalize",
+    "publisher": "Dima Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-normalize",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-normalize\\readme.md"
+  },
+  "array-range@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mattdesl/array-range",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "url": "https://github.com/mattdesl",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-range",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-range\\LICENSE.md"
+  },
+  "array-rearrange@2.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/array-rearrange",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-rearrange",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\array-rearrange\\license.md"
+  },
+  "babel-merge@3.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/neutrinojs/babel-merge",
+    "publisher": "Eli Perelman",
+    "email": "eli@eliperelman.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\babel-merge",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\babel-merge\\LICENSE"
+  },
+  "bahttext@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jojoee/bahttext",
+    "publisher": "Nathachai Thongniran",
+    "email": "inid3a@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bahttext",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bahttext\\LICENSE"
+  },
+  "balanced-match@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/balanced-match",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\balanced-match",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\balanced-match\\LICENSE.md"
+  },
+  "base64-arraybuffer@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/niklasvh/base64-arraybuffer",
+    "publisher": "Niklas von Hertzen",
+    "email": "niklasvh@gmail.com",
+    "url": "https://hertzen.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\base64-arraybuffer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\base64-arraybuffer\\LICENSE"
+  },
+  "baseline-browser-mapping@2.8.25": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/web-platform-dx/baseline-browser-mapping",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\baseline-browser-mapping",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\baseline-browser-mapping\\LICENSE.txt"
+  },
+  "bessel@1.0.2": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/SheetJS/bessel",
+    "publisher": "SheetJS",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bessel",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bessel\\LICENSE"
+  },
+  "binary-search-bounds@2.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/binary-search-bounds",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\binary-search-bounds",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\binary-search-bounds\\LICENSE"
+  },
+  "binary-search@1.3.6": {
+    "licenses": "CC0-1.0",
+    "repository": "https://github.com/darkskyapp/binary-search",
+    "publisher": "The Dark Sky Company, LLC",
+    "email": "support@darkskyapp.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\binary-search",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\binary-search\\README.md"
+  },
+  "bit-twiddle@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/bit-twiddle",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bit-twiddle",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bit-twiddle\\LICENSE"
+  },
+  "bitmap-sdf@1.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/bitmap-sdf",
+    "publisher": "Dima Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bitmap-sdf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bitmap-sdf\\readme.md"
+  },
+  "bl@2.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/rvagg/bl",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bl",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\bl\\LICENSE.md"
+  },
+  "brace-expansion@2.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/brace-expansion",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\brace-expansion",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\brace-expansion\\LICENSE"
+  },
+  "browserslist@4.27.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/browserslist/browserslist",
+    "publisher": "Andrey Sitnik",
+    "email": "andrey@sitnik.ru",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\browserslist",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\browserslist\\LICENSE"
+  },
+  "buffer-from@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/LinusU/buffer-from",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\buffer-from",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\buffer-from\\LICENSE"
+  },
+  "caniuse-lite@1.0.30001753": {
+    "licenses": "CC-BY-4.0",
+    "repository": "https://github.com/browserslist/caniuse-lite",
+    "publisher": "Ben Briggs",
+    "email": "beneb.info@gmail.com",
+    "url": "http://beneb.info",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\caniuse-lite",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\caniuse-lite\\LICENSE"
+  },
+  "canvas-fit@1.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/canvas-fit",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\canvas-fit",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\canvas-fit\\LICENSE.md"
+  },
+  "canvas-hypertxt@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/glideapps/canvas-hypertxt",
+    "publisher": "Glide",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\canvas-hypertxt",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\canvas-hypertxt\\LICENSE"
+  },
+  "chalk-template@0.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chalk/chalk-template",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\chalk-template",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\chalk-template\\license"
+  },
+  "chalk@4.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chalk/chalk",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\chalk",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\chalk\\license"
+  },
+  "chevrotain@7.1.2": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/Chevrotain/chevrotain",
+    "publisher": "Shahar Soel",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\chevrotain",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\chevrotain\\LICENSE.txt"
+  },
+  "clamp@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/clamp",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://github.com/hughsk",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\clamp",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\clamp\\LICENSE.md"
+  },
+  "class-variance-authority@0.7.1": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/joe-bell/cva",
+    "publisher": "Joe Bell",
+    "url": "https://joebell.co.uk",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\class-variance-authority",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\class-variance-authority\\LICENSE"
+  },
+  "classnames@2.5.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/JedWatson/classnames",
+    "publisher": "Jed Watson",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\classnames",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\classnames\\LICENSE"
+  },
+  "clsx@1.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lukeed/clsx",
+    "publisher": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-draggable\\node_modules\\clsx",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-draggable\\node_modules\\clsx\\license"
+  },
+  "clsx@2.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lukeed/clsx",
+    "publisher": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\clsx",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\clsx\\license"
+  },
+  "cmdk@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pacocoursey/cmdk",
+    "publisher": "Paco",
+    "url": "https://github.com/pacocoursey",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\cmdk",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\cmdk\\LICENSE.md"
+  },
+  "color-alpha@1.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-alpha",
+    "publisher": "ΔY",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-alpha",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-alpha\\readme.md"
+  },
+  "color-convert@2.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Qix-/color-convert",
+    "publisher": "Heather Arthur",
+    "email": "fayearthur@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-convert",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-convert\\LICENSE"
+  },
+  "color-id@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-id",
+    "publisher": "Dima Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-id",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-id\\readme.md"
+  },
+  "color-name@1.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-name",
+    "publisher": "DY",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-name",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-name\\LICENSE"
+  },
+  "color-normalize@1.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-normalize",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-normalize",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-normalize\\readme.md"
+  },
+  "color-parse@1.4.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-parse",
+    "publisher": "Deema Ywanov",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-alpha\\node_modules\\color-parse",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-alpha\\node_modules\\color-parse\\LICENSE"
+  },
+  "color-parse@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-parse",
+    "publisher": "Dmitry Ivanov",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-parse",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-parse\\LICENSE"
+  },
+  "color-rgba@2.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-rgba",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-rgba",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-rgba\\readme.md"
+  },
+  "color-rgba@2.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-rgba",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-normalize\\node_modules\\color-rgba",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-normalize\\node_modules\\color-rgba\\readme.md"
+  },
+  "color-space@1.16.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/colorjs/color-space",
+    "publisher": "Deema Yvanow",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-rgba\\node_modules\\color-space",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-rgba\\node_modules\\color-space\\LICENSE"
+  },
+  "color-space@2.3.2": {
+    "licenses": "Unlicense",
+    "repository": "https://github.com/colorjs/color-space",
+    "publisher": "Dmitry Ivanov",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-space",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\color-space\\LICENSE"
+  },
+  "command-line-args@6.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/75lb/command-line-args",
+    "publisher": "Lloyd Brookes",
+    "email": "opensource@75lb.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\command-line-args",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\command-line-args\\LICENSE"
+  },
+  "command-line-usage@7.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/75lb/command-line-usage",
+    "publisher": "Lloyd Brookes",
+    "email": "75pound@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\command-line-usage",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\command-line-usage\\LICENSE"
+  },
+  "commander@2.20.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/tj/commander.js",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\commander",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\commander\\LICENSE"
+  },
+  "concat-stream@1.6.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/maxogden/concat-stream",
+    "publisher": "Max Ogden",
+    "email": "max@maxogden.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\concat-stream",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\concat-stream\\LICENSE"
+  },
+  "convert-source-map@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/thlorenz/convert-source-map",
+    "publisher": "Thorsten Lorenz",
+    "email": "thlorenz@gmx.de",
+    "url": "http://thlorenz.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\convert-source-map",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\convert-source-map\\LICENSE"
+  },
+  "core-util-is@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/isaacs/core-util-is",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\core-util-is",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\core-util-is\\LICENSE"
+  },
+  "country-regex@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/etpinard/country-regex",
+    "publisher": "Étienne Tétreault-Pinard",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\country-regex",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\country-regex\\LICENSE"
+  },
+  "css-font-size-keywords@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jedmao/css-font-size-keywords",
+    "publisher": "Jed Mao",
+    "email": "jedmao@outlook.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-size-keywords",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-size-keywords\\LICENSE"
+  },
+  "css-font-stretch-keywords@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jedmao/css-font-stretch-keywords",
+    "publisher": "Jed Mao",
+    "email": "jedmao@outlook.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-stretch-keywords",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-stretch-keywords\\LICENSE"
+  },
+  "css-font-style-keywords@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jedmao/css-font-style-keywords",
+    "publisher": "Jed Mao",
+    "email": "jedmao@outlook.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-style-keywords",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-style-keywords\\LICENSE"
+  },
+  "css-font-weight-keywords@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jedmao/css-font-weight-keywords",
+    "publisher": "Jed Mao",
+    "email": "jedmao@outlook.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-weight-keywords",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font-weight-keywords\\LICENSE"
+  },
+  "css-font@1.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/css-font",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-font\\license.md"
+  },
+  "css-global-keywords@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jedmao/css-global-keywords",
+    "publisher": "Jed Mao",
+    "email": "jedmao@outlook.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-global-keywords",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-global-keywords\\LICENSE"
+  },
+  "css-loader@7.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/webpack-contrib/css-loader",
+    "publisher": "Tobias Koppers @sokra",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-loader",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-loader\\LICENSE"
+  },
+  "css-system-font-keywords@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jedmao/css-system-font-keywords",
+    "publisher": "Jed Mao",
+    "email": "jedmao@outlook.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-system-font-keywords",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\css-system-font-keywords\\LICENSE"
+  },
+  "csscolorparser@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/deanm/css-color-parser-js",
+    "publisher": "Dean McNamee",
+    "email": "dean@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\csscolorparser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\csscolorparser\\README"
+  },
+  "cssesc@3.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mathiasbynens/cssesc",
+    "publisher": "Mathias Bynens",
+    "url": "https://mathiasbynens.be/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\cssesc",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\cssesc\\LICENSE-MIT.txt"
+  },
+  "csstype@3.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/frenic/csstype",
+    "publisher": "Fredrik Nicol",
+    "email": "fredrik.nicol@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\csstype",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\csstype\\LICENSE"
+  },
+  "d3-array@1.2.4": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-array",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-array",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-array\\LICENSE"
+  },
+  "d3-collection@1.0.7": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-collection",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-collection",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-collection\\LICENSE"
+  },
+  "d3-color@3.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/d3/d3-color",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-color",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-color\\LICENSE"
+  },
+  "d3-dispatch@1.0.6": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-dispatch",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-dispatch",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-dispatch\\LICENSE"
+  },
+  "d3-force@1.2.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-force",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-force",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-force\\LICENSE"
+  },
+  "d3-format@1.4.5": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-format",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-format",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-format\\LICENSE"
+  },
+  "d3-geo-projection@2.9.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-geo-projection",
+    "publisher": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-geo-projection",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-geo-projection\\LICENSE"
+  },
+  "d3-geo@1.12.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-geo",
+    "publisher": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-geo",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-geo\\LICENSE"
+  },
+  "d3-hierarchy@1.1.9": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-hierarchy",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-hierarchy",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-hierarchy\\LICENSE"
+  },
+  "d3-interpolate@3.0.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/d3/d3-interpolate",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-interpolate",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-interpolate\\LICENSE"
+  },
+  "d3-path@1.0.9": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-path",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-path\\LICENSE"
+  },
+  "d3-quadtree@1.0.7": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-quadtree",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-quadtree",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-quadtree\\LICENSE"
+  },
+  "d3-shape@1.3.7": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-shape",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-shape",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-shape\\LICENSE"
+  },
+  "d3-time-format@2.3.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-time-format",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-time-format",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-time-format\\LICENSE"
+  },
+  "d3-time@1.1.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-time",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-time",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-time\\LICENSE"
+  },
+  "d3-timer@1.0.10": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-timer",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-timer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-timer\\LICENSE"
+  },
+  "d@1.0.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/d",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d\\LICENSE"
+  },
+  "date-fns-jalali@4.1.0-0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/date-fns-jalali/date-fns-jalali",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\date-fns-jalali",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\date-fns-jalali\\LICENSE.md"
+  },
+  "date-fns@4.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/date-fns/date-fns",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\date-fns",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\date-fns\\LICENSE.md"
+  },
+  "debug@2.6.9": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/debug",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-parser\\node_modules\\debug",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-parser\\node_modules\\debug\\LICENSE"
+  },
+  "debug@3.2.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/debug",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\needle\\node_modules\\debug",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\needle\\node_modules\\debug\\LICENSE"
+  },
+  "debug@4.4.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/debug-js/debug",
+    "publisher": "Josh Junon",
+    "url": "https://github.com/qix-",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\debug",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\debug\\LICENSE"
+  },
+  "deepmerge@2.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/KyleAMathews/deepmerge",
+    "publisher": "Nick Fisher",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\deepmerge",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\deepmerge\\license.txt"
+  },
+  "defined@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/inspect-js/defined",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\defined",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\defined\\LICENSE"
+  },
+  "detect-kerning@2.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/detect-kerning",
+    "publisher": "Dmitry Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\detect-kerning",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\detect-kerning\\readme.md"
+  },
+  "detect-node-es@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/thekashey/detect-node",
+    "publisher": "Ilya Kantor",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\detect-node-es",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\detect-node-es\\LICENSE"
+  },
+  "draw-svg-path@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/michaelrhodes/draw-svg-path",
+    "publisher": "Michael Rhodes",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\draw-svg-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\draw-svg-path\\readme.md"
+  },
+  "dtype@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/shama/dtype",
+    "publisher": "Kyle Robinson Young",
+    "email": "kyle@dontkry.com",
+    "url": "http://dontkry.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\dtype",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\dtype\\LICENSE-MIT"
+  },
+  "dup@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/dup",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\dup",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\dup\\LICENSE"
+  },
+  "duplexify@3.7.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mafintosh/duplexify",
+    "publisher": "Mathias Buus",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\duplexify",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\duplexify\\LICENSE"
+  },
+  "earcut@2.2.4": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/earcut",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\earcut",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\earcut\\LICENSE"
+  },
+  "earcut@3.0.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/earcut",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\earcut",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\earcut\\LICENSE"
+  },
+  "electron-to-chromium@1.5.245": {
+    "licenses": "ISC",
+    "repository": "https://github.com/kilian/electron-to-chromium",
+    "publisher": "Kilian Valkhof",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\electron-to-chromium",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\electron-to-chromium\\LICENSE"
+  },
+  "element-size@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/element-size",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\element-size",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\element-size\\LICENSE.md"
+  },
+  "elementary-circuits-directed-graph@1.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/antoinerg/elementary-circuits-directed-graph",
+    "publisher": "Antoine Roy-Gobeil",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\elementary-circuits-directed-graph",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\elementary-circuits-directed-graph\\LICENSE"
+  },
+  "end-of-stream@1.4.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mafintosh/end-of-stream",
+    "publisher": "Mathias Buus",
+    "email": "mathiasbuus@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\end-of-stream",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\end-of-stream\\LICENSE"
+  },
+  "es5-ext@0.10.64": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/es5-ext",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es5-ext",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es5-ext\\LICENSE"
+  },
+  "es6-iterator@2.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/medikoo/es6-iterator",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es6-iterator",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es6-iterator\\LICENSE"
+  },
+  "es6-symbol@3.1.4": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/es6-symbol",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es6-symbol",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es6-symbol\\LICENSE"
+  },
+  "es6-weak-map@2.0.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/es6-weak-map",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es6-weak-map",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\es6-weak-map\\LICENSE"
+  },
+  "escalade@3.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lukeed/escalade",
+    "publisher": "Luke Edwards",
+    "email": "luke.edwards05@gmail.com",
+    "url": "https://lukeed.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\escalade",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\escalade\\license"
+  },
+  "escodegen@2.1.0": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/estools/escodegen",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\escodegen",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\escodegen\\LICENSE.BSD"
+  },
+  "esniff@2.0.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/esniff",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\esniff",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\esniff\\LICENSE"
+  },
+  "esprima@4.0.1": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/jquery/esprima",
+    "publisher": "Ariya Hidayat",
+    "email": "ariya.hidayat@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\esprima",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\esprima\\LICENSE.BSD"
+  },
+  "estraverse@5.3.0": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/estools/estraverse",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\estraverse",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\estraverse\\LICENSE.BSD"
+  },
+  "esutils@2.0.3": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/estools/esutils",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\esutils",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\esutils\\LICENSE.BSD"
+  },
+  "event-emitter@0.3.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/medikoo/event-emitter",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\event-emitter",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\event-emitter\\LICENSE"
+  },
+  "events@3.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Gozala/events",
+    "publisher": "Irakli Gozalishvili",
+    "email": "rfobic@gmail.com",
+    "url": "http://jeditoolkit.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\events",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\events\\LICENSE"
+  },
+  "ext@1.7.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/es5-ext.git#ext",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ext",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ext\\LICENSE"
+  },
+  "falafel@2.2.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/node-falafel",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\falafel",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\falafel\\LICENSE"
+  },
+  "fast-formula-parser@1.0.19": {
+    "licenses": "MIT",
+    "repository": "https://github.com/LesterLyu/fast-formula-parser",
+    "publisher": "Lester",
+    "url": "Dishu",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\fast-formula-parser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\fast-formula-parser\\LICENSE"
+  },
+  "fast-isnumeric@1.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/fast-isnumeric",
+    "publisher": "Alex Johnson",
+    "url": "@alexcjohnson",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\fast-isnumeric",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\fast-isnumeric\\LICENSE"
+  },
+  "find-replace@5.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/75lb/find-replace",
+    "publisher": "Lloyd Brookes",
+    "email": "75pound@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\find-replace",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\find-replace\\LICENSE"
+  },
+  "find-up@5.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/find-up",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "https://sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\find-up",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\find-up\\license"
+  },
+  "flatbuffers@25.9.23": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/google/flatbuffers",
+    "publisher": "The FlatBuffers project",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\flatbuffers",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\flatbuffers\\LICENSE"
+  },
+  "flatten-vertex-data@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/glo-js/flatten-vertex-data",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "url": "https://github.com/mattdesl",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\flatten-vertex-data",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\flatten-vertex-data\\LICENSE.md"
+  },
+  "font-atlas@2.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/font-atlas",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\font-atlas",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\font-atlas\\LICENSE.md"
+  },
+  "font-measure@1.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/font-measure",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\font-measure",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\font-measure\\readme.md"
+  },
+  "from2@2.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/from2",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\from2",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\from2\\LICENSE.md"
+  },
+  "function-bind@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Raynos/function-bind",
+    "publisher": "Raynos",
+    "email": "raynos2@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\function-bind",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\function-bind\\LICENSE"
+  },
+  "gensync@1.0.0-beta.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/loganfsmyth/gensync",
+    "publisher": "Logan Smyth",
+    "email": "loganfsmyth@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gensync",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gensync\\LICENSE"
+  },
+  "geojson-vt@3.2.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/geojson-vt",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\geojson-vt",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\geojson-vt\\LICENSE"
+  },
+  "geojson-vt@4.0.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/geojson-vt",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\geojson-vt",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\geojson-vt\\LICENSE"
+  },
+  "get-canvas-context@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Jam3/get-canvas-context",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "url": "https://github.com/mattdesl",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\get-canvas-context",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\get-canvas-context\\LICENSE.md"
+  },
+  "get-nonce@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/theKashey/get-nonce",
+    "publisher": "Anton Korzunov",
+    "email": "thekashey@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\get-nonce",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\get-nonce\\LICENSE"
+  },
+  "get-stream@6.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/get-stream",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "https://sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\get-stream",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\get-stream\\license"
+  },
+  "gl-mat4@1.2.0": {
+    "licenses": "Zlib",
+    "repository": "https://github.com/stackgl/gl-mat4",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-mat4",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-mat4\\LICENSE.md"
+  },
+  "gl-matrix@3.4.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/toji/gl-matrix",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-matrix",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-matrix\\LICENSE.md"
+  },
+  "gl-text@1.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/a-vis/gl-text",
+    "publisher": "Dmitry Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-text",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-text\\license.md"
+  },
+  "gl-util@3.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/gl-util",
+    "publisher": "Dima Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-util",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\gl-util\\readme.md"
+  },
+  "global-prefix@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jonschlinkert/global-prefix",
+    "publisher": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\global-prefix",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\global-prefix\\LICENSE"
+  },
+  "glsl-inject-defines@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mattdesl/glsl-inject-defines",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "url": "http://github.com/mattdesl",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-inject-defines",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-inject-defines\\LICENSE.md"
+  },
+  "glsl-resolve@0.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/glsl-resolve",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-resolve",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-resolve\\LICENSE.md"
+  },
+  "glsl-token-assignments@2.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glsl-token-assignments",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-assignments",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-assignments\\LICENSE.md"
+  },
+  "glsl-token-defines@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glsl-token-defines",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-defines",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-defines\\LICENSE.md"
+  },
+  "glsl-token-depth@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glsl-token-depth",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-depth",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-depth\\LICENSE.md"
+  },
+  "glsl-token-descope@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glsl-token-descope",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-descope",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-descope\\LICENSE.md"
+  },
+  "glsl-token-inject-block@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Jam3/glsl-token-inject-block",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "url": "https://github.com/mattdesl",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-inject-block",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-inject-block\\LICENSE.md"
+  },
+  "glsl-token-properties@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glsl-token-properties",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-properties",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-properties\\LICENSE.md"
+  },
+  "glsl-token-scope@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glsl-token-scope",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-scope",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-scope\\LICENSE.md"
+  },
+  "glsl-token-string@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glsl-token-string",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-string",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-string\\LICENSE.md"
+  },
+  "glsl-token-whitespace-trim@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/glsl-token-whitespace-trim",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "https://github.com/hughsk",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-whitespace-trim",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-token-whitespace-trim\\LICENSE.md"
+  },
+  "glsl-tokenizer@2.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/gl-modules/glsl-tokenizer",
+    "publisher": "Chris Dickinson",
+    "email": "chris@neversaw.us",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\LICENSE.md"
+  },
+  "glslify-bundle@5.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glslify-bundle",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glslify-bundle",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glslify-bundle\\LICENSE.md"
+  },
+  "glslify-deps@1.3.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/stackgl/glslify-deps",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glslify-deps",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glslify-deps\\README.md"
+  },
+  "glslify@7.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stackgl/glslify",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glslify",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glslify\\LICENSE.md"
+  },
+  "graceful-fs@4.2.11": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/node-graceful-fs",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\graceful-fs",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\graceful-fs\\LICENSE"
+  },
+  "grid-index@1.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/grid-index",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\grid-index",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\grid-index\\LICENSE"
+  },
+  "has-flag@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/has-flag",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\has-flag",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\has-flag\\license"
+  },
+  "has-hover@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/has-hover",
+    "publisher": "Dima Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\has-hover",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\has-hover\\readme.md"
+  },
+  "has-passive-events@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/has-passive-events",
+    "publisher": "Dmitry Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\has-passive-events",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\has-passive-events\\license.md"
+  },
+  "hasown@2.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/inspect-js/hasOwn",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\hasown",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\hasown\\LICENSE"
+  },
+  "heap@0.2.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/qiao/heap.js",
+    "publisher": "Xueqiao Xu",
+    "email": "xueqiaoxu@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\heap",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\heap\\LICENSE"
+  },
+  "hsluv@0.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hsluv/hsluv",
+    "publisher": "Alexei Boronine",
+    "email": "alexei@boronine.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\hsluv",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\hsluv\\README.md"
+  },
+  "html-element-attributes@1.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/wooorm/html-element-attributes",
+    "publisher": "Titus Wormer",
+    "email": "tituswormer@gmail.com",
+    "url": "http://wooorm.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\html-element-attributes",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\html-element-attributes\\LICENSE"
+  },
+  "iconv-lite@0.4.24": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ashtuchkin/iconv-lite",
+    "publisher": "Alexander Shtuchkin",
+    "email": "ashtuchkin@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\needle\\node_modules\\iconv-lite",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\needle\\node_modules\\iconv-lite\\LICENSE"
+  },
+  "icss-utils@5.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/css-modules/icss-utils",
+    "publisher": "Glen Maddern",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\icss-utils",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\icss-utils\\LICENSE.md"
+  },
+  "ieee754@1.2.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/feross/ieee754",
+    "publisher": "Feross Aboukhadijeh",
+    "email": "feross@feross.org",
+    "url": "https://feross.org",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ieee754",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ieee754\\LICENSE"
+  },
+  "inherits@2.0.4": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/inherits",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\inherits",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\inherits\\LICENSE"
+  },
+  "ini@4.1.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/ini",
+    "publisher": "GitHub Inc.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ini",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ini\\LICENSE"
+  },
+  "is-any-array@2.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/cheminfo-js/is-any-array",
+    "publisher": "Luc Patiny",
+    "email": "luc@patiny.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-any-array",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-any-array\\LICENSE"
+  },
+  "is-browser@2.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ForbesLindesay/is-browser",
+    "publisher": "ForbesLindesay",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-browser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-browser\\LICENSE"
+  },
+  "is-core-module@2.16.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/inspect-js/is-core-module",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-core-module",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-core-module\\LICENSE"
+  },
+  "is-extendable@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jonschlinkert/is-extendable",
+    "publisher": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-extendable",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-extendable\\LICENSE"
+  },
+  "is-finite@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/is-finite",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-finite",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-finite\\license"
+  },
+  "is-firefox@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/gillstrom/is-firefox",
+    "publisher": "Andreas Gillström",
+    "email": "andreasgillstrom@gmail.com",
+    "url": "github.com/gillstrom",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-firefox",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-firefox\\license"
+  },
+  "is-iexplorer@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/kevva/is-iexplorer",
+    "publisher": "Kevin Mårtensson",
+    "email": "kevinmartensson@gmail.com",
+    "url": "https://github.com/kevva",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-iexplorer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-iexplorer\\license"
+  },
+  "is-mobile@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/is-mobile",
+    "publisher": "Julian Gruber",
+    "email": "julian@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-mobile",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-mobile\\README.md"
+  },
+  "is-obj@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/is-obj",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-obj",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-obj\\license"
+  },
+  "is-plain-obj@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/is-plain-obj",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-plain-obj",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-plain-obj\\license"
+  },
+  "is-plain-object@2.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jonschlinkert/is-plain-object",
+    "publisher": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-plain-object",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-plain-object\\LICENSE"
+  },
+  "is-string-blank@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/is-string-blank",
+    "publisher": "Alex Johnson",
+    "url": "@alexcjohnson",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-string-blank",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-string-blank\\LICENSE"
+  },
+  "is-svg-path@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/is-svg-path",
+    "publisher": "Dima Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-svg-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\is-svg-path\\readme.md"
+  },
+  "isarray@0.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/isarray",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\isarray",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\isarray\\README.md"
+  },
+  "isarray@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/isarray",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\readable-stream\\node_modules\\isarray",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\readable-stream\\node_modules\\isarray\\README.md"
+  },
+  "isarray@2.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/isarray",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\isarray",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\isarray\\LICENSE"
+  },
+  "isexe@3.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/isexe",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\global-prefix\\node_modules\\isexe",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\global-prefix\\node_modules\\isexe\\LICENSE"
+  },
+  "isobject@3.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jonschlinkert/isobject",
+    "publisher": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\isobject",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\isobject\\LICENSE"
+  },
+  "js-tokens@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lydell/js-tokens",
+    "publisher": "Simon Lydell",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\js-tokens",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\js-tokens\\LICENSE"
+  },
+  "jsesc@3.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mathiasbynens/jsesc",
+    "publisher": "Mathias Bynens",
+    "url": "https://mathiasbynens.be/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\jsesc",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\jsesc\\LICENSE-MIT.txt"
+  },
+  "json-bignum@0.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/datalanche/json-bignum",
+    "publisher": "Datalanche, Inc.",
+    "url": "https://www.datalanche.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\json-bignum",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\json-bignum\\LICENSE"
+  },
+  "json-stringify-pretty-compact@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lydell/json-stringify-pretty-compact",
+    "publisher": "Simon Lydell",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\json-stringify-pretty-compact",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\json-stringify-pretty-compact\\LICENSE"
+  },
+  "json5@2.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/json5/json5",
+    "publisher": "Aseem Kishore",
+    "email": "aseem.kishore@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\json5",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\json5\\LICENSE.md"
+  },
+  "jstat@1.9.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jstat/jstat",
+    "publisher": "Trevor Norris",
+    "email": "trev.norris@gmail.com",
+    "url": "http://trevorjnorris.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\jstat",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\jstat\\LICENSE"
+  },
+  "kdbush@3.0.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mourner/kdbush",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supercluster\\node_modules\\kdbush",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supercluster\\node_modules\\kdbush\\LICENSE"
+  },
+  "kdbush@4.0.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mourner/kdbush",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\kdbush",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\kdbush\\LICENSE"
+  },
+  "kind-of@6.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jonschlinkert/kind-of",
+    "publisher": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\kind-of",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\kind-of\\LICENSE"
+  },
+  "locate-path@6.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/locate-path",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "https://sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\locate-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\locate-path\\license"
+  },
+  "lodash.camelcase@4.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lodash.camelcase",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lodash.camelcase\\LICENSE"
+  },
+  "lodash.merge@4.6.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lodash.merge",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lodash.merge\\LICENSE"
+  },
+  "lodash@4.17.23": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lodash",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lodash\\LICENSE"
+  },
+  "loose-envify@1.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/zertosh/loose-envify",
+    "publisher": "Andres Suarez",
+    "email": "zertosh@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\loose-envify",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\loose-envify\\LICENSE"
+  },
+  "lru-cache@5.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/node-lru-cache",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lru-cache",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lru-cache\\LICENSE"
+  },
+  "lucide-react@0.552.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/lucide-icons/lucide",
+    "publisher": "Eric Fennis",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lucide-react",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\lucide-react\\LICENSE"
+  },
+  "map-limit@0.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/map-limit",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughsk.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\map-limit",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\map-limit\\LICENSE.md"
+  },
+  "maplibre-gl@4.7.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/maplibre/maplibre-gl-js",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\LICENSE.txt"
+  },
+  "marked@17.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/markedjs/marked",
+    "publisher": "Christopher Jeffrey",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\marked",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\marked\\LICENSE.md"
+  },
+  "math-log2@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/math-log2",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\math-log2",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\math-log2\\license"
+  },
+  "minimatch@9.0.5": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/minimatch",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\minimatch",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\minimatch\\LICENSE"
+  },
+  "minimist@1.2.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/minimistjs/minimist",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\minimist",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\minimist\\LICENSE"
+  },
+  "ml-array-max@1.2.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/array",
+    "publisher": "Michaël Zasso",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-max",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-max\\LICENSE"
+  },
+  "ml-array-mean@1.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/array",
+    "publisher": "Jefferson Hernández",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-mean",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-mean\\LICENSE"
+  },
+  "ml-array-min@1.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/array",
+    "publisher": "Michaël Zasso",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-min",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-min\\LICENSE"
+  },
+  "ml-array-rescale@1.3.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/array",
+    "publisher": "Michaël Zasso",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-rescale",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-rescale\\LICENSE"
+  },
+  "ml-array-sum@1.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/array",
+    "publisher": "Jefferson Hernández",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-sum",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-array-sum\\LICENSE"
+  },
+  "ml-distance-euclidean@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/distance-euclidean",
+    "publisher": "Michaël Zasso",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-distance-euclidean",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-distance-euclidean\\LICENSE"
+  },
+  "ml-distance-euclidean@3.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/distance-euclidean",
+    "publisher": "Michaël Zasso",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-hclust\\node_modules\\ml-distance-euclidean",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-hclust\\node_modules\\ml-distance-euclidean\\LICENSE"
+  },
+  "ml-distance-matrix@2.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/distance-matrix",
+    "publisher": "Daniel Kostro",
+    "email": "kostro.d@gmail.com",
+    "url": "https://github.com/Daniel Kostro",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-distance-matrix",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-distance-matrix\\LICENSE"
+  },
+  "ml-distance@4.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/distance",
+    "publisher": "Michaël Zasso",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-distance",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-distance\\LICENSE"
+  },
+  "ml-hclust@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/hclust",
+    "publisher": "Miguel Asencio",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-hclust",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-hclust\\LICENSE"
+  },
+  "ml-matrix@6.12.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/matrix",
+    "publisher": "Michaël Zasso",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-matrix",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-matrix\\LICENSE"
+  },
+  "ml-tree-similarity@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mljs/tree-similarity",
+    "publisher": "Miguel Asencio",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-tree-similarity",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ml-tree-similarity\\LICENSE"
+  },
+  "mouse-change@1.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/mouse-change",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-change",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-change\\LICENSE"
+  },
+  "mouse-event-offset@3.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mattdesl/mouse-event-offset",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-event-offset",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-event-offset\\LICENSE.md"
+  },
+  "mouse-event@1.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/mouse-event",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-event",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-event\\LICENSE"
+  },
+  "mouse-wheel@1.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/mouse-wheel",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-wheel",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mouse-wheel\\LICENSE"
+  },
+  "ms@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/zeit/ms",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-parser\\node_modules\\ms",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-parser\\node_modules\\ms\\license.md"
+  },
+  "ms@2.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vercel/ms",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ms",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ms\\license.md"
+  },
+  "mumath@3.3.4": {
+    "licenses": "Unlicense",
+    "repository": "https://github.com/dfcreative/mumath",
+    "publisher": "dfcreative",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mumath",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\mumath\\README.md"
+  },
+  "murmurhash-js@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/murmurhash-js",
+    "publisher": "Gary Court",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\murmurhash-js",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\murmurhash-js\\README.md"
+  },
+  "nanoid@3.3.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ai/nanoid",
+    "publisher": "Andrey Sitnik",
+    "email": "andrey@sitnik.ru",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\nanoid",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\nanoid\\LICENSE"
+  },
+  "native-promise-only@0.8.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/getify/native-promise-only",
+    "publisher": "Kyle Simpson",
+    "email": "getify@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\native-promise-only",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\native-promise-only\\README.md"
+  },
+  "needle@2.9.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/tomas/needle",
+    "publisher": "Tomás Pollak",
+    "email": "tomas@forkhq.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\needle",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\needle\\license.txt"
+  },
+  "next-themes@0.4.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pacocoursey/next-themes",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\next-themes",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\next-themes\\license.md"
+  },
+  "next-tick@1.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/next-tick",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "http://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\next-tick",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\next-tick\\LICENSE"
+  },
+  "node-releases@2.0.27": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chicoxyzzy/node-releases",
+    "publisher": "Sergey Rubanov",
+    "email": "chi187@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\node-releases",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\node-releases\\LICENSE"
+  },
+  "normalize-svg-path@0.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jkroso/normalize-svg-path",
+    "publisher": "Jake Rosoman",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\normalize-svg-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\normalize-svg-path\\Readme.md"
+  },
+  "normalize-svg-path@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jkroso/normalize-svg-path",
+    "publisher": "Jake Rosoman",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-path-bounds\\node_modules\\normalize-svg-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-path-bounds\\node_modules\\normalize-svg-path\\license.md"
+  },
+  "num-sort@2.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/num-sort",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "https://sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\num-sort",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\num-sort\\license"
+  },
+  "number-is-integer@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/number-is-integer",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\number-is-integer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\number-is-integer\\license"
+  },
+  "object-assign@4.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/object-assign",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\object-assign",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\object-assign\\license"
+  },
+  "object.omit@3.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jonschlinkert/object.omit",
+    "publisher": "Jon Schlinkert",
+    "url": "https://github.com/jonschlinkert",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\object.omit",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\object.omit\\LICENSE"
+  },
+  "once@1.3.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/once",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\map-limit\\node_modules\\once",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\map-limit\\node_modules\\once\\LICENSE"
+  },
+  "once@1.4.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/once",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\once",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\once\\LICENSE"
+  },
+  "p-limit@3.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/p-limit",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "https://sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\p-limit",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\p-limit\\license"
+  },
+  "p-locate@5.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/p-locate",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "https://sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\p-locate",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\p-locate\\license"
+  },
+  "parenthesis@3.1.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/parenthesis",
+    "publisher": "Dmitry Yv",
+    "email": "df.creative@gmail.com",
+    "url": "http://github.com/dy",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parenthesis",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parenthesis\\LICENSE"
+  },
+  "parse-rect@1.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/parse-rect",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parse-rect",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parse-rect\\license"
+  },
+  "parse-svg-path@0.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jkroso/parse-svg-path",
+    "publisher": "Jake Rosoman",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parse-svg-path",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parse-svg-path\\License"
+  },
+  "parse-unit@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mattdesl/parse-unit",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parse-unit",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\parse-unit\\LICENSE.md"
+  },
+  "path-exists@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/path-exists",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\path-exists",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\path-exists\\license"
+  },
+  "path-parse@1.0.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jbgutierrez/path-parse",
+    "publisher": "Javier Blanco",
+    "email": "http://jbgutierrez.info",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\path-parse",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\path-parse\\LICENSE"
+  },
+  "pbf@3.3.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/mapbox/pbf",
+    "publisher": "Konstantin Kaefer",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\pbf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\pbf\\LICENSE"
+  },
+  "performance-now@2.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/braveg1rl/performance-now",
+    "publisher": "Braveg1rl",
+    "email": "braveg1rl@outlook.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\performance-now",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\performance-now\\license.txt"
+  },
+  "pick-by-alias@1.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/pick-by-alias",
+    "publisher": "Dima Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\pick-by-alias",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\pick-by-alias\\readme.md"
+  },
+  "picocolors@1.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/alexeyraspopov/picocolors",
+    "publisher": "Alexey Raspopov",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\picocolors",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\picocolors\\LICENSE"
+  },
+  "plotly.js@2.35.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/plotly.js",
+    "publisher": "Plotly, Inc.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\plotly.js",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\plotly.js\\LICENSE"
+  },
+  "point-in-polygon@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/point-in-polygon",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\point-in-polygon",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\point-in-polygon\\LICENSE"
+  },
+  "polybooljs@1.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/velipso/polybooljs",
+    "publisher": "Sean",
+    "url": "https://sean.cm/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\polybooljs",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\polybooljs\\LICENSE"
+  },
+  "postcss-modules-extract-imports@3.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/css-modules/postcss-modules-extract-imports",
+    "publisher": "Glen Maddern",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-extract-imports",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-extract-imports\\LICENSE"
+  },
+  "postcss-modules-local-by-default@4.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/css-modules/postcss-modules-local-by-default",
+    "publisher": "Mark Dalgleish",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-local-by-default",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-local-by-default\\LICENSE"
+  },
+  "postcss-modules-scope@3.2.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/css-modules/postcss-modules-scope",
+    "publisher": "Glen Maddern",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-scope",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-scope\\LICENSE"
+  },
+  "postcss-modules-values@4.0.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/css-modules/postcss-modules-values",
+    "publisher": "Glen Maddern",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-values",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-modules-values\\LICENSE"
+  },
+  "postcss-selector-parser@7.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/postcss/postcss-selector-parser",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-selector-parser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-selector-parser\\LICENSE-MIT"
+  },
+  "postcss-value-parser@4.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TrySound/postcss-value-parser",
+    "publisher": "Bogdan Chadkin",
+    "email": "trysound@yandex.ru",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-value-parser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss-value-parser\\LICENSE"
+  },
+  "postcss@8.5.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/postcss/postcss",
+    "publisher": "Andrey Sitnik",
+    "email": "andrey@sitnik.ru",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\postcss\\LICENSE"
+  },
+  "potpack@1.0.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/potpack",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\potpack",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\potpack\\LICENSE"
+  },
+  "potpack@2.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/potpack",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\potpack",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\potpack\\LICENSE"
+  },
+  "probe-image-size@7.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodeca/probe-image-size",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\probe-image-size",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\probe-image-size\\LICENSE"
+  },
+  "process-nextick-args@2.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/calvinmetcalf/process-nextick-args",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\process-nextick-args",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\process-nextick-args\\license.md"
+  },
+  "prop-types@15.8.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/facebook/prop-types",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\prop-types",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\prop-types\\LICENSE"
+  },
+  "protocol-buffers-schema@3.6.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mafintosh/protocol-buffers-schema",
+    "publisher": "Mathias Buus",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\protocol-buffers-schema",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\protocol-buffers-schema\\LICENSE"
+  },
+  "quickselect@2.0.0": {
+    "licenses": "ISC",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\quickselect",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\quickselect\\LICENSE"
+  },
+  "quickselect@3.0.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mourner/quickselect",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\quickselect",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\quickselect\\LICENSE"
+  },
+  "raf@3.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chrisdickinson/raf",
+    "publisher": "Chris Dickinson",
+    "email": "chris@neversaw.us",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\raf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\raf\\LICENSE"
+  },
+  "re-resizable@6.11.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bokuweb/react-resizable-box",
+    "publisher": "bokuweb",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\re-resizable",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\re-resizable\\LICENSE"
+  },
+  "react-day-picker@9.11.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/gpbl/react-day-picker",
+    "publisher": "Giampaolo Bellavite",
+    "email": "io@gpbl.dev",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-day-picker",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-day-picker\\LICENSE"
+  },
+  "react-dom@19.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/facebook/react",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-dom",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-dom\\LICENSE"
+  },
+  "react-draggable@4.4.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/react-grid-layout/react-draggable",
+    "publisher": "Matt Zabriskie",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-draggable",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-draggable\\LICENSE"
+  },
+  "react-easy-swipe@0.0.21": {
+    "licenses": "MIT",
+    "repository": "https://github.com/leandrowd/react-easy-swipe",
+    "publisher": "Leandro Augusto Lemos",
+    "url": "http://leandrowd.github.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-easy-swipe",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-easy-swipe\\README.md"
+  },
+  "react-html-attributes@1.4.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jackyho112/react-html-attributes",
+    "publisher": "Jacky Ho",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-html-attributes",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-html-attributes\\LICENSE"
+  },
+  "react-is@16.13.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/facebook/react",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\prop-types\\node_modules\\react-is",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\prop-types\\node_modules\\react-is\\LICENSE"
+  },
+  "react-number-format@5.4.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/s-yadav/react-number-format",
+    "publisher": "Sudhanshu Yadav",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-number-format",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-number-format\\LICENSE"
+  },
+  "react-plotly.js@2.6.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/react-plotly.js",
+    "publisher": "Plotly, Inc.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-plotly.js",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-plotly.js\\LICENSE"
+  },
+  "react-remove-scroll-bar@2.3.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/theKashey/react-remove-scroll-bar",
+    "publisher": "Anton Korzunov",
+    "email": "thekashey@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-remove-scroll-bar",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-remove-scroll-bar\\README.md"
+  },
+  "react-remove-scroll@2.7.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/theKashey/react-remove-scroll",
+    "publisher": "Anton Korzunov",
+    "email": "thekashey@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-remove-scroll",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-remove-scroll\\LICENSE"
+  },
+  "react-resizable-panels@3.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bvaughn/react-resizable-panels",
+    "publisher": "Brian Vaughn",
+    "email": "brian.david.vaughn@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-resizable-panels",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-resizable-panels\\README.md"
+  },
+  "react-responsive-carousel@3.2.23": {
+    "licenses": "MIT",
+    "repository": "https://github.com/leandrowd/react-responsive-carousel",
+    "publisher": "Leandro Augusto Lemos",
+    "url": "http://leandrowd.github.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-responsive-carousel",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-responsive-carousel\\LICENSE.md"
+  },
+  "react-rnd@10.5.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bokuweb/react-rnd",
+    "publisher": "bokuweb",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-rnd",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-rnd\\LICENSE"
+  },
+  "react-style-singleton@2.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/theKashey/react-style-singleton",
+    "publisher": "Anton Korzunov",
+    "url": "thekashey@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-style-singleton",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-style-singleton\\LICENSE"
+  },
+  "react@19.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/facebook/react",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react\\LICENSE"
+  },
+  "readable-stream@1.0.34": {
+    "licenses": "MIT",
+    "repository": "https://github.com/isaacs/readable-stream",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\readable-stream",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\readable-stream\\LICENSE"
+  },
+  "readable-stream@2.3.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodejs/readable-stream",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\readable-stream",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\readable-stream\\LICENSE"
+  },
+  "regexp-to-ast@0.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bd82/regexp-to-ast",
+    "publisher": "Shahar Soel",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regexp-to-ast",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regexp-to-ast\\LICENSE"
+  },
+  "regl-error2d@2.0.12": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/regl-error2d",
+    "publisher": "Dima Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-error2d",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-error2d\\license"
+  },
+  "regl-line2d@3.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/regl-line2d",
+    "publisher": "Dima Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-line2d",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-line2d\\license"
+  },
+  "regl-scatter2d@3.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/regl-scatter2d",
+    "publisher": "Dima Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-scatter2d",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-scatter2d\\license"
+  },
+  "regl-splom@1.0.14": {
+    "licenses": "MIT",
+    "repository": "https://github.com/gl-vis/regl-splom",
+    "publisher": "Dmitry Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-splom",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl-splom\\license.md"
+  },
+  "regl@2.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/regl-project/regl",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\regl\\LICENSE"
+  },
+  "resolve-protobuf-schema@2.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mafintosh/resolve-protobuf-schema",
+    "publisher": "Mathias Buus",
+    "url": "@mafintosh",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\resolve-protobuf-schema",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\resolve-protobuf-schema\\LICENSE"
+  },
+  "resolve@0.6.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/node-resolve",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-resolve\\node_modules\\resolve",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-resolve\\node_modules\\resolve\\LICENSE"
+  },
+  "resolve@1.22.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/browserify/resolve",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-geo-projection\\node_modules\\resolve",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\d3-geo-projection\\node_modules\\resolve\\LICENSE"
+  },
+  "right-now@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hughsk/right-now",
+    "publisher": "Hugh Kennedy",
+    "email": "hughskennedy@gmail.com",
+    "url": "http://hughskennedy.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\right-now",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\right-now\\LICENSE.md"
+  },
+  "rw@1.3.3": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/mbostock/rw",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\rw",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\rw\\LICENSE"
+  },
+  "safe-buffer@5.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/feross/safe-buffer",
+    "publisher": "Feross Aboukhadijeh",
+    "email": "feross@feross.org",
+    "url": "http://feross.org",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\readable-stream\\node_modules\\safe-buffer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\readable-stream\\node_modules\\safe-buffer\\LICENSE"
+  },
+  "safe-buffer@5.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/feross/safe-buffer",
+    "publisher": "Feross Aboukhadijeh",
+    "email": "feross@feross.org",
+    "url": "https://feross.org",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\safe-buffer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\safe-buffer\\LICENSE"
+  },
+  "safer-buffer@2.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ChALkeR/safer-buffer",
+    "publisher": "Nikita Skovoroda",
+    "email": "chalkerx@gmail.com",
+    "url": "https://github.com/ChALkeR",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\safer-buffer",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\safer-buffer\\LICENSE"
+  },
+  "sax@1.4.3": {
+    "licenses": "BlueOak-1.0.0",
+    "repository": "https://github.com/isaacs/sax-js",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\sax",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\sax\\LICENSE.md"
+  },
+  "scheduler@0.27.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/facebook/react",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\scheduler",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\scheduler\\LICENSE"
+  },
+  "semver@6.3.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/node-semver",
+    "publisher": "GitHub Inc.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-compilation-targets\\node_modules\\semver",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@babel\\helper-compilation-targets\\node_modules\\semver\\LICENSE"
+  },
+  "semver@7.7.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/node-semver",
+    "publisher": "GitHub Inc.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\semver",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\semver\\LICENSE"
+  },
+  "shallow-copy@0.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/shallow-copy",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\shallow-copy",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\shallow-copy\\LICENSE"
+  },
+  "signum@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/signum",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\signum",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\signum\\LICENSE"
+  },
+  "sonner@2.0.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/emilkowalski/sonner",
+    "publisher": "Emil Kowalski",
+    "email": "e@emilkowal.ski",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\sonner",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\sonner\\LICENSE.md"
+  },
+  "source-map-js@1.2.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/7rulnik/source-map-js",
+    "publisher": "Valentin 7rulnik Semirulnik",
+    "email": "v7rulnik@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\source-map-js",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\source-map-js\\LICENSE"
+  },
+  "source-map@0.6.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/mozilla/source-map",
+    "publisher": "Nick Fitzgerald",
+    "email": "nfitzgerald@mozilla.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\source-map",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\source-map\\LICENSE"
+  },
+  "stack-trace@0.0.9": {
+    "licenses": "MIT*",
+    "repository": "https://github.com/felixge/node-stack-trace",
+    "publisher": "Felix Geisendörfer",
+    "email": "felix@debuggable.com",
+    "url": "http://debuggable.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stack-trace",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stack-trace\\License"
+  },
+  "static-eval@2.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/browserify/static-eval",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\static-eval",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\static-eval\\LICENSE"
+  },
+  "stream-parser@0.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TooTallNate/node-stream-parser",
+    "publisher": "Nathan Rajlich",
+    "email": "nathan@tootallnate.net",
+    "url": "http://tootallnate.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-parser",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-parser\\LICENSE"
+  },
+  "stream-shift@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mafintosh/stream-shift",
+    "publisher": "Mathias Buus",
+    "url": "@mafintosh",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-shift",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\stream-shift\\LICENSE"
+  },
+  "string-split-by@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/string-split-by",
+    "publisher": "Dmitry Yv",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\string-split-by",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\string-split-by\\readme.md"
+  },
+  "string_decoder@0.10.31": {
+    "licenses": "MIT",
+    "repository": "https://github.com/rvagg/string_decoder",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\string_decoder",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\string_decoder\\LICENSE"
+  },
+  "string_decoder@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodejs/string_decoder",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\string_decoder",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\string_decoder\\LICENSE"
+  },
+  "strongly-connected-components@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/strongly-connected-components",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\strongly-connected-components",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\strongly-connected-components\\LICENSE"
+  },
+  "style-loader@4.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/webpack-contrib/style-loader",
+    "publisher": "Tobias Koppers @sokra",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\style-loader",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\style-loader\\LICENSE"
+  },
+  "supercluster@7.1.5": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/supercluster",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supercluster",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supercluster\\LICENSE"
+  },
+  "supercluster@8.0.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/supercluster",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\supercluster",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\maplibre-gl\\node_modules\\supercluster\\LICENSE"
+  },
+  "superscript-text@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/superscript-text",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\superscript-text",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\superscript-text\\LICENSE"
+  },
+  "supports-color@7.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chalk/supports-color",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supports-color",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supports-color\\license"
+  },
+  "supports-preserve-symlinks-flag@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/inspect-js/node-supports-preserve-symlinks-flag",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supports-preserve-symlinks-flag",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\supports-preserve-symlinks-flag\\LICENSE"
+  },
+  "svg-arc-to-cubic-bezier@3.2.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/colinmeinke/svg-arc-to-cubic-bezier",
+    "publisher": "Colin Meinke",
+    "email": "hello@colinmeinke.com",
+    "url": "https://colinmeinke.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-arc-to-cubic-bezier",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-arc-to-cubic-bezier\\LICENSE.md"
+  },
+  "svg-path-bounds@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/svg-path-bounds",
+    "publisher": "Dima Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-path-bounds",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-path-bounds\\readme.md"
+  },
+  "svg-path-sdf@1.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/svg-path-sdf",
+    "publisher": "Dima Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-path-sdf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\svg-path-sdf\\readme.md"
+  },
+  "table-layout@4.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/75lb/table-layout",
+    "publisher": "Lloyd Brookes",
+    "email": "75pound@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\table-layout",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\table-layout\\LICENSE"
+  },
+  "tailwind-merge@3.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dcastil/tailwind-merge",
+    "publisher": "Dany Castillo",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tailwind-merge",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tailwind-merge\\LICENSE.md"
+  },
+  "tailwindcss@4.1.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/tailwindlabs/tailwindcss",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tailwindcss",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tailwindcss\\LICENSE"
+  },
+  "tauri-app@0.1.0": {
+    "licenses": "UNLICENSED",
+    "private": true,
+    "publisher": "easyCris",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri"
+  },
+  "tauri-controls@0.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/agmmnn/tauri-controls",
+    "publisher": "agmmnn",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tauri-controls",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tauri-controls\\LICENSE"
+  },
+  "through2@0.6.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/rvagg/through2",
+    "publisher": "Rod Vagg",
+    "email": "r@va.gg",
+    "url": "https://github.com/rvagg",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\through2",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-tokenizer\\node_modules\\through2\\LICENSE"
+  },
+  "through2@2.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/rvagg/through2",
+    "publisher": "Rod Vagg",
+    "email": "r@va.gg",
+    "url": "https://github.com/rvagg",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\through2",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\through2\\LICENSE.md"
+  },
+  "tinycolor2@1.6.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bgrins/TinyColor",
+    "publisher": "Brian Grinstead",
+    "email": "briangrinstead@gmail.com",
+    "url": "http://briangrinstead.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tinycolor2",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tinycolor2\\LICENSE"
+  },
+  "tinyqueue@2.0.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mourner/tinyqueue",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tinyqueue",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tinyqueue\\LICENSE"
+  },
+  "tinyqueue@3.0.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mourner/tinyqueue",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@maplibre\\maplibre-gl-style-spec\\node_modules\\tinyqueue",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\@maplibre\\maplibre-gl-style-spec\\node_modules\\tinyqueue\\LICENSE"
+  },
+  "to-float32@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dy/to-float32",
+    "publisher": "Dmitry Yv.",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\to-float32",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\to-float32\\license"
+  },
+  "to-px@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/to-px",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\to-px",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\to-px\\LICENSE"
+  },
+  "topojson-client@3.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/topojson/topojson-client",
+    "publisher": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\topojson-client",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\topojson-client\\LICENSE"
+  },
+  "ts-invariant@0.10.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/apollographql/invariant-packages",
+    "publisher": "Ben Newman",
+    "email": "ben@apollographql.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ts-invariant",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\ts-invariant\\LICENSE"
+  },
+  "tslib@2.6.2": {
+    "licenses": "0BSD",
+    "repository": "https://github.com/Microsoft/tslib",
+    "publisher": "Microsoft Corp.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-rnd\\node_modules\\tslib",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\react-rnd\\node_modules\\tslib\\LICENSE.txt"
+  },
+  "tslib@2.8.1": {
+    "licenses": "0BSD",
+    "repository": "https://github.com/Microsoft/tslib",
+    "publisher": "Microsoft Corp.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tslib",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\tslib\\LICENSE.txt"
+  },
+  "type@2.7.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/medikoo/type",
+    "publisher": "Mariusz Nowak",
+    "email": "medyk@medikoo.com",
+    "url": "https://www.medikoo.com/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\type",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\type\\LICENSE"
+  },
+  "typedarray-pool@1.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/typedarray-pool",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\typedarray-pool",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\typedarray-pool\\LICENSE"
+  },
+  "typedarray@0.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/typedarray",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\typedarray",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\typedarray\\LICENSE"
+  },
+  "typical@7.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/75lb/typical",
+    "publisher": "Lloyd Brookes",
+    "email": "opensource@75lb.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\typical",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\typical\\LICENSE"
+  },
+  "undici-types@7.16.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodejs/undici",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\undici-types",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\undici-types\\LICENSE"
+  },
+  "unquote@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lakenen/node-unquote",
+    "publisher": "Cameron Lakenen",
+    "email": "cameron@lakenen.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\unquote",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\unquote\\LICENSE"
+  },
+  "update-browserslist-db@1.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/browserslist/update-db",
+    "publisher": "Andrey Sitnik",
+    "email": "andrey@sitnik.ru",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\update-browserslist-db",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\update-browserslist-db\\LICENSE"
+  },
+  "update-diff@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/update-diff",
+    "publisher": "Dima Yv",
+    "email": "df.creative@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\update-diff",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\update-diff\\readme.md"
+  },
+  "use-callback-ref@1.3.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/theKashey/use-callback-ref",
+    "publisher": "theKashey",
+    "email": "thekashey@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\use-callback-ref",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\use-callback-ref\\LICENSE"
+  },
+  "use-sidecar@1.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/theKashey/use-sidecar",
+    "publisher": "theKashey",
+    "email": "thekashey@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\use-sidecar",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\use-sidecar\\LICENSE"
+  },
+  "util-deprecate@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TooTallNate/util-deprecate",
+    "publisher": "Nathan Rajlich",
+    "email": "nathan@tootallnate.net",
+    "url": "http://n8.io/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\util-deprecate",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\util-deprecate\\LICENSE"
+  },
+  "vt-pbf@3.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mapbox/vt-pbf",
+    "publisher": "Anand Thakker",
+    "email": "vestibule@anandthakker.net",
+    "url": "http://anandthakker.net/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\vt-pbf",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\vt-pbf\\LICENSE"
+  },
+  "weak-map@1.0.8": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/drses/weak-map",
+    "publisher": "Mark Miller",
+    "email": "erights@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\weak-map",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\weak-map\\README.md"
+  },
+  "webgl-context@2.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mattdesl/webgl-context",
+    "publisher": "Matt DesLauriers",
+    "email": "dave.des@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\webgl-context",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\webgl-context\\LICENSE.md"
+  },
+  "which@4.0.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/node-which",
+    "publisher": "GitHub Inc.",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\global-prefix\\node_modules\\which",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\global-prefix\\node_modules\\which\\LICENSE"
+  },
+  "wordwrapjs@5.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/75lb/wordwrapjs",
+    "publisher": "Lloyd Brookes",
+    "email": "opensource@75lb.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\wordwrapjs",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\wordwrapjs\\LICENSE"
+  },
+  "world-calendars@1.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/plotly/world-calendars",
+    "publisher": "Alex Johnson",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\world-calendars",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\world-calendars\\LICENSE"
+  },
+  "wrappy@1.0.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/wrappy",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\wrappy",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\wrappy\\LICENSE"
+  },
+  "xtend@2.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Raynos/xtend",
+    "publisher": "Raynos",
+    "email": "raynos2@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-resolve\\node_modules\\xtend",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\glsl-resolve\\node_modules\\xtend\\LICENCE"
+  },
+  "xtend@4.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Raynos/xtend",
+    "publisher": "Raynos",
+    "email": "raynos2@gmail.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\xtend",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\xtend\\LICENSE"
+  },
+  "yallist@3.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/yallist",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\yallist",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\yallist\\LICENSE"
+  },
+  "yocto-queue@0.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/yocto-queue",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "https://sindresorhus.com",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\yocto-queue",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\yocto-queue\\license"
+  },
+  "zustand@5.0.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pmndrs/zustand",
+    "publisher": "Paul Henschel",
+    "path": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\zustand",
+    "licenseFile": "C:\\Users\\RajLord_new\\Desktop\\tauri\\node_modules\\zustand\\LICENSE"
+  }
+}
+
