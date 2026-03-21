@@ -3,7 +3,7 @@
 **Publication-ready statistics and RNA-seq — no coding required, no data uploaded.**
 
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)
-![Version](https://img.shields.io/github/v/release/easyCris-software/easyCris?color=brightgreen)
+![Version](https://img.shields.io/github/v/tag/easyCris-software/easyCris?sort=semver&color=brightgreen)
 ![Free](https://img.shields.io/badge/price-free-brightgreen)
 
 <table>
