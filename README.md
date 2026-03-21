@@ -332,10 +332,12 @@ easyCris ships with three built-in reference guides accessible from the Help men
 ### Build from Source (Contributors)
 
 1. Install Node.js, Python 3.12, and Rust toolchain (`rustup` + MSVC build tools on Windows)
-2. Run `npm ci`
+2. Run `npm ci --legacy-peer-deps`
 3. Run `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1 -IncludeRnaseq` for full source functionality (use without `-IncludeRnaseq` for stats-only setup)
 4. Run `npm run -s typecheck`
 5. Run `npm run tauri dev`
+
+If you see `ERESOLVE` peer dependency conflicts during install, use the command above with `--legacy-peer-deps` (required for current `tauri-controls` peer constraints).
 
 ---
 

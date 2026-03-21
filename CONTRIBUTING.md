@@ -5,7 +5,7 @@
 1. Read `README.md`.
 2. Sign the contributor license agreement in `CLA.md`.
 3. Run local checks:
-   - `npm ci`
+   - `npm ci --legacy-peer-deps`
    - `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1`
    - For RNA-seq source work: `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1 -IncludeRnaseq`
    - `npm run -s typecheck`
@@ -28,6 +28,7 @@
 3. Do not commit secrets, local environment files, or generated binary payloads.
 4. PR checks and CLA check must pass before merge.
 5. Public updates are generated from private master via a curated export process.
+6. If install fails with `ERESOLVE` peer dependency conflicts, re-run with `--legacy-peer-deps` (this is expected with current `tauri-controls` peer constraints).
 
 ## License of Contributions
 
