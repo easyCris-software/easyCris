@@ -18,3 +18,5 @@ Track every merged public PR and how it was handled in private master before the
 1. Do not run a new public export until all merged public PRs since the last export have an entry.
 2. Each accepted PR must map to a private commit or explicit reimplementation note.
 3. Rejections must include a short technical/legal reason.
+
+- 2026-03-21: branch protection smoke PR created to verify pr-quality-gates + cla-check.
