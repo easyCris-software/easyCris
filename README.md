@@ -4,7 +4,7 @@
 
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)
 ![Version](https://img.shields.io/github/v/tag/easyCris-software/easyCris?sort=semver&color=brightgreen)
-![Free](https://img.shields.io/badge/price-free-brightgreen)
+
 
 <table>
   <tr>
@@ -34,7 +34,7 @@ No usage data, analysis data, or file contents are sent to external servers.
 
 ## 🧪 What is easyCris?
 
-easyCris is a free desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
+easyCris is desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
 
 ---
 
@@ -43,7 +43,7 @@ easyCris is a free desktop application for scientific data analysis — covering
 **[Download Latest Release](https://github.com/easyCris-software/easyCris/releases/latest)**
 
 Windows x64 installer (`.exe`). Once installed, the app supports in-app updates through signed release packages.
-easyCris is currently free to use.
+
 
 ---
 
@@ -346,7 +346,6 @@ If you use easyCris in published research, please cite the underlying methods:
 
 ## ⚖️ License
 
-easyCris is currently free to use. All rights reserved.
 Copyright © easyCris Software. Unauthorized copying, distribution, or modification is prohibited.
 By downloading and using easyCris you agree to the Terms of Use included with the installer.
 
