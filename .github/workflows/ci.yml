@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gates:
+    name: community-quality-gates
+    runs-on: windows-latest
+    steps:
+      - name: Enable Git long paths
+        shell: pwsh
+        run: git config --global core.longpaths true
+
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@631a55b12751854ce901bb631d5902ceb48146f7 # stable
+
+      - name: Install JS dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Bootstrap Python runtime
+        shell: pwsh
+        run: ./scripts/bootstrap-python.ps1
+
+      - name: Typecheck
+        run: npm run -s typecheck
+
+      - name: Build frontend
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: npm run -s build
+
+      - name: Rust check
+        run: cargo check --manifest-path src-tauri/Cargo.toml
+
+      - name: Rust tests
+        shell: pwsh
+        run: ./scripts/cargo-test-win.ps1
+
+      - name: License summary sync check
+        run: npm run -s license:summary:check
+
+      - name: Isolation allowlist check
+        run: npm run -s isolation:allowlist:check
+
+      - name: Forbidden path hygiene check
+        shell: pwsh
+        run: |
+          $matches = git ls-files | Where-Object {
+            $_ -match "^(backup/|old_documentation/|_documentation/|memory/|memory_db/|RNA_seq/|retired_python_files/|Screenshot .+\.png$|playwright-report/|edgedriver_win|\.env$|\.env\.production$|\.claude/|AGENTS\.md$|CLAUDE\.md$|\.mcp\.json$|.*\.pfx$|.*\.key$|.*\.Rhistory$|\.pybiomart\.sqlite$|\.tmp-vitest-report\.json$|(?:.*/)?\.ipynb_checkpoints/|python_embedded/python_dependencies/|python_embedded/python\.exe|python_embedded/python312\.dll|python_embedded/.*\.pyd$|python_embedded/.*\.dll$|python_embedded/.*embed.*\.zip$|python_embedded/.*runtime.*\.zip$|^_test_validation/)"
+          }
+          if ($matches) {
+            $matches | ForEach-Object { Write-Host "FORBIDDEN: $_" }
+            throw "Forbidden tracked paths detected in CI"
+          }

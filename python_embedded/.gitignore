@@ -1,0 +1,15 @@
+# Optional local interpreter artifacts.
+python.exe
+python._pth
+
+# Local runtime payloads must never be committed in OSS snapshot lane.
+python312.dll
+python_dependencies/
+*.pyd
+*.dll
+*.zip
+
+# Local caches
+__pycache__/
+**/__pycache__/
+*.pyc

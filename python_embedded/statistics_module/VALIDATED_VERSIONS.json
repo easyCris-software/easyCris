@@ -1,0 +1,132 @@
+{
+  "manifest_version": "1.1",
+  "last_updated": "2026-01-12",
+  "validation_plan_version": "3.15",
+  "python_version": "3.12.8",
+  "r_version": "4.5.1",
+
+  "backend": {
+    "type": "python_script",
+    "path": "python_embedded/stats.py",
+    "version": "1.0.0",
+    "smoke_tests": "PASSED (4/4)",
+    "notes": "Development: Python script. Production: Compile with Nuitka --onefile as final step."
+  },
+
+  "dependencies": {
+    "pyarrow": "22.0.0",
+    "numpy": "1.26.4",
+    "scipy": "1.14.1",
+    "pandas": "2.3.3",
+    "statsmodels": "0.14.4",
+    "scikit-learn": "1.7.2",
+    "scikit-posthocs": "0.11.4",
+    "lmfit": "1.3.4",
+    "lifelines": "0.30.0",
+    "matplotlib": "3.10.7",
+    "kaleido": "0.1.0.post1",
+    "gseapy": "1.1.11",
+    "pytest": "9.0.1"
+  },
+
+  "modules": {
+    "parametric": {
+      "version": "2.5.0",
+      "validation_group": "Group1_Hypothesis_Testing",
+      "status": "REQUIRES_REVALIDATION",
+      "tests": "271/271 (previous validation)",
+      "notes": "v2.5.0: One-Way ANOVA now generates post-hoc Tukey HSD for all k>2 regardless of omnibus p-value. Matches common practice. 🔓 UNLOCKED for bracket support - requires baseline update."
+    },
+    "nonparametric": {
+      "version": "2.3.1",
+      "validation_group": "Group1_Hypothesis_Testing",
+      "status": "REQUIRES_REVALIDATION",
+      "tests": "271/271 (previous validation)",
+      "notes": "v2.3.1: Fixed matplotlib circular import for scikit-posthocs Dunn's test. v2.3.0: Post-hoc now runs for all k>2 regardless of omnibus p-value. 🔓 UNLOCKED for bracket support - requires baseline update."
+    },
+    "anova": {
+      "version": "2.0.7",
+      "validation_group": "Group1_Hypothesis_Testing",
+      "status": "VALIDATED",
+      "tests": "64/64 (44 main + 20 simple effects)",
+      "notes": "One-way ANOVA, two-way ANOVA with simple effects (pooled error), Type III SS with sum contrasts"
+    },
+    "multifactorial_anova": {
+      "version": "1.4",
+      "validation_group": "Group1_Hypothesis_Testing",
+      "status": "VALIDATED",
+      "tests": "56/56 (44 main + 12 simple effects)",
+      "notes": "Two-way ANOVA, three-way ANOVA, interaction effects, simple effects with pooled error"
+    },
+    "regression": {
+      "version": "2.0.5",
+      "validation_group": "Group3_Regression_Correlation",
+      "status": "VALIDATED",
+      "tests": "122/122",
+      "notes": "Linear, polynomial, logistic, Poisson regression"
+    },
+    "correlation": {
+      "version": "1.0.0",
+      "validation_group": "Group3_Regression_Correlation",
+      "status": "VALIDATED",
+      "tests": "122/122",
+      "notes": "Pearson, Spearman, Kendall correlation"
+    },
+    "contingency": {
+      "version": "2.1.0",
+      "validation_group": "Group4_Categorical",
+      "status": "VALIDATED",
+      "tests": "19/19",
+      "notes": "Chi-square, Fisher's exact test, odds ratio"
+    },
+    "descriptive": {
+      "version": "1.0.0",
+      "validation_group": "Group5_Distribution_Descriptive",
+      "status": "VALIDATED",
+      "tests": "41/41",
+      "notes": "Mean, median, mode, SD, quartiles, outlier detection"
+    },
+    "distributions": {
+      "version": "2.2.1",
+      "validation_group": "Group5_Distribution_Descriptive",
+      "status": "VALIDATED",
+      "tests": "41/41",
+      "notes": "Normality tests, Q-Q plots, distribution fitting"
+    },
+    "survival": {
+      "version": "2.1",
+      "validation_group": "Group6_Survival",
+      "status": "VALIDATED",
+      "tests": "42/42",
+      "notes": "Kaplan-Meier, Cox proportional hazards, Nelson-Aalen. v2.1: Fixed Gamma calculation (was incorrectly using Somers' D approximation)"
+    },
+    "mediation": {
+      "version": "1.1.0",
+      "validation_group": "Group7_Mediation_Moderation",
+      "status": "VALIDATED",
+      "tests": "18/18",
+      "notes": "Mediation analysis (Baron & Kenny, bootstrap CIs)"
+    },
+    "moderation": {
+      "version": "1.7.0",
+      "validation_group": "Group7_Mediation_Moderation",
+      "status": "VALIDATED",
+      "tests": "65/65",
+      "notes": "Moderation analysis, conditional effects, Johnson-Neyman"
+    },
+    "dose_response": {
+      "version": "1.7.0",
+      "validation_group": "Group2_Pharmacology",
+      "status": "VALIDATED",
+      "tests": "48/48",
+      "notes": "3PL/4PL/5PL dose-response curves, IC50/EC50, curve comparison"
+    },
+    "drug_combo": {
+      "version": "1.1.2",
+      "validation_group": "Group2_Pharmacology",
+      "status": "VALIDATED",
+      "tests": "41/41",
+      "notes": "Synergy-compatible: HSA, Bliss, Loewe (dense+sparse), ZIP. Full statistical parity with baseline metrics (mean, SD, median, min, max, n_cells)"
+    }
+  }
+}

@@ -3,8 +3,8 @@
 **Publication-ready statistics and RNA-seq — no coding required, no data uploaded.**
 
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)
-![Version](https://img.shields.io/github/v/tag/easyCris-software/easyCris?sort=semver&color=brightgreen)
-
+![Version](https://img.shields.io/badge/version-latest-brightgreen)
+![Free](https://img.shields.io/badge/price-free-brightgreen)
 
 <table>
   <tr>
@@ -20,7 +20,7 @@
 - **Runs 100% locally** — your data never leaves your machine
 - **Publication-ready output** — interactive plots, results tables, and built-in citations
 
-**[Download easyCris](https://github.com/easyCris-software/easyCris/releases/latest)** · **[Visit easycris.com](https://www.easycris.com)** · **[Join the Discussion](https://github.com/easyCris-software/easyCris/discussions)**
+**[Download easyCris](https://www.easycris.com)** · **[Visit easycris.com](https://www.easycris.com)** · **Contact: hello@easycris.com**
 
 ---
 
@@ -34,16 +34,19 @@ No usage data, analysis data, or file contents are sent to external servers.
 
 ## 🧪 What is easyCris?
 
-easyCris is desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required.
+easyCris is a free desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required for official installer builds.
 
 ---
 
 ## ⬇️ Download
 
-**[Download Latest Release](https://github.com/easyCris-software/easyCris/releases/latest)**
+Official install options:
+
+- Official signed installer (recommended): **[easycris.com](https://www.easycris.com)**
+- Official website: **[easycris.com](https://www.easycris.com)**
 
 Windows x64 installer (`.exe`). Once installed, the app supports in-app updates through signed release packages.
-
+easyCris is currently free to use.
 
 ---
 
@@ -320,11 +323,19 @@ easyCris ships with three built-in reference guides accessible from the Help men
 
 ## 🚀 Getting Started
 
-1. Download the installer from the [Releases page](https://github.com/easyCris-software/easyCris/releases/latest)
+1. Download the installer from [easycris.com](https://www.easycris.com)
 2. Run the `.exe` installer (admin rights may depend on your system policy)
 3. Open easyCris and import your CSV data
 4. Select a statistical test or analysis workflow
 5. Review your results table and auto-generated plots
+
+### Build from Source (Contributors)
+
+1. Install Node.js, Python 3.12, and Rust toolchain (`rustup` + MSVC build tools on Windows)
+2. Run `npm ci`
+3. Run `pwsh -ExecutionPolicy Bypass -File scripts/bootstrap-python.ps1 -IncludeRnaseq` for full source functionality (use without `-IncludeRnaseq` for stats-only setup)
+4. Run `npm run -s typecheck`
+5. Run `npm run tauri dev`
 
 ---
 
@@ -346,8 +357,17 @@ If you use easyCris in published research, please cite the underlying methods:
 
 ## ⚖️ License
 
-Copyright © easyCris Software. Unauthorized copying, distribution, or modification is prohibited.
-By downloading and using easyCris you agree to the Terms of Use included with the installer.
+easyCris Community is licensed under the Apache License, Version 2.0.
+
+See [LICENSE](LICENSE) for the full license text.
+
+The easyCris name, logo, and official signed releases are not licensed for unrestricted trademark use by the Apache-2.0 code license.
+
+Commercial inquiries: hello@easycris.com
+
+## 🤝 Contributing & Security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## ⚠️ Disclaimer
 

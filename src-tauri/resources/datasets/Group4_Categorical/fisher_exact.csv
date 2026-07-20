@@ -1,0 +1,11 @@
+group,outcome
+treatment,success
+treatment,success
+treatment,success
+treatment,success
+treatment,failure
+control,success
+control,failure
+control,failure
+control,failure
+control,failure

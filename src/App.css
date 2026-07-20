@@ -1,0 +1,372 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Border radius utilities */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Background colors */
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-foreground: var(--foreground);
+
+  /* Text colors */
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-disabled: var(--text-disabled);
+
+  /* Card & Popover */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Primary & Accent */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-light: var(--accent-light);
+
+  /* Secondary & Muted */
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  /* Semantic colors */
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  /* Borders & Input */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Charts */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  /* SukiUI Blue Theme - Light Mode */
+  /* Border radius */
+  --radius: 0.625rem;
+  --app-height: 100dvh;
+  --app-width: 100dvw;
+
+  /* Backgrounds - Slight blue tint matching SukiUI */
+  --background: oklch(0.99 0.005 250);           /* #F8FAFC → Very light blue-gray */
+  --background-secondary: oklch(0.96 0.01 250);  /* #EFF3F8 → Light blue-gray */
+  --background-tertiary: oklch(0.93 0.015 250);  /* #E2E8F0 → Slightly darker */
+  --foreground: oklch(0.18 0.02 250);            /* #1E293B → Dark slate */
+
+  /* Cards & Popovers */
+  --card: oklch(1 0.003 250);                    /* Nearly white with hint of blue */
+  --card-foreground: oklch(0.18 0.02 250);
+  --popover: oklch(1 0.003 250);
+  --popover-foreground: oklch(0.18 0.02 250);
+
+  /* Primary/Accent - SukiUI Blue (#3B82F6 / Blue-500) */
+  --primary: oklch(0.58 0.20 250);               /* #3B82F6 → Blue-500 */
+  --primary-foreground: oklch(0.99 0.005 250);   /* White text on blue */
+  --accent: oklch(0.58 0.20 250);                /* Same as primary */
+  --accent-foreground: oklch(0.99 0.005 250);
+  --accent-light: oklch(0.75 0.15 250);          /* #60A5FA → Blue-400 (lighter) */
+
+  /* Secondary - Light blue-gray */
+  --secondary: oklch(0.96 0.01 250);             /* Light bg for secondary actions */
+  --secondary-foreground: oklch(0.18 0.02 250);
+
+  /* Muted */
+  --muted: oklch(0.93 0.015 250);                /* Muted backgrounds */
+  --muted-foreground: oklch(0.50 0.02 250);      /* #64748B → Medium slate */
+
+  /* Text colors (aliases for components) */
+  --text: oklch(0.18 0.02 250);                  /* Same as foreground */
+  --text-muted: oklch(0.50 0.02 250);            /* Medium slate */
+  --text-disabled: oklch(0.70 0.015 250);        /* #94A3B8 → Light slate */
+
+  /* Semantic colors */
+  --destructive: oklch(0.577 0.245 27.325);      /* Red (keep existing) */
+  --success: oklch(0.60 0.15 150);               /* Green */
+  --warning: oklch(0.75 0.15 85);                /* Amber */
+
+  /* Borders & Input */
+  --border: oklch(0.90 0.01 250);                /* #E2E8F0 → Slate-200 */
+  --input: oklch(0.90 0.01 250);
+  --ring: oklch(0.58 0.20 250);                  /* Blue ring for focus */
+
+  /* Charts - Vibrant blues/purples/greens */
+  --chart-1: oklch(0.58 0.20 250);               /* Blue */
+  --chart-2: oklch(0.65 0.18 280);               /* Purple */
+  --chart-3: oklch(0.70 0.15 200);               /* Cyan */
+  --chart-4: oklch(0.75 0.12 150);               /* Green */
+  --chart-5: oklch(0.80 0.10 50);                /* Yellow */
+
+  /* Sidebar - Blue theme */
+  --sidebar: oklch(0.99 0.005 250);              /* Light sidebar bg */
+  --sidebar-foreground: oklch(0.18 0.02 250);
+  --sidebar-primary: oklch(0.58 0.20 250);       /* Blue accent */
+  --sidebar-primary-foreground: oklch(0.99 0.005 250);
+  --sidebar-accent: oklch(0.96 0.01 250);        /* Light blue-gray */
+  --sidebar-accent-foreground: oklch(0.18 0.02 250);
+  --sidebar-border: oklch(0.90 0.01 250);
+  --sidebar-ring: oklch(0.58 0.20 250);
+}
+
+.dark {
+  /* SukiUI Blue Theme - Dark Mode */
+  /* Backgrounds - Dark slate with blue tint */
+  --background: oklch(0.18 0.02 250);            /* #1E293B → Slate-800 */
+  --background-secondary: oklch(0.22 0.025 250); /* #334155 → Slate-700 */
+  --background-tertiary: oklch(0.28 0.03 250);   /* #475569 → Slate-600 */
+  --foreground: oklch(0.98 0.005 250);           /* #F8FAFC → Very light */
+
+  /* Cards & Popovers */
+  --card: oklch(0.22 0.025 250);                 /* Slightly lighter than bg */
+  --card-foreground: oklch(0.98 0.005 250);
+  --popover: oklch(0.22 0.025 250);
+  --popover-foreground: oklch(0.98 0.005 250);
+
+  /* Primary/Accent - Brighter blue for dark mode (#60A5FA / Blue-400) */
+  --primary: oklch(0.68 0.22 250);               /* #60A5FA → Blue-400 (brighter) */
+  --primary-foreground: oklch(0.15 0.02 250);    /* Dark text on blue */
+  --accent: oklch(0.68 0.22 250);                /* Same as primary */
+  --accent-foreground: oklch(0.15 0.02 250);
+  --accent-light: oklch(0.75 0.18 250);          /* #93C5FD → Blue-300 (lighter) */
+
+  /* Secondary */
+  --secondary: oklch(0.28 0.03 250);             /* Slate-600 */
+  --secondary-foreground: oklch(0.98 0.005 250);
+
+  /* Muted */
+  --muted: oklch(0.28 0.03 250);                 /* Slate-600 */
+  --muted-foreground: oklch(0.70 0.015 250);     /* #94A3B8 → Medium light */
+
+  /* Text colors (aliases for components) */
+  --text: oklch(0.98 0.005 250);                 /* Very light */
+  --text-muted: oklch(0.70 0.015 250);           /* #94A3B8 → Medium light */
+  --text-disabled: oklch(0.50 0.02 250);         /* #64748B → Medium dark */
+
+  /* Semantic colors */
+  --destructive: oklch(0.704 0.191 22.216);      /* Red (keep existing) */
+  --success: oklch(0.68 0.18 150);               /* Green (brighter) */
+  --warning: oklch(0.80 0.15 85);                /* Amber (brighter) */
+
+  /* Borders & Input */
+  --border: oklch(0.35 0.03 250);                /* #475569 → Slate-600 */
+  --input: oklch(0.40 0.03 250);                 /* Slightly lighter */
+  --ring: oklch(0.68 0.22 250);                  /* Blue ring for focus */
+
+  /* Charts - Vibrant, adjusted for dark bg */
+  --chart-1: oklch(0.68 0.22 250);               /* Blue-400 */
+  --chart-2: oklch(0.72 0.20 280);               /* Purple-400 */
+  --chart-3: oklch(0.75 0.18 200);               /* Cyan-400 */
+  --chart-4: oklch(0.78 0.15 150);               /* Green-400 */
+  --chart-5: oklch(0.82 0.12 50);                /* Yellow-400 */
+
+  /* Sidebar - Dark theme */
+  --sidebar: oklch(0.22 0.025 250);              /* Slate-700 */
+  --sidebar-foreground: oklch(0.98 0.005 250);
+  --sidebar-primary: oklch(0.68 0.22 250);       /* Blue-400 */
+  --sidebar-primary-foreground: oklch(0.98 0.005 250);
+  --sidebar-accent: oklch(0.28 0.03 250);        /* Slate-600 */
+  --sidebar-accent-foreground: oklch(0.98 0.005 250);
+  --sidebar-border: oklch(0.35 0.03 250);        /* Slate-600 */
+  --sidebar-ring: oklch(0.68 0.22 250);          /* Blue-400 */
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+    cursor: default;
+  }
+
+  /* Plotly modebar layout (keep icons in a single horizontal row) */
+  .modebar {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .modebar-group {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+
+  .plotly .modebar-container {
+    position: absolute !important;
+    top: var(--plotly-modebar-offset, 6px) !important;
+    right: 6px !important;
+  }
+
+  .plotly text {
+    font-weight: var(--plotly-font-weight, 700);
+  }
+
+  .plotly .xtick text {
+    font-weight: var(--plotly-x-tick-weight, var(--plotly-font-weight, 700));
+  }
+
+  .plotly .ytick text {
+    font-weight: var(--plotly-y-tick-weight, var(--plotly-font-weight, 700));
+  }
+
+  .plotly .legend text {
+    font-weight: var(--plotly-legend-weight, var(--plotly-font-weight, 700));
+  }
+
+  .plotly .annotation text {
+    font-weight: var(--plotly-annotation-weight, var(--plotly-font-weight, 700));
+  }
+
+  /* Significance brackets: vertical-only drag cursor */
+  /* Target only significance bracket shapes (they use path type with 'M ... L ... L ... L ...' pattern) */
+  .plotly .shapelayer path[data-index] {
+    cursor: ns-resize !important;
+  }
+
+  .plotly .shapelayer path[data-index]:hover {
+    cursor: ns-resize !important;
+    stroke-width: 4 !important;  /* Slight visual feedback on hover */
+  }
+
+  /* Override Plotly's default drag cursor for all shape layers */
+  .plotly .shapelayer .drag {
+    cursor: ns-resize !important;
+  }
+
+  html,
+  #root {
+    height: var(--app-height);
+    min-height: var(--app-height);
+    width: var(--app-width);
+    min-width: var(--app-width);
+    overflow: hidden;
+  }
+
+  body {
+    @apply text-foreground;
+    font-family: -apple-system, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    overscroll-behavior: none;
+    height: var(--app-height);
+    min-height: var(--app-height);
+    width: var(--app-width);
+    min-width: var(--app-width);
+    overflow: hidden;
+    position: relative;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.75) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.75);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .dark * {
+    scrollbar-color: rgba(71, 85, 105, 0.95) rgba(15, 23, 42, 0.2);
+  }
+
+  .dark *::-webkit-scrollbar-thumb {
+    background-color: rgba(71, 85, 105, 0.95);
+  }
+
+  .dark *::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.2);
+  }
+
+  svg {
+    color: inherit;
+  }
+
+  /* Allow text selection in specific areas */
+  input,
+  textarea,
+  [contenteditable='true'] {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    cursor: text !important;
+  }
+
+  /* Utility class for when pointer cursor is explicitly needed */
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+
+  /* Fullscreen plot styling - center and fill screen */
+  [data-testid='plot-container']:fullscreen {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: var(--background) !important;
+    padding: 2rem !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Dark mode fullscreen background */
+  .dark [data-testid='plot-container']:fullscreen {
+    background: oklch(0.15 0.02 250) !important;
+  }
+
+  /* Make the Plotly plot fill the fullscreen container */
+  [data-testid='plot-container']:fullscreen .js-plotly-plot {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

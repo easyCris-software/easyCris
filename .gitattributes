@@ -1,0 +1,2 @@
+python_embedded/python_dependencies/kaleido/executable/bin/kaleido.exe filter=lfs diff=lfs merge=lfs -text
+python_embedded/python_dependencies/**/*.pyd filter=lfs diff=lfs merge=lfs -text
