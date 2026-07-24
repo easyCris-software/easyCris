@@ -1,6 +1,6 @@
 [package]
 name = "easycris"
-version = "0.1.38"
+version = "0.1.39"
 description = "easyCris desktop statistical analysis application"
 license = "Apache-2.0"
 authors = ["easyCris Software <hello@easycris.com>"]
