@@ -1,0 +1,28 @@
+# RNA-seq compatibility overlay validated by the EasyCris R/Python and E2E lanes.
+#
+# PyDESeq2 0.5.3 declares NumPy >=2, but EasyCris validates this patched build with
+# the shared NumPy 1.26.4 scientific stack. Provisioning installs this complete
+# overlay with --no-deps, then applies scripts/rnaseq_patches/pydeseq2_0_5_3.
+# Keep every RNA-only transitive dependency pinned here.
+#
+# legacy-api-wrap is intentionally absent. anndata uses its built-in fallback,
+# preserving the project's validated no-MPL runtime policy.
+anndata==0.12.7
+array-api-compat==1.13.0
+donfig==0.8.1.post1
+formulaic==1.2.1
+formulaic-contrasts==1.0.0
+google-crc32c==1.8.0
+h5py==3.15.1
+interface-meta==1.3.0
+narwhals==2.12.0
+natsort==8.4.0
+numcodecs==0.16.5
+packaging==26.0
+pydeseq2==0.5.3
+PyYAML==6.0.3
+session-info==1.0.1
+stdlib-list==0.12.0
+typing-extensions==4.15.0
+wrapt==2.0.1
+zarr==3.1.5

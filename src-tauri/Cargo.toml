@@ -1,0 +1,91 @@
+[package]
+name = "easycris"
+version = "0.1.39"
+description = "easyCris desktop statistical analysis application"
+license = "Apache-2.0"
+authors = ["easyCris Software <hello@easycris.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "tauri_app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[features]
+default = ["native-capture-window"]
+native-capture-window = ["dep:windows-capture2"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = ["isolation"] }
+
+[dependencies]
+tauri = { version = "2", features = ["isolation", "macos-private-api", "image-ico"] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri-plugin-clipboard-manager = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-log = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-persisted-scope = "2"
+tauri-plugin-process = "2"
+tauri-plugin-single-instance = "2"
+log = "0.4"
+tracing = "0.1"
+tracing-log = "0.2"  # Bridge between tracing and log crate
+regex = "1.11.1"
+rand = "0.8"         # Random number generation for trace IDs
+
+# easyCris backend dependencies
+tokio = { version = "1", features = ["full", "time"] }
+tokio-tungstenite = "0.29" # WebSocket signaling for remote-session spike
+futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+anyhow = "1"
+csv = "1.3"           # CSV/TSV parsing (Phase 3C)
+chrono = "0.4"        # Timestamps for dataset metadata (Phase 3C)
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+keyring = { version = "3.6", default-features = false, features = ["apple-native", "windows-native", "sync-secret-service"] }
+calamine = { version = "0.24", features = ["default"] }     # Excel import (.xlsx/.xls) (Phase 4 Fix Module 3)
+rust_xlsxwriter = "0.64"  # Excel export (Phase 4 Milestone 2)
+arrow2 = { version = "0.18", features = ["io_ipc", "io_csv"] }  # Arrow columnar data (Phase 4 Milestone 2B)
+lazy_static = "1.4"  # Global cache instance (Phase 4 Milestone 3)
+dirs = "5.0"  # Platform-specific directories (Phase 4 Milestone 4)
+fs2 = "0.4"   # Local disk free-space checks for cache health prompts
+image = { version = "0.25", default-features = false, features = ["png"] }  # Icon decoding for runtime icon refresh
+uuid = { version = "1.11", features = ["v4", "serde"] }  # UUID generation for project IDs
+enigo = "0.5"         # Cross-platform input injection for remote-session spike
+
+# DuckDB for large dataset storage (Phase 5 - Hybrid Cache)
+duckdb = { version = "=1.4.5", features = ["bundled"] }  # MIT license, bundled binary
+
+# Moka - High performance concurrent cache (Phase 5 - Scroll Performance)
+moka = { version = "0.12", features = ["sync"] }  # MIT/Apache-2.0, thread-safe LRU cache
+
+# Formualizer - Backend formula evaluation engine (Phase 6 - Backend Formulas)
+# Using eval + parse for streaming large ranges (workbook materializes everything)
+# NOTE: We already have arrow2 0.18 - DO NOT add arrow v53
+formualizer-eval = "=0.4.3"      # Evaluation engine with custom resolver support
+formualizer-parse = "=1.1.1"     # Formula parser (AST)
+formualizer-common = "=1.1.1"    # LiteralValue, CalcValue, Range types
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
+
+[target.'cfg(windows)'.dependencies]
+windows-capture2 = { package = "windows-capture", version = "2.0.0", optional = true }
+windows = { version = "0.58.0", features = ["Win32_Foundation", "Win32_Graphics_Dwm", "Win32_Graphics_Gdi", "Win32_UI_WindowsAndMessaging"] }
+wasapi = "0.23"
+rubato = "3.0"
+sonora = "0.1.0"
+
+# Optimize for smaller binary size in release builds
+[profile.release]
+codegen-units = 1        # Better LLVM optimization (slower build, smaller binary)
+lto = true               # Link-time optimizations
+opt-level = "s"          # Optimize for size over speed
+panic = "abort"          # Don't include panic unwinding code
+strip = true             # Remove debug symbols

@@ -1,0 +1,1122 @@
+{
+  "summary": {
+    "total": 159,
+    "copyleft": 0,
+    "unknown": 0
+  },
+  "packages": [
+    {
+      "name": "anndata",
+      "version": "0.12.7",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "anyio",
+      "version": "4.11.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "anyio-4.12.1.dist-info",
+      "version": null,
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "argon2-cffi",
+      "version": "25.1.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "argon2-cffi-bindings",
+      "version": "25.1.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "array-api-compat",
+      "version": "1.13.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "arrow",
+      "version": "1.4.0",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "asteval",
+      "version": "1.0.7",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "asttokens",
+      "version": "3.0.0",
+      "license": "Apache 2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "async-lru",
+      "version": "2.0.5",
+      "license": "MIT License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "attrs",
+      "version": "25.4.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "autograd",
+      "version": "1.8.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "autograd-gamma",
+      "version": "0.5.0",
+      "license": "MIT License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "babel",
+      "version": "2.17.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "beautifulsoup4",
+      "version": "4.14.2",
+      "license": "MIT License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "biothings_client-0.4.1.dist-info",
+      "version": null,
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "bleach",
+      "version": "6.3.0",
+      "license": "Apache Software License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "cattrs",
+      "version": "25.3.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "cffi",
+      "version": "2.0.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.4.4",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "contourpy",
+      "version": "1.3.3",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "cycler",
+      "version": "0.12.1",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "debugpy",
+      "version": "1.8.17",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "decorator",
+      "version": "5.2.1",
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "defusedxml",
+      "version": "0.7.1",
+      "license": "PSFL",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "dill",
+      "version": "0.4.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "donfig",
+      "version": "0.8.1.post1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "drm_basic",
+      "version": "0.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "duckdb",
+      "version": "1.1.3",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "executing",
+      "version": "2.2.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "fastjsonschema",
+      "version": "2.21.2",
+      "license": "BSD",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "fonttools",
+      "version": "4.60.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "fonttools",
+      "version": "4.61.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "formulaic",
+      "version": "1.2.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "formulaic-contrasts",
+      "version": "1.0.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "future",
+      "version": "1.0.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "google-crc32c",
+      "version": "1.8.0",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "gseapy",
+      "version": "1.1.11",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "h5py",
+      "version": "3.15.1",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "idna",
+      "version": "3.11",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "interface-meta",
+      "version": "1.3.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "isoduration",
+      "version": "20.11.0",
+      "license": "ISC License (ISCL)",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "jedi",
+      "version": "0.19.2",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "joblib",
+      "version": "1.5.2",
+      "license": "BSD 3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "joblib-1.5.3.dist-info",
+      "version": null,
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "json5",
+      "version": "0.12.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "jsonpointer",
+      "version": "3.0.0",
+      "license": "Modified BSD License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.25.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "kaleido",
+      "version": "0.1.0.post1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "kiwisolver",
+      "version": "1.4.9",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "lark",
+      "version": "1.3.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "lifelines",
+      "version": "0.30.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "lmfit",
+      "version": "1.3.4",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "logistro",
+      "version": "2.0.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "lxml",
+      "version": "6.0.2",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "3.0.3",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "matplotlib",
+      "version": "3.10.7",
+      "license": "PSF-2.0",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "matplotlib-inline",
+      "version": "0.2.1",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "mistune",
+      "version": "3.1.4",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "mygene-3.2.2.dist-info",
+      "version": null,
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "narwhals",
+      "version": "2.12.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "narwhals",
+      "version": "2.15.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "natsort",
+      "version": "8.4.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "nest-asyncio",
+      "version": "1.6.0",
+      "license": "BSD",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "Nuitka",
+      "version": "2.8.9",
+      "license": "Apache License, Version 2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "numcodecs",
+      "version": "0.16.5",
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "numpy",
+      "version": "1.26.4",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "numpy-2.4.1.dist-info",
+      "version": null,
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "ordered-set",
+      "version": "4.1.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "orjson",
+      "version": "3.11.4",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "packaging",
+      "version": "25.0",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "packaging",
+      "version": "26.0",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "pandas",
+      "version": "2.3.3",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "pandas",
+      "version": "3.0.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "pandocfilters",
+      "version": "1.5.1",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "parso",
+      "version": "0.8.5",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "patsy",
+      "version": "1.0.2",
+      "license": "2-clause BSD",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pillow",
+      "version": "12.1.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "platformdirs",
+      "version": "4.5.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "plotly",
+      "version": "5.24.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "polars",
+      "version": "1.20.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "prometheus_client",
+      "version": "0.23.1",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "prompt_toolkit",
+      "version": "3.0.52",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "psutil",
+      "version": "7.1.3",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pure_eval",
+      "version": "0.2.3",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pyarrow",
+      "version": "22.0.0",
+      "license": "Apache Software License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pycparser",
+      "version": "2.23",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pydeseq2",
+      "version": "0.5.3",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.19.2",
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pyparsing",
+      "version": "3.2.5",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "pyparsing",
+      "version": "3.3.2",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "PyProcessMacro",
+      "version": "1.0.12",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pytest",
+      "version": "9.0.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "pytest-timeout",
+      "version": "2.4.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "license": "Dual License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "python-json-logger",
+      "version": "4.0.0",
+      "license": "BSD-2-Clause License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "python-pptx",
+      "version": "0.6.23",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pytz",
+      "version": "2025.2",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pywin32",
+      "version": "311",
+      "license": "PSF",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "pywinpty",
+      "version": "3.0.2",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "PyYAML",
+      "version": "6.0.3",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "requests",
+      "version": "2.32.5",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "requests-cache",
+      "version": "1.2.1",
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "rfc3339-validator",
+      "version": "0.1.4",
+      "license": "MIT license",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "rfc3986-validator",
+      "version": "0.1.1",
+      "license": "MIT license",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "rfc3987-syntax",
+      "version": "1.1.0",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "rpds-py",
+      "version": "0.28.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.7.2",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "scikit_learn-1.8.0.dist-info",
+      "version": null,
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "scikit-posthocs",
+      "version": "0.11.4",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "scipy",
+      "version": "1.14.1",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "scipy",
+      "version": "1.16.3",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "scipy",
+      "version": "1.17.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "seaborn",
+      "version": "0.13.2",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "Send2Trash",
+      "version": "1.8.3",
+      "license": "BSD License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "session_info",
+      "version": "1.0.1",
+      "license": "BSD-3",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "setuptools-80.10.2.dist-info",
+      "version": null,
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "setuptools",
+      "version": "80.9.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "simplejson",
+      "version": "3.20.2",
+      "license": "MIT License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "sniffio",
+      "version": "1.3.1",
+      "license": "MIT OR Apache-2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "soupsieve",
+      "version": "2.8",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "stack-data",
+      "version": "0.6.3",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "statsmodels",
+      "version": "0.14.4",
+      "license": "BSD License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "statsmodels",
+      "version": "0.14.5",
+      "license": "BSD License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "statsmodels-0.14.6.dist-info",
+      "version": null,
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "stdlib-list",
+      "version": "0.12.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "tenacity",
+      "version": "9.1.2",
+      "license": "Apache 2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "terminado",
+      "version": "0.18.1",
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "threadpoolctl",
+      "version": "3.6.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "tinycss2",
+      "version": "1.4.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "classifier"
+    },
+    {
+      "name": "tornado",
+      "version": "6.5.2",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "traitlets",
+      "version": "5.14.3",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.15.0",
+      "license": "PSF-2.0",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "tzdata",
+      "version": "2025.3",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "uncertainties",
+      "version": "3.2.3",
+      "license": "Revised BSD License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "uri-template",
+      "version": "1.3.0",
+      "license": "MIT License",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.5.0",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "urllib3-2.6.3.dist-info",
+      "version": null,
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "url-normalize",
+      "version": "2.2.1",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "wcwidth",
+      "version": "0.2.14",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "webcolors",
+      "version": "25.10.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "webencodings",
+      "version": "0.5.1",
+      "license": "BSD",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "websocket-client",
+      "version": "1.9.0",
+      "license": "Apache-2.0",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "wheel-0.46.3.dist-info",
+      "version": null,
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "wrapt",
+      "version": "2.0.1",
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "metadata:license-text"
+    },
+    {
+      "name": "xlsxwriter",
+      "version": "3.2.9",
+      "license": "BSD-2-Clause",
+      "status": "ok",
+      "evidence": "metadata:license"
+    },
+    {
+      "name": "zarr",
+      "version": "3.1.5",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "zstandard",
+      "version": "0.25.0",
+      "license": "BSD-3-Clause",
+      "status": "ok",
+      "evidence": "license-file"
+    },
+    {
+      "name": "certifi",
+      "version": "0.1.0-wincert",
+      "license": "MIT",
+      "status": "ok",
+      "evidence": "custom-stub"
+    }
+  ]
+}

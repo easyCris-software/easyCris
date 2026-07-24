@@ -1,0 +1,136 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Version tag to release (for example v0.1.24)"
+        required: true
+        type: string
+      draft_release:
+        description: "Publish as draft release (recommended for smoke)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: write
+
+jobs:
+  windows-release:
+    name: build-and-publish-windows
+    runs-on: windows-latest
+    env:
+      NODE_VERSION: "20"
+      PYTHON_VERSION: "3.12"
+    steps:
+      - name: Enable Git long paths
+        shell: pwsh
+        run: git config --global core.longpaths true
+
+      - name: Resolve and validate release tag
+        id: meta
+        shell: pwsh
+        run: |
+          $tag = if ("${{ github.event_name }}" -eq "workflow_dispatch") { "${{ inputs.release_tag }}" } else { "${{ github.ref_name }}" }
+          $tag = $tag.Trim()
+          if ($tag -notmatch '^v\d') {
+            throw "Release workflow requires a v* tag. Got: '$tag'"
+          }
+          "release_tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "release_version=$($tag.TrimStart('v'))" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ steps.meta.outputs.release_tag }}
+          fetch-depth: 0
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@631a55b12751854ce901bb631d5902ceb48146f7 # stable
+
+      - name: Install JS dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Bootstrap Python runtime
+        shell: pwsh
+        run: ./scripts/bootstrap-python.ps1
+
+      - name: Bootstrap Nuitka builder
+        shell: pwsh
+        run: ./scripts/bootstrap-nuitka.ps1
+
+      - name: Provision embedded Python runtime
+        shell: pwsh
+        run: ./scripts/provision-python-embedded.ps1
+
+      - name: Quality gates
+        run: |
+          npm run -s typecheck
+          npm run -s isolation:allowlist:check
+          npm run -s license:summary:check
+
+      - name: Validate release signing secrets
+        shell: pwsh
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:TAURI_SIGNING_PRIVATE_KEY)) {
+            throw "Missing secret: TAURI_SIGNING_PRIVATE_KEY"
+          }
+          if ([string]::IsNullOrWhiteSpace($env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD)) {
+            throw "Missing secret: TAURI_SIGNING_PRIVATE_KEY_PASSWORD"
+          }
+
+      - name: Build NSIS release artifacts
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: npm run -s tauri:build:release:nsis
+
+      - name: Generate updater metadata
+        id: updater
+        shell: pwsh
+        run: |
+          $tag = "${{ steps.meta.outputs.release_tag }}"
+          $version = "${{ steps.meta.outputs.release_version }}"
+          $tagDate = git for-each-ref "refs/tags/$tag" --format="%(taggerdate:iso-strict)" | Select-Object -First 1
+          if ([string]::IsNullOrWhiteSpace($tagDate)) {
+            $tagDate = git log -1 --format=%cI "$tag"
+          }
+          if ([string]::IsNullOrWhiteSpace($tagDate)) {
+            throw "Could not resolve tag timestamp for $tag"
+          }
+          "pub_date=$tagDate" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          node scripts/generate-updater-json.mjs --version $version --tag "$tag" --repo "${{ github.repository }}" --pub-date "$tagDate" --output latest.json
+          if (-not (Test-Path latest.json)) { throw "latest.json was not generated" }
+
+      - name: Publish release assets
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2
+        with:
+          tag_name: ${{ steps.meta.outputs.release_tag }}
+          draft: ${{ github.event_name == 'workflow_dispatch' && inputs.draft_release == 'true' }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            src-tauri/target/release/bundle/nsis/*
+            latest.json

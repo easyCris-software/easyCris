@@ -1,0 +1,12 @@
+{
+  "notice": {
+    "canonical": "src-tauri/resources/legal/THIRD_PARTY_LICENSES.txt",
+    "mirror": "legal/THIRD_PARTY_LICENSES.txt"
+  },
+  "artifacts": {
+    "npm": "runtime-licenses-js.json",
+    "rust": "runtime-licenses-rust.json",
+    "python": "legal/python-licenses.json",
+    "other": "legal/other-components.json"
+  }
+}

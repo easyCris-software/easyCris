@@ -1,0 +1,21 @@
+services:
+  easycris-remote-signaling:
+    build: .
+    image: easycris-remote-signaling:local
+    restart: unless-stopped
+    environment:
+      EASYCRIS_REMOTE_BIND: 0.0.0.0:8080
+      # Same-machine local smoke values. Replace for LAN, staging, or production.
+      PUBLIC_BASE_URL: http://127.0.0.1:8080
+      RELAY_URL: ws://127.0.0.1:8080/v1/remote/signaling
+      # Local development placeholder only. Never reuse outside localhost.
+      # In any real deployment this must differ from TURN_STATIC_AUTH_SECRET.
+      REMOTE_INVITE_HMAC_KEY: change-this-local-dev-only
+      STUN_URLS: stun:stun.l.google.com:19302
+      TURN_URLS: turn:turn.easycris.com:3478
+      # Must match coturn static-auth-secret in any real deployment.
+      # Must not be reused as REMOTE_INVITE_HMAC_KEY.
+      TURN_STATIC_AUTH_SECRET: change-this-turn-secret-local-dev-only
+      RUST_LOG: easycris_remote_signaling=info,tower_http=info
+    ports:
+      - '8080:8080'

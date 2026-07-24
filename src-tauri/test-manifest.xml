@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Activates Common Controls v6 for cargo test binaries on Windows.
+     Without this, test binaries crash with STATUS_ENTRYPOINT_NOT_FOUND (0xc0000139)
+     because TaskDialogIndirect is missing from comctl32.dll v5.
+     See _documentation/CARGO_TEST_WINDOWS_FIX.md -->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity
+        type="win32"
+        name="Microsoft.Windows.Common-Controls"
+        version="6.0.0.0"
+        processorArchitecture="amd64"
+        publicKeyToken="6595b64144ccf1df"
+        language="*"
+      />
+    </dependentAssembly>
+  </dependency>
+</assembly>

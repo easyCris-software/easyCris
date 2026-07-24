@@ -1,0 +1,302 @@
+{
+  "version": "1.0.0",
+  "datasets": [
+    {
+      "id": "anova_one_way",
+      "name": "Anova One Way",
+      "description": "Sample dataset for Anova One Way.",
+      "file": "Group1_Hypothesis_Testing/anova_one_way.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 24,
+      "columns": 2
+    },
+    {
+      "id": "anova_two_way",
+      "name": "Anova Two Way",
+      "description": "Sample dataset for Anova Two Way.",
+      "file": "Group1_Hypothesis_Testing/anova_two_way.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 16,
+      "columns": 3
+    },
+    {
+      "id": "kruskal_wallis",
+      "name": "Kruskal Wallis",
+      "description": "Sample dataset for Kruskal Wallis.",
+      "file": "Group1_Hypothesis_Testing/kruskal_wallis.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 24,
+      "columns": 2
+    },
+    {
+      "id": "lmm_anova",
+      "name": "Linear Mixed Model",
+      "description": "Sample dataset for Linear Mixed Model.",
+      "file": "Group1_Hypothesis_Testing/linear_mixed_model.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 120,
+      "columns": 7
+    },
+    {
+      "id": "mann_whitney",
+      "name": "Mann Whitney",
+      "description": "Sample dataset for Mann Whitney.",
+      "file": "Group1_Hypothesis_Testing/mann_whitney.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 20,
+      "columns": 2
+    },
+    {
+      "id": "multifactorial_anova",
+      "name": "Multifactorial Anova",
+      "description": "Sample dataset for Multifactorial Anova.",
+      "file": "Group1_Hypothesis_Testing/multifactorial_anova.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 16,
+      "columns": 4
+    },
+    {
+      "id": "scheirer_ray_hare",
+      "name": "Scheirer Ray Hare",
+      "description": "Sample dataset for Scheirer Ray Hare.",
+      "file": "Group1_Hypothesis_Testing/scheirer_ray_hare.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 16,
+      "columns": 3
+    },
+    {
+      "id": "t_test_one_sample",
+      "name": "T Test One Sample",
+      "description": "Sample dataset for T Test One Sample.",
+      "file": "Group1_Hypothesis_Testing/t_test_one_sample.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 24,
+      "columns": 1
+    },
+    {
+      "id": "t_test_paired",
+      "name": "T Test Paired",
+      "description": "Sample dataset for T Test Paired.",
+      "file": "Group1_Hypothesis_Testing/t_test_paired.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 12,
+      "columns": 2
+    },
+    {
+      "id": "t_test_two_sample",
+      "name": "T Test Two Sample",
+      "description": "Sample dataset for T Test Two Sample.",
+      "file": "Group1_Hypothesis_Testing/t_test_two_sample.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 24,
+      "columns": 2
+    },
+    {
+      "id": "wilcoxon_signed_rank",
+      "name": "Wilcoxon Signed Rank",
+      "description": "Sample dataset for Wilcoxon Signed Rank.",
+      "file": "Group1_Hypothesis_Testing/wilcoxon_signed_rank.csv",
+      "group": "Group1_Hypothesis_Testing",
+      "rows": 20,
+      "columns": 2
+    },
+    {
+      "id": "dose_response_3pl",
+      "name": "Dose Response 3pl",
+      "description": "Sample dataset for Dose Response 3pl.",
+      "file": "Group2_Pharmacology/dose_response_3pl.csv",
+      "group": "Group2_Pharmacology",
+      "rows": 18,
+      "columns": 2
+    },
+    {
+      "id": "dose_response_4pl",
+      "name": "Dose Response 4pl",
+      "description": "Sample dataset for Dose Response 4pl.",
+      "file": "Group2_Pharmacology/dose_response_4pl.csv",
+      "group": "Group2_Pharmacology",
+      "rows": 18,
+      "columns": 2
+    },
+    {
+      "id": "correlation_kendall",
+      "name": "Correlation Kendall",
+      "description": "Sample dataset for Correlation Kendall.",
+      "file": "Group3_Regression_Correlation/correlation_kendall.csv",
+      "group": "Group3_Regression_Correlation",
+      "rows": 10,
+      "columns": 5
+    },
+    {
+      "id": "correlation_pearson",
+      "name": "Correlation Pearson",
+      "description": "Sample dataset for Correlation Pearson.",
+      "file": "Group3_Regression_Correlation/correlation_pearson.csv",
+      "group": "Group3_Regression_Correlation",
+      "rows": 10,
+      "columns": 5
+    },
+    {
+      "id": "correlation_spearman",
+      "name": "Correlation Spearman",
+      "description": "Sample dataset for Correlation Spearman.",
+      "file": "Group3_Regression_Correlation/correlation_spearman.csv",
+      "group": "Group3_Regression_Correlation",
+      "rows": 10,
+      "columns": 5
+    },
+    {
+      "id": "linear_regression",
+      "name": "Linear Regression",
+      "description": "Sample dataset for Linear Regression.",
+      "file": "Group3_Regression_Correlation/linear_regression.csv",
+      "group": "Group3_Regression_Correlation",
+      "rows": 10,
+      "columns": 2
+    },
+    {
+      "id": "logistic_binary",
+      "name": "Logistic Binary",
+      "description": "Sample dataset for Logistic Binary.",
+      "file": "Group3_Regression_Correlation/logistic_binary.csv",
+      "group": "Group3_Regression_Correlation",
+      "rows": 150,
+      "columns": 3
+    },
+    {
+      "id": "logistic_multinomial",
+      "name": "Logistic Multinomial",
+      "description": "Sample dataset for Logistic Multinomial.",
+      "file": "Group3_Regression_Correlation/logistic_multinomial.csv",
+      "group": "Group3_Regression_Correlation",
+      "rows": 150,
+      "columns": 3
+    },
+    {
+      "id": "multiple_linear_regression",
+      "name": "Multiple Linear Regression",
+      "description": "Sample dataset for Multiple Linear Regression.",
+      "file": "Group3_Regression_Correlation/multiple_linear_regression.csv",
+      "group": "Group3_Regression_Correlation",
+      "rows": 150,
+      "columns": 4
+    },
+    {
+      "id": "chi_squared_gof",
+      "name": "Chi Squared Gof",
+      "description": "Sample dataset for Chi Squared Gof.",
+      "file": "Group4_Categorical/chi_squared_gof.csv",
+      "group": "Group4_Categorical",
+      "rows": 4,
+      "columns": 3
+    },
+    {
+      "id": "chi_squared",
+      "name": "Chi Squared",
+      "description": "Sample dataset for Chi Squared.",
+      "file": "Group4_Categorical/chi_squared.csv",
+      "group": "Group4_Categorical",
+      "rows": 17,
+      "columns": 2
+    },
+    {
+      "id": "fisher_exact",
+      "name": "Fisher Exact",
+      "description": "Sample dataset for Fisher Exact.",
+      "file": "Group4_Categorical/fisher_exact.csv",
+      "group": "Group4_Categorical",
+      "rows": 10,
+      "columns": 2
+    },
+    {
+      "id": "mcnemar",
+      "name": "Mcnemar",
+      "description": "Sample dataset for Mcnemar.",
+      "file": "Group4_Categorical/mcnemar.csv",
+      "group": "Group4_Categorical",
+      "rows": 15,
+      "columns": 2
+    },
+    {
+      "id": "descriptive_statistics",
+      "name": "Descriptive Statistics",
+      "description": "Sample dataset for Descriptive Statistics.",
+      "file": "Group5_Distribution_Descriptive/descriptive_statistics.csv",
+      "group": "Group5_Distribution_Descriptive",
+      "rows": 20,
+      "columns": 1
+    },
+    {
+      "id": "normality_tests",
+      "name": "Normality Tests",
+      "description": "Sample dataset for Normality Tests.",
+      "file": "Group5_Distribution_Descriptive/normality_tests.csv",
+      "group": "Group5_Distribution_Descriptive",
+      "rows": 30,
+      "columns": 1
+    },
+    {
+      "id": "outlier_detection",
+      "name": "Outlier Detection",
+      "description": "Sample dataset for Outlier Detection.",
+      "file": "Group5_Distribution_Descriptive/outlier_detection.csv",
+      "group": "Group5_Distribution_Descriptive",
+      "rows": 20,
+      "columns": 1
+    },
+    {
+      "id": "cox_proportional_hazards",
+      "name": "Cox Proportional Hazards",
+      "description": "Sample dataset for Cox Proportional Hazards.",
+      "file": "Group6_Survival/cox_proportional_hazards.csv",
+      "group": "Group6_Survival",
+      "rows": 15,
+      "columns": 3
+    },
+    {
+      "id": "kaplan_meier",
+      "name": "Kaplan Meier",
+      "description": "Sample dataset for Kaplan Meier.",
+      "file": "Group6_Survival/kaplan_meier.csv",
+      "group": "Group6_Survival",
+      "rows": 20,
+      "columns": 3
+    },
+    {
+      "id": "nelson_aalen",
+      "name": "Nelson Aalen",
+      "description": "Sample dataset for Nelson Aalen.",
+      "file": "Group6_Survival/nelson_aalen.csv",
+      "group": "Group6_Survival",
+      "rows": 15,
+      "columns": 2
+    },
+    {
+      "id": "mediation_model4",
+      "name": "Mediation Model4",
+      "description": "Sample dataset for Mediation Model4.",
+      "file": "Group7_Mediation_Moderation/mediation_model4.csv",
+      "group": "Group7_Mediation_Moderation",
+      "rows": 20,
+      "columns": 3
+    },
+    {
+      "id": "moderated_mediation_model7",
+      "name": "Moderated Mediation Model7",
+      "description": "Sample dataset for Moderated Mediation Model7.",
+      "file": "Group7_Mediation_Moderation/moderated_mediation_model7.csv",
+      "group": "Group7_Mediation_Moderation",
+      "rows": 20,
+      "columns": 4
+    },
+    {
+      "id": "moderation_model1",
+      "name": "Moderation Model1",
+      "description": "Sample dataset for Moderation Model1.",
+      "file": "Group7_Mediation_Moderation/moderation_model1.csv",
+      "group": "Group7_Mediation_Moderation",
+      "rows": 20,
+      "columns": 3
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "identifier": "com.easycris.app.e2e",
+  "build": {
+    "beforeBuildCommand": "npm run build:e2e",
+    "frontendDist": "../dist-e2e"
+  }
+}

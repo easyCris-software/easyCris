@@ -1,0 +1,24 @@
+EASYCRIS COMMUNITY END USER NOTICE
+==================================
+
+Last Updated: 2026-07-15
+
+easyCris Community is open-source software distributed under the Apache
+License, Version 2.0.
+
+This notice does not add restrictions beyond the Apache-2.0 license. You may
+use, copy, modify, distribute, and sublicense easyCris Community under the
+terms of Apache-2.0.
+
+The full Apache-2.0 license text is included in the repository root LICENSE
+file.
+
+Third-party components are governed by their own license terms. See
+THIRD_PARTY_LICENSES.txt for applicable notices and license text.
+
+The software is provided on an "AS IS" basis, without warranties or conditions
+of any kind, either express or implied, including warranties or conditions of
+title, non-infringement, merchantability, or fitness for a particular purpose.
+
+The easyCris name, logos, and official signed release channels are not granted
+as trademarks by the Apache-2.0 software license.
