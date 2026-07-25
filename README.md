@@ -4,7 +4,7 @@
 
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)
 ![Version](https://img.shields.io/badge/version-latest-brightgreen)
-![Free](https://img.shields.io/badge/price-free-brightgreen)
+![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 
 <table>
   <tr>
@@ -34,7 +34,7 @@ No usage data, analysis data, or file contents are sent to external servers.
 
 ## 🧪 What is easyCris?
 
-easyCris is a free desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required for official installer builds.
+easyCris Community is an open-source desktop application for scientific data analysis — covering classical statistics, pharmacology, bulk RNA-seq differential expression, and data cleaning tools, all in one place. Core workflows are implemented with established statistical methods and manuscript references listed below, giving you publication-ready output without writing a single line of code. All computation runs locally using an embedded analysis engine; no external software installation is required for official installer builds.
 
 ---
 
@@ -46,7 +46,7 @@ Official install options:
 - Official website: **[easycris.com](https://www.easycris.com)**
 
 Windows x64 installer (`.exe`). Once installed, the app supports in-app updates through signed release packages.
-easyCris is currently free to use.
+The Community edition is available under Apache-2.0. Commercial and Pro offerings may provide additional capabilities, support, or official services.
 
 ---
 
