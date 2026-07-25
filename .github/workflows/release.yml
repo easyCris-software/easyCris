@@ -105,6 +105,7 @@ jobs:
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          EASYCRIS_SKIP_PYTHON_COMPILE: "1"
         run: npm run -s tauri:build:release:nsis
 
       - name: Generate updater metadata
