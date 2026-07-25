@@ -2216,6 +2216,35 @@ impl HybridCacheManager {
         Ok(())
     }
 
+    fn open_duckdb_for_create(&self, db_path: &Path) -> Result<Connection, String> {
+        for (attempt_idx, delay_ms) in CONNECTION_OPEN_RETRY_DELAYS_MS.iter().enumerate() {
+            if *delay_ms > 0 {
+                std::thread::sleep(Duration::from_millis(*delay_ms));
+            }
+
+            self.ensure_duckdb_parent_dir(db_path)?;
+
+            match Connection::open(db_path) {
+                Ok(conn) => return Ok(conn),
+                Err(err) => {
+                    let is_last_attempt = attempt_idx + 1 == CONNECTION_OPEN_RETRY_DELAYS_MS.len();
+                    if is_last_attempt {
+                        return Err(format!("Failed to create database: {}", err));
+                    }
+
+                    log::warn!(
+                        "Cache: failed to create DuckDB database at '{}' on attempt {}: {}",
+                        db_path.display(),
+                        attempt_idx + 1,
+                        err
+                    );
+                }
+            }
+        }
+
+        Err("Failed to create database: exhausted retry attempts".to_string())
+    }
+
     /// Quote SQL identifier to prevent injection
     fn quote_identifier(name: &str) -> String {
         format!("\"{}\"", name.replace('"', "\"\""))
@@ -2924,8 +2953,7 @@ impl HybridCacheManager {
             emit(10, "Opening database...");
         }
 
-        let conn =
-            Connection::open(&db_path).map_err(|e| format!("Failed to create database: {}", e))?;
+        let conn = self.open_duckdb_for_create(&db_path)?;
 
         // Configure DuckDB for large datasets
         let num_threads = std::thread::available_parallelism()
@@ -3104,8 +3132,7 @@ impl HybridCacheManager {
             emit(10, "Opening database...");
         }
 
-        let conn =
-            Connection::open(&db_path).map_err(|e| format!("Failed to create database: {}", e))?;
+        let conn = self.open_duckdb_for_create(&db_path)?;
 
         // Configure DuckDB for large datasets
         let num_threads = std::thread::available_parallelism()
@@ -3360,8 +3387,7 @@ impl HybridCacheManager {
         // Remove old DB file if exists
         let _ = std::fs::remove_file(&db_path);
 
-        let conn =
-            Connection::open(&db_path).map_err(|e| format!("Failed to create database: {}", e))?;
+        let conn = self.open_duckdb_for_create(&db_path)?;
 
         // Configure DuckDB
         conn.execute_batch(
