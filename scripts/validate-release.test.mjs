@@ -5,6 +5,7 @@ import os from 'node:os'
 import path from 'node:path'
 import {
   buildDarwinPlotParityMatrix,
+  readTargetPlatform as readValidationTargetPlatform,
   resolveInstalledDarwinDist,
   validateDarwinRuntime,
   validateMacBundleResources,
@@ -47,6 +48,11 @@ test('resolves installed Darwin runtime in the updater resource path', () => {
   )
 })
 
+test('release target platform parser rejects missing platform values', () => {
+  assert.throws(() => readValidationTargetPlatform(['--platform']), /Missing value for --platform/)
+  assert.throws(() => readValidationTargetPlatform(['--platform', '--community']), /Missing value for --platform/)
+})
+
 test('builds script and compiled Darwin PDF/TIFF parity probes', () => {
   const paths = {
     scriptPython: 'python3.12',
@@ -84,21 +90,59 @@ test('Darwin community validation runs all script and compiled PDF/TIFF parity p
   assert.equal(calls.filter(call => JSON.parse(call.input).action === 'export_plot').length, 6)
 })
 
-test('Darwin RNA-seq availability probe preserves its non-success result allowance', t => {
+test('Darwin parity accepts a bare PATH command and rejects a missing path-like executable', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
   t.after(() => fs.rmSync(root, { recursive: true, force: true }))
   const paths = makeFixtureTree(root)
+  const calls = []
+  const bareCommandResult = validateDarwinRuntime({
+    paths: { ...paths, scriptPython: 'python3.12' },
+    requireScriptCompiledPlotParity: true,
+    runner: successfulRunner(calls),
+    probeOutputDir: path.join(root, 'bare-probe-output'),
+  })
+  assert.deepEqual(bareCommandResult.errors, [])
+  assert.ok(calls.some(call => call.command === 'python3.12'))
+
+  const missingCommand = path.join(root, 'missing', 'python3.12')
+  const missingCalls = []
+  const missingPathResult = validateDarwinRuntime({
+    paths: { ...paths, scriptPython: missingCommand },
+    requireScriptCompiledPlotParity: true,
+    runner: successfulRunner(missingCalls),
+    probeOutputDir: path.join(root, 'missing-probe-output'),
+  })
+  assert.ok(missingPathResult.errors.some(error => error.includes(missingCommand)))
+  assert.equal(missingCalls.some(call => call.command === missingCommand), false)
+})
+
+test('Darwin RNA-seq probe uses valid matching IDs and requires success=true', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  const calls = []
   const result = validateDarwinRuntime({
     paths,
-    runner: ({ input }) => {
-      const payload = JSON.parse(input)
-      return payload.test === 'rnaseq_deseq2'
-        ? { status: 0, stdout: JSON.stringify({ success: false, error: 'expected fixture response' }), stderr: '' }
-        : { status: 0, stdout: JSON.stringify({ success: true }), stderr: '' }
-    },
+    runner: successfulRunner(calls),
     probeOutputDir: path.join(root, 'probe-output'),
   })
   assert.deepEqual(result.errors, [])
+  const rnaPayloads = calls
+    .map(call => JSON.parse(call.input))
+    .filter(payload => payload.test === 'rnaseq_validate_samples')
+  assert.deepEqual(rnaPayloads, [
+    { test: 'rnaseq_validate_samples', data: { counts_sample_ids: ['s1'], metadata_sample_ids: ['s1'] }, params: {} },
+    { test: 'rnaseq_validate_samples', data: { counts_sample_ids: ['s1'], metadata_sample_ids: ['s1'] }, params: {} },
+  ])
+
+  for (const response of [{}, { success: null }, { success: 'true' }, { success: false }]) {
+    const rejected = validateDarwinRuntime({
+      paths,
+      runner: () => ({ status: 0, stdout: JSON.stringify(response), stderr: '' }),
+      probeOutputDir: path.join(root, `rejected-probe-output-${String(response.success)}`),
+    })
+    assert.ok(rejected.errors.some(error => error.includes('did not report success=true')))
+  }
 })
 
 test('Darwin validation removes only generated Kaleido logs and rejects empty exports', t => {
@@ -139,15 +183,43 @@ test('Darwin validation rejects a missing installed backend', t => {
   assert.ok(result.errors.some(error => error.includes('installed rnaseq.dist executable')))
 })
 
+test('Darwin validation cleans installed Kaleido logs and scans full staged and installed resources', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  const installedLog = path.join(paths.installedDist, 'plot.dist', 'kaleido', 'executable', 'debug.log')
+  const installedUnrelatedLog = path.join(paths.installedDist, 'stats.dist', 'backend.log')
+  const stagedSibling = path.join(root, 'bundle_resources', 'msedgedriver')
+  const installedSibling = path.join(paths.appPath, 'Contents', 'Resources', 'PyWin32_system32')
+  fs.mkdirSync(path.dirname(installedLog), { recursive: true })
+  fs.mkdirSync(path.dirname(installedUnrelatedLog), { recursive: true })
+  fs.mkdirSync(stagedSibling, { recursive: true })
+  fs.mkdirSync(installedSibling, { recursive: true })
+  fs.writeFileSync(installedLog, 'remove')
+  fs.writeFileSync(installedUnrelatedLog, 'keep')
+
+  const result = validateDarwinRuntime({
+    paths,
+    installedApp: paths.appPath,
+    runner: successfulRunner([]),
+    probeOutputDir: path.join(root, 'probe-output'),
+  })
+
+  assert.equal(fs.existsSync(installedLog), false)
+  assert.equal(fs.existsSync(installedUnrelatedLog), true)
+  assert.ok(result.errors.some(error => error.includes(stagedSibling)))
+  assert.ok(result.errors.some(error => error.includes(installedSibling)))
+})
+
 test('macOS resources reject Windows-only payloads', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
   t.after(() => fs.rmSync(root, { recursive: true, force: true }))
   fs.mkdirSync(path.join(root, 'win32com'), { recursive: true })
-  fs.mkdirSync(path.join(root, 'pywin32'), { recursive: true })
+  fs.mkdirSync(path.join(root, 'PyWin32_system32'), { recursive: true })
   fs.writeFileSync(path.join(root, 'win32com', 'bridge.dll'), 'windows')
   const errors = validateMacBundleResources(root)
   assert.ok(errors.some(error => error.includes(path.join(root, 'win32com', 'bridge.dll'))))
-  assert.ok(errors.some(error => error.includes(path.join(root, 'pywin32'))))
+  assert.ok(errors.some(error => error.includes(path.join(root, 'PyWin32_system32'))))
 })
 
 test('Windows community mode retains its existing script parity selection', () => {

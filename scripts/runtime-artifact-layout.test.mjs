@@ -4,6 +4,7 @@ import {
   backendArtifactPaths,
   cleanTransientKaleidoLogs,
   isTransientKaleidoLog,
+  readTargetPlatform as readStageTargetPlatform,
   stagePythonRuntime,
 } from './stage_python_runtime.mjs'
 import fs from 'node:fs'
@@ -33,6 +34,11 @@ test('recognizes only transient Kaleido logs', () => {
   assert.equal(isTransientKaleidoLog('stats.dist/backend.log'), false)
 })
 
+test('staging target platform parser rejects missing platform values', () => {
+  assert.throws(() => readStageTargetPlatform(['--platform']), /Missing value for --platform/)
+  assert.throws(() => readStageTargetPlatform(['--platform', '--other']), /Missing value for --platform/)
+})
+
 test('cleans logs only below generated Kaleido roots', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-stage-'))
   t.after(() => fs.rmSync(root, { recursive: true, force: true }))
@@ -59,6 +65,9 @@ test('stages extensionless Darwin artifacts without copying the Windows interpre
     fs.writeFileSync(executable, `${backend}-fake`)
   }
   fs.writeFileSync(path.join(root, 'python_embedded', 'python.exe'), 'windows-only')
+  const staleStagedPython = path.join(root, 'bundle_resources', 'python_embedded', 'python.exe')
+  fs.mkdirSync(path.dirname(staleStagedPython), { recursive: true })
+  fs.writeFileSync(staleStagedPython, 'stale-windows-runtime')
   const generatedLog = path.join(sourceDist, 'plot.dist', 'kaleido', 'executable', 'debug.log')
   const unrelatedLog = path.join(sourceDist, 'stats.dist', 'backend.log')
   fs.mkdirSync(path.dirname(generatedLog), { recursive: true })
@@ -72,4 +81,25 @@ test('stages extensionless Darwin artifacts without copying the Windows interpre
   assert.equal(fs.existsSync(path.join(result.stageRoot, 'python.exe')), false)
   assert.equal(fs.existsSync(generatedLog), false)
   assert.equal(fs.existsSync(unrelatedLog), true)
+})
+
+test('staging preserves the Windows interpreter copy', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-stage-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const sourceDist = path.join(root, 'python_embedded', 'dist')
+  for (const backend of ['stats', 'rnaseq', 'plot']) {
+    const topLevel = path.join(sourceDist, `${backend}.exe`)
+    const nested = path.join(sourceDist, `${backend}.dist`, `${backend}.exe`)
+    fs.mkdirSync(path.dirname(nested), { recursive: true })
+    fs.writeFileSync(topLevel, `${backend}-top-level`)
+    fs.writeFileSync(nested, `${backend}-nested`)
+  }
+  const sourcePython = path.join(root, 'python_embedded', 'python.exe')
+  fs.writeFileSync(sourcePython, 'windows-interpreter')
+
+  const result = stagePythonRuntime({ root, platform: 'win32' })
+
+  assert.equal(fs.readFileSync(path.join(result.stageRoot, 'python.exe'), 'utf8'), 'windows-interpreter')
+  assert.equal(fs.existsSync(path.join(result.stageDist, 'plot.exe')), true)
+  assert.equal(fs.existsSync(path.join(result.stageDist, 'plot.dist', 'plot.exe')), true)
 })

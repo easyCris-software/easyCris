@@ -255,7 +255,17 @@ export function shouldRunWindowsScriptPlotParity({ communityMode }) {
 
 function darwinBackendProbe(backend) {
   if (backend === 'stats') return BASE_BACKEND_PROBES[0]
-  if (backend === 'rnaseq') return BASE_BACKEND_PROBES[2]
+  if (backend === 'rnaseq') {
+    return {
+      backend: 'rnaseq',
+      payload: {
+        test: 'rnaseq_validate_samples',
+        data: { counts_sample_ids: ['s1'], metadata_sample_ids: ['s1'] },
+        params: {},
+      },
+      requireSuccess: true,
+    }
+  }
   return {
     backend: 'plot',
     payload: { action: 'ping' },
@@ -291,8 +301,12 @@ function defaultDarwinRunner({ command, args, input, cwd }) {
   })
 }
 
+function isPathLikeExecutable(executable) {
+  return path.isAbsolute(executable) || executable.includes('/') || executable.includes('\\')
+}
+
 function runDarwinProbe({ executable, args = [], payload, label, outputFormat, requireSuccess = true, runner, probeOutputDir: outputDir, localErrors }) {
-  if (!fs.existsSync(executable)) {
+  if (isPathLikeExecutable(executable) && !fs.existsSync(executable)) {
     localErrors.push(`Backend probe missing executable (${label}): ${executable}`)
     return
   }
@@ -313,8 +327,8 @@ function runDarwinProbe({ executable, args = [], payload, label, outputFormat, r
     })
     const parsed = parseProbeResult(result, label, localErrors)
     if (!parsed) return
-    if (requireSuccess && parsed.success === false) {
-      localErrors.push(`Backend probe returned unsuccessful payload for ${label}: ${typeof parsed.error === 'string' ? parsed.error : JSON.stringify(parsed.error ?? null)}`)
+    if (requireSuccess && parsed.success !== true) {
+      localErrors.push(`Backend probe did not report success=true for ${label}: ${typeof parsed.error === 'string' ? parsed.error : JSON.stringify(parsed.error ?? parsed.success ?? null)}`)
       return
     }
     if (outputPath) {
@@ -365,7 +379,13 @@ export function validateMacBundleResources(resourceRoot) {
   for (const candidate of paths) {
     const parts = path.relative(resourceRoot, candidate).split(path.sep).filter(Boolean)
     const name = path.basename(candidate).toLowerCase()
-    if (forbiddenMacSuffixes.some(suffix => name.endsWith(suffix)) || parts.some(part => forbiddenMacNames.includes(part.toLowerCase()))) {
+    if (
+      forbiddenMacSuffixes.some(suffix => name.endsWith(suffix)) ||
+      parts.some(part => {
+        const normalized = part.toLowerCase()
+        return forbiddenMacNames.includes(normalized) || normalized.startsWith('pywin32')
+      })
+    ) {
       localErrors.push(`Windows-only payload found in macOS resources: ${candidate}`)
     }
   }
@@ -393,6 +413,7 @@ export function validateDarwinRuntime({
   let installedDist = null
   if (installedApp) {
     installedDist = resolveInstalledDarwinDist(installedApp)
+    generatedKaleidoRoots.push(path.join(installedDist, 'plot.dist', 'kaleido', 'executable'))
     trees.push({ dist: installedDist, label: 'installed' })
   }
 
@@ -450,9 +471,11 @@ export function validateDarwinRuntime({
           localErrors,
         })
       }
-      localErrors.push(...validateMacBundleResources(path.dirname(installedDist)))
+      localErrors.push(...validateMacBundleResources(path.join(installedApp, 'Contents', 'Resources')))
     }
-    if (stagedDistPath) localErrors.push(...validateMacBundleResources(path.dirname(stagedDistPath)))
+    if (stagedDistPath) {
+      localErrors.push(...validateMacBundleResources(path.dirname(path.dirname(stagedDistPath))))
+    }
   } finally {
     cleanTransientKaleidoLogs(generatedKaleidoRoots)
     for (const root of generatedKaleidoRoots) {
@@ -1244,7 +1267,12 @@ function validateLegalFiles() {
 
 export function readTargetPlatform(argv = process.argv.slice(2)) {
   const index = argv.indexOf('--platform')
-  return assertRuntimePlatform(index >= 0 ? argv[index + 1] : process.platform)
+  if (index < 0) return assertRuntimePlatform(process.platform)
+  const platform = argv[index + 1]
+  if (!platform || platform.startsWith('--')) {
+    throw new Error('Missing value for --platform')
+  }
+  return assertRuntimePlatform(platform)
 }
 
 function readInstalledApp(argv) {

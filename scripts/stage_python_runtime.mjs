@@ -16,7 +16,12 @@ const rootDir = path.resolve(__dirname, '..')
 
 export function readTargetPlatform(argv = process.argv.slice(2)) {
   const index = argv.indexOf('--platform')
-  return assertRuntimePlatform(index >= 0 ? argv[index + 1] : process.platform)
+  if (index < 0) return assertRuntimePlatform(process.platform)
+  const platform = argv[index + 1]
+  if (!platform || platform.startsWith('--')) {
+    throw new Error('Missing value for --platform')
+  }
+  return assertRuntimePlatform(platform)
 }
 
 export function backendArtifactPaths(distRoot, backend, platform = process.platform) {
@@ -87,10 +92,10 @@ function assertNoTransientKaleidoLogs(roots) {
 }
 
 function stageOptionalWindowsPython({ root, stageRoot, platform }) {
-  if (platform !== 'win32') return
-  const source = path.join(root, 'python_embedded', 'python.exe')
   const destination = path.join(stageRoot, 'python.exe')
   removeIfExists(destination)
+  if (platform !== 'win32') return
+  const source = path.join(root, 'python_embedded', 'python.exe')
   if (!fs.existsSync(source)) {
     console.log(`[stage-python-runtime] Optional file skipped: ${source}`)
     return
