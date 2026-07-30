@@ -79,3 +79,76 @@ jobs:
             $matches | ForEach-Object { Write-Host "FORBIDDEN: $_" }
             throw "Forbidden tracked paths detected in CI"
           }
+
+  macos-quality-gates:
+    name: macos-community-quality-gates (${{ matrix.suffix }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            rust_target: x86_64-apple-darwin
+            suffix: x86_64
+          - runner: macos-14
+            rust_target: aarch64-apple-darwin
+            suffix: aarch64
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@631a55b12751854ce901bb631d5902ceb48146f7
+        with:
+          targets: ${{ matrix.rust_target }}
+
+      - name: Install JS dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run -s typecheck
+
+      - name: Run frontend tests
+        run: npm run -s test:run
+
+      - name: Build frontend
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: npm run -s build
+
+      - name: Runtime naming tests
+        run: npm run -s test:runtime-platform
+
+      - name: Compiler helper tests
+        run: npm run -s test:compile-python
+
+      - name: Staging and validation contract tests
+        run: node --test scripts/runtime-artifact-layout.test.mjs scripts/validate-release.test.mjs
+
+      - name: CI workflow privacy contract
+        run: node --test scripts/ci-workflow-contract.test.mjs
+
+      - name: Focused macOS backend path tests
+        run: |
+          cargo test --manifest-path src-tauri/Cargo.toml compiled_backend_names_follow_platform
+          cargo test --manifest-path src-tauri/Cargo.toml venv_python_paths_follow_platform
+          cargo test --manifest-path src-tauri/Cargo.toml macos_bundle_python_base_dir_candidate_uses_updater_resources
+
+      - name: Rust check
+        run: cargo check --manifest-path src-tauri/Cargo.toml
