@@ -5,7 +5,12 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { REQUIRED_BACKENDS } from './python-runtime-constants.mjs'
+import {
+  REQUIRED_BACKENDS,
+  assertRuntimePlatform,
+  backendExecutableName,
+} from './python-runtime-constants.mjs'
+import { cleanTransientKaleidoLogs } from './stage_python_runtime.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -32,6 +37,7 @@ const shippedFontDirPath = path.join(rootDir, 'public', 'fonts')
 const requireFrontendDist = process.argv.includes('--require-frontend-dist')
 const checkInstalledUpdater = process.argv.includes('--check-installed-updater')
 const communityMode = process.argv.includes('--community')
+const requireScriptCompiledPlotParity = process.argv.includes('--require-script-compiled-plot-parity')
 const probeOutputDir = path.join(rootDir, '_tmp')
 
 const allowedPythonFiles = new Set()
@@ -211,6 +217,251 @@ function removeProbeOutputFileIfPresent(targetPath) {
   if (fs.existsSync(targetPath)) {
     fs.rmSync(targetPath, { force: true })
   }
+}
+
+export function resolveInstalledDarwinDist(appPath) {
+  return path.join(
+    appPath,
+    'Contents',
+    'Resources',
+    '_up_',
+    'bundle_resources',
+    'python_embedded',
+    'dist'
+  )
+}
+
+export function buildDarwinPlotParityMatrix(paths) {
+  const buildProbe = (scope, format, executable, args = []) => ({
+    scope,
+    format,
+    command: [executable, ...args].join(' '),
+    executable,
+    args,
+  })
+  return [
+    buildProbe('script', 'pdf', paths.scriptPython, [paths.scriptPlot]),
+    buildProbe('script', 'tiff', paths.scriptPython, [paths.scriptPlot]),
+    buildProbe('source-compiled', 'pdf', path.join(paths.sourceDist, 'plot.dist', 'plot')),
+    buildProbe('source-compiled', 'tiff', path.join(paths.sourceDist, 'plot.dist', 'plot')),
+    buildProbe('staged-compiled', 'pdf', path.join(paths.stagedDist, 'plot.dist', 'plot')),
+    buildProbe('staged-compiled', 'tiff', path.join(paths.stagedDist, 'plot.dist', 'plot')),
+  ]
+}
+
+export function shouldRunWindowsScriptPlotParity({ communityMode }) {
+  return !communityMode
+}
+
+function darwinBackendProbe(backend) {
+  if (backend === 'stats') return BASE_BACKEND_PROBES[0]
+  if (backend === 'rnaseq') return BASE_BACKEND_PROBES[2]
+  return {
+    backend: 'plot',
+    payload: { action: 'ping' },
+    requireSuccess: true,
+  }
+}
+
+function parseProbeResult(result, label, localErrors) {
+  if (result?.error) {
+    localErrors.push(`Backend probe failed to execute ${label}: ${result.error.message}`)
+    return null
+  }
+  if (result?.status !== 0) {
+    localErrors.push(`Backend probe returned non-zero exit for ${label}: exit=${result?.status}`)
+    return null
+  }
+  const parsed = parseJsonFromBackendStdout(result?.stdout)
+  if (!parsed || typeof parsed !== 'object') {
+    localErrors.push(`Backend probe returned no JSON object for ${label}`)
+    return null
+  }
+  return parsed
+}
+
+function defaultDarwinRunner({ command, args, input, cwd }) {
+  return spawnSync(command, args, {
+    cwd,
+    input,
+    encoding: 'utf8',
+    timeout: BACKEND_PROBE_TIMEOUT_MS,
+    maxBuffer: 10 * 1024 * 1024,
+    windowsHide: true,
+  })
+}
+
+function runDarwinProbe({ executable, args = [], payload, label, outputFormat, requireSuccess = true, runner, probeOutputDir: outputDir, localErrors }) {
+  if (!fs.existsSync(executable)) {
+    localErrors.push(`Backend probe missing executable (${label}): ${executable}`)
+    return
+  }
+
+  let outputPath = null
+  try {
+    const probePayload = JSON.parse(JSON.stringify(payload))
+    if (outputFormat) {
+      fs.mkdirSync(outputDir, { recursive: true })
+      outputPath = path.join(outputDir, `release_probe_${label.replace(/[^a-z0-9_-]/gi, '_')}_${Date.now()}_${Math.random().toString(16).slice(2)}.${outputFormat}`)
+      probePayload.output_path = outputPath
+    }
+    const result = runner({
+      command: executable,
+      args,
+      input: JSON.stringify(probePayload),
+      cwd: path.dirname(executable),
+    })
+    const parsed = parseProbeResult(result, label, localErrors)
+    if (!parsed) return
+    if (requireSuccess && parsed.success === false) {
+      localErrors.push(`Backend probe returned unsuccessful payload for ${label}: ${typeof parsed.error === 'string' ? parsed.error : JSON.stringify(parsed.error ?? null)}`)
+      return
+    }
+    if (outputPath) {
+      if (!fs.existsSync(outputPath)) {
+        localErrors.push(`Backend probe did not produce expected output file for ${label}: ${outputPath}`)
+      } else if (fs.statSync(outputPath).size <= 0) {
+        localErrors.push(`Backend probe produced empty output file for ${label}: ${outputPath}`)
+      }
+    }
+  } finally {
+    if (outputPath) removeProbeOutputFileIfPresent(outputPath)
+  }
+}
+
+function validateDarwinBackendTree(distRoot, label, localErrors) {
+  for (const backend of REQUIRED_BACKENDS) {
+    const executable = path.join(distRoot, `${backend}.dist`, backendExecutableName(backend, 'darwin'))
+    if (!fs.existsSync(path.join(distRoot, `${backend}.dist`))) {
+      localErrors.push(`Missing ${label} ${backend}.dist: ${path.join(distRoot, `${backend}.dist`)}`)
+    }
+    if (!fs.existsSync(executable)) {
+      localErrors.push(`Missing ${label} ${backend}.dist executable: ${executable}`)
+    }
+  }
+}
+
+function walkPathsRecursive(targetDir) {
+  if (!fs.existsSync(targetDir)) return []
+  const result = [targetDir]
+  const stack = [targetDir]
+  while (stack.length > 0) {
+    const current = stack.pop()
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const entryPath = path.join(current, entry.name)
+      result.push(entryPath)
+      if (entry.isDirectory()) stack.push(entryPath)
+    }
+  }
+  return result
+}
+
+export function validateMacBundleResources(resourceRoot) {
+  const forbiddenMacSuffixes = ['.exe', '.dll', '.pyd', '.ps1']
+  const forbiddenMacNames = ['pywin32', 'win32com', 'msedgedriver']
+  const localErrors = []
+  if (!fs.existsSync(resourceRoot)) return localErrors
+  const paths = walkPathsRecursive(resourceRoot)
+  for (const candidate of paths) {
+    const parts = path.relative(resourceRoot, candidate).split(path.sep).filter(Boolean)
+    const name = path.basename(candidate).toLowerCase()
+    if (forbiddenMacSuffixes.some(suffix => name.endsWith(suffix)) || parts.some(part => forbiddenMacNames.includes(part.toLowerCase()))) {
+      localErrors.push(`Windows-only payload found in macOS resources: ${candidate}`)
+    }
+  }
+  return localErrors
+}
+
+export function validateDarwinRuntime({
+  paths,
+  requireScriptCompiledPlotParity: requireParity = false,
+  installedApp,
+  runner = defaultDarwinRunner,
+  probeOutputDir: outputDir = probeOutputDir,
+} = {}) {
+  const localErrors = []
+  const sourceDistPath = paths?.sourceDist
+  const stagedDistPath = paths?.stagedDist
+  const generatedKaleidoRoots = [
+    sourceDistPath && path.join(sourceDistPath, 'plot.dist', 'kaleido', 'executable'),
+    stagedDistPath && path.join(stagedDistPath, 'plot.dist', 'kaleido', 'executable'),
+  ].filter(Boolean)
+  const trees = [
+    { dist: sourceDistPath, label: 'source' },
+    { dist: stagedDistPath, label: 'staged' },
+  ]
+  let installedDist = null
+  if (installedApp) {
+    installedDist = resolveInstalledDarwinDist(installedApp)
+    trees.push({ dist: installedDist, label: 'installed' })
+  }
+
+  try {
+    for (const tree of trees) {
+      if (!tree.dist) {
+        localErrors.push(`Missing ${tree.label} Python dist directory`)
+        continue
+      }
+      validateDarwinBackendTree(tree.dist, tree.label, localErrors)
+      for (const backend of REQUIRED_BACKENDS) {
+        const executable = path.join(tree.dist, `${backend}.dist`, backendExecutableName(backend, 'darwin'))
+        const probe = darwinBackendProbe(backend)
+        runDarwinProbe({
+          executable,
+          payload: probe.payload,
+          requireSuccess: probe.requireSuccess,
+          label: `${tree.label}_${backend}`,
+          runner,
+          probeOutputDir: outputDir,
+          localErrors,
+        })
+      }
+    }
+
+    if (requireParity) {
+      for (const parityProbe of buildDarwinPlotParityMatrix({
+        scriptPython: paths.scriptPython,
+        scriptPlot: paths.scriptPlot,
+        sourceDist: sourceDistPath,
+        stagedDist: stagedDistPath,
+      })) {
+        runDarwinProbe({
+          executable: parityProbe.executable,
+          args: parityProbe.args,
+          payload: buildPlotExportProbe(parityProbe.format).payload,
+          label: `${parityProbe.scope}_${parityProbe.format}`,
+          outputFormat: parityProbe.format,
+          runner,
+          probeOutputDir: outputDir,
+          localErrors,
+        })
+      }
+    }
+
+    if (installedDist) {
+      for (const format of ['pdf', 'tiff']) {
+        runDarwinProbe({
+          executable: path.join(installedDist, 'plot.dist', 'plot'),
+          payload: buildPlotExportProbe(format).payload,
+          label: `installed_${format}`,
+          outputFormat: format,
+          runner,
+          probeOutputDir: outputDir,
+          localErrors,
+        })
+      }
+      localErrors.push(...validateMacBundleResources(path.dirname(installedDist)))
+    }
+    if (stagedDistPath) localErrors.push(...validateMacBundleResources(path.dirname(stagedDistPath)))
+  } finally {
+    cleanTransientKaleidoLogs(generatedKaleidoRoots)
+    for (const root of generatedKaleidoRoots) {
+      const logs = walkFilesRecursive(root).filter(filePath => path.basename(filePath).toLowerCase().endsWith('.log'))
+      for (const log of logs) localErrors.push(`Transient Kaleido log remained after validation: ${log}`)
+    }
+  }
+
+  return { errors: localErrors }
 }
 
 function validateCompiledBackends() {
@@ -991,23 +1242,63 @@ function validateLegalFiles() {
   }
 }
 
-function main() {
-  ensureProbeOutputDirectory()
-  validateLegalFiles()
+export function readTargetPlatform(argv = process.argv.slice(2)) {
+  const index = argv.indexOf('--platform')
+  return assertRuntimePlatform(index >= 0 ? argv[index + 1] : process.platform)
+}
+
+function readInstalledApp(argv) {
+  const index = argv.indexOf('--installed-app')
+  if (index < 0) return null
+  const appPath = argv[index + 1]
+  if (!appPath || appPath.startsWith('--')) {
+    throw new Error('Use --installed-app <path>')
+  }
+  return path.resolve(appPath)
+}
+
+function validateWindowsRuntime() {
   validateCompiledBackends()
   validateInstalledUpdaterBackends()
   validateCompiledBackendProbes()
-  if (!communityMode) {
+  if (shouldRunWindowsScriptPlotParity({ communityMode })) {
     validateScriptAndCompiledPlotParityProbes()
   }
+}
+
+function validatePortableRelease() {
   validateNoUnexpectedPyFiles()
   validateNoNuitkaInStagedRuntime()
   validateNoE2EArtifactsInReleaseDist()
   validateNoSourceMaps()
   validateNoUnresolvedStoreAliasInBundle()
   validateStrictCspAgainstRuntimeCodegen()
-  validateNsisReleaseConfig()
-  validateNsisArtifactSignatures()
+}
+
+function main(argv = process.argv.slice(2)) {
+  const targetPlatform = readTargetPlatform(argv)
+  ensureProbeOutputDirectory()
+  validateLegalFiles()
+  if (targetPlatform === 'win32') {
+    validateWindowsRuntime()
+  } else {
+    const darwinResult = validateDarwinRuntime({
+      paths: {
+        sourceDist,
+        stagedDist,
+        scriptPython: 'python3.12',
+        scriptPlot: scriptPlotBackendPath,
+      },
+      requireScriptCompiledPlotParity,
+      installedApp: readInstalledApp(argv),
+    })
+    errors.push(...darwinResult.errors)
+  }
+  validatePortableRelease()
+  if (targetPlatform === 'win32') {
+    validateNsisReleaseConfig()
+    validateNsisArtifactSignatures()
+  }
 
   for (const warning of warnings) {
     console.warn(`[validate-release] WARN: ${warning}`)
@@ -1024,6 +1315,11 @@ function main() {
   console.log('[validate-release] OK: Hardened release prerequisites validated')
 }
 
-main()
-
-
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  try {
+    main()
+  } catch (error) {
+    console.error(`[validate-release] ERROR: ${error.message}`)
+    process.exitCode = 1
+  }
+}
