@@ -133,7 +133,17 @@ def validate_x86_gseapy_wheel(wheel: Path, runner: Callable[..., str] = run_chec
             if "x86_64" not in file_output or "arm64" in file_output:
                 raise RuntimeError(f"Intel gseapy extension is not x86_64: {file_output.strip()}")
             otool_output = _run(runner, ["otool", "-l", str(extension)], ROOT)
-            match = re.search(r"(?:minos|version)\s+(\d+)(?:\.(\d+))?", otool_output)
+            build_version = re.search(
+                r"cmd\s+LC_BUILD_VERSION.*?\bminos\s+(\d+)(?:\.(\d+))?",
+                otool_output,
+                flags=re.DOTALL,
+            )
+            legacy_version = re.search(
+                r"cmd\s+LC_VERSION_MIN_MACOSX.*?\bversion\s+(\d+)(?:\.(\d+))?",
+                otool_output,
+                flags=re.DOTALL,
+            )
+            match = build_version or legacy_version
             if not match:
                 raise RuntimeError(f"Unable to determine Intel gseapy minimum macOS version: {otool_output.strip()}")
             version = (int(match.group(1)), int(match.group(2) or 0))

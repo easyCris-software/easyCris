@@ -426,6 +426,31 @@ def prepare_compile_source_tree(name: str) -> Path:
     return staged_root
 
 
+def validate_kaleido_payload(
+    payload_dir: Path,
+    target_platform: str,
+    target_arch: str,
+    inspect_file: callable,
+) -> None:
+    """Validate only Mach-O members; shell scripts and assets remain intact."""
+    if target_platform != "darwin":
+        return
+    macho_files = []
+    for candidate in payload_dir.rglob("*"):
+        if not candidate.is_file():
+            continue
+        inspected = inspect_file(candidate)
+        if "Mach-O" not in inspected:
+            continue
+        macho_files.append(candidate)
+        if target_arch not in inspected:
+            raise RuntimeError(
+                f"Kaleido payload architecture mismatch for {candidate}: expected {target_arch}, got {inspected.strip()}"
+            )
+    if not macho_files:
+        raise RuntimeError(f"No Mach-O files found in Kaleido payload: {payload_dir}")
+
+
 def prepare_kaleido_executable_payload(name: str) -> Path:
     """
     Stage Kaleido executable payload for deterministic packaging.
@@ -445,16 +470,12 @@ def prepare_kaleido_executable_payload(name: str) -> Path:
     for log_file in staged_payload_dir.rglob("*.log"):
         log_file.unlink(missing_ok=True)
 
-    native_files = [path for path in staged_payload_dir.rglob("*") if path.is_file() and path.stat().st_mode & stat.S_IXUSR]
-    if TARGET_PLATFORM == "darwin":
-        if not native_files:
-            raise RuntimeError(f"No executable Kaleido payload files found: {staged_payload_dir}")
-        for native_file in native_files:
-            inspected = subprocess.run(["file", str(native_file)], check=True, capture_output=True, text=True).stdout
-            if TARGET_ARCH not in inspected:
-                raise RuntimeError(
-                    f"Kaleido payload architecture mismatch for {native_file}: expected {TARGET_ARCH}, got {inspected.strip()}"
-                )
+    validate_kaleido_payload(
+        staged_payload_dir,
+        TARGET_PLATFORM,
+        TARGET_ARCH,
+        lambda candidate: subprocess.run(["file", str(candidate)], check=True, capture_output=True, text=True).stdout,
+    )
 
     return staged_payload_dir
 

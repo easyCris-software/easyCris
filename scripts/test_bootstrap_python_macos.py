@@ -173,6 +173,11 @@ class BootstrapCommandContractTests(unittest.TestCase):
                 bootstrap_python_macos.validate_x86_gseapy_wheel(
                     wheel, lambda command, **_kwargs: "Mach-O x86_64" if command[0] == "file" else "minos 14.0"
                 )
+            with self.assertRaisesRegex(RuntimeError, "minimum macOS"):
+                bootstrap_python_macos.validate_x86_gseapy_wheel(
+                    wheel,
+                    lambda command, **_kwargs: "Mach-O x86_64" if command[0] == "file" else "version 0.0\ncmd LC_BUILD_VERSION\n minos 14.0",
+                )
             with self.assertRaisesRegex(RuntimeError, "wheel tag"):
                 bootstrap_python_macos.validate_x86_gseapy_wheel(root / "gseapy-1.1.11-py3-none-any.whl", valid_runner)
 
@@ -197,7 +202,7 @@ class BootstrapCommandContractTests(unittest.TestCase):
             if command[0] == "file":
                 return "Mach-O 64-bit x86_64"
             if command[0] == "otool":
-                return "minos 13.0"
+                return "cmd LC_BUILD_VERSION\n minos 13.0"
             event = ("install " if "install" in command else "wheel " if "wheel" in command else "run ") + " ".join(command)
             if "env" in kwargs:
                 event += " " + " ".join(f"{key}={value}" for key, value in sorted(kwargs["env"].items()) if key in {"MACOSX_DEPLOYMENT_TARGET", "_PYTHON_HOST_PLATFORM", "ARCHFLAGS"})

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /** Controlled, checkpointed Darwin Nuitka compilation. */
 
-import { createHash } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import { createWriteStream, existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { mkdir, readFile } from 'node:fs/promises'
+import { mkdir, readFile, rm } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
@@ -15,6 +15,30 @@ import { REQUIRED_BACKENDS } from './python-runtime-constants.mjs'
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const CHECKPOINT_SCHEMA_VERSION = 1
 const DEFAULT_TIMEOUT_SECONDS = 9000
+const PROBE_TIMEOUT_MS = 60_000
+const KILL_GRACE_MS = 5_000
+const MAX_CAPTURE_BYTES = 64 * 1024
+
+function signalDarwinProcessGroup(pid, signal) {
+  process.kill(process.platform === 'darwin' ? -pid : pid, signal)
+}
+
+export function scheduleProcessTermination({
+  pid, timeoutMs, graceMs = KILL_GRACE_MS, setTimer = setTimeout, clearTimer = clearTimeout,
+  signalProcess = signalDarwinProcessGroup,
+}) {
+  let killTimer = null
+  const termTimer = setTimer(() => {
+    try { signalProcess(pid, 'SIGTERM') } catch { /* process already exited */ }
+    killTimer = setTimer(() => {
+      try { signalProcess(pid, 'SIGKILL') } catch { /* process already exited */ }
+    }, graceMs)
+  }, timeoutMs)
+  return () => {
+    clearTimer(termTimer)
+    if (killTimer !== null) clearTimer(killTimer)
+  }
+}
 
 function requireDarwinHost(platformName = process.platform, arch = os.machine()) {
   if (platformName !== 'darwin') throw new Error(`Darwin host required; detected ${platformName}`)
@@ -84,6 +108,26 @@ function commandOutput(command, args) {
   return result.stdout.trim()
 }
 
+export function assertBuilderVersions(pythonVersion, nuitkaVersion) {
+  if (!/^Python 3\.12(?:\.\d+)?\b/.test(pythonVersion)) throw new Error(`Nuitka builder must use Python 3.12: ${pythonVersion}`)
+  if (nuitkaVersion.trim().split(/\r?\n/, 1)[0] !== '2.8.10') throw new Error(`Nuitka builder must use Nuitka 2.8.10: ${nuitkaVersion}`)
+}
+
+export async function backendSourceHash(root = ROOT) {
+  const inputs = [
+    path.join(root, 'scripts', 'compile_python_nuitka.py'),
+    path.join(root, 'python_embedded', 'stats.py'),
+    path.join(root, 'python_embedded', 'rnaseq.py'),
+    path.join(root, 'python_embedded', 'plot.py'),
+  ]
+  const digest = createHash('sha256')
+  for (const input of inputs) {
+    digest.update(path.relative(root, input))
+    digest.update(await readFile(input))
+  }
+  return digest.digest('hex')
+}
+
 function trackedTreeIsClean() {
   return commandOutput('git', ['status', '--porcelain', '--untracked-files=no']) === ''
 }
@@ -99,10 +143,31 @@ function readCheckpoint(checkpointPath) {
   return JSON.parse(readFileSync(checkpointPath, 'utf8'))
 }
 
-function completedBackends(checkpoint, fingerprint) {
+export async function validateReusableCheckpoints({ checkpoint, fingerprint, artifactResolver, inspectArtifact, probe }) {
   if (!checkpoint.fingerprint) return []
+  if (checkpoint.schemaVersion !== CHECKPOINT_SCHEMA_VERSION) throw new Error('Checkpoint schema version is invalid')
   assertCheckpointFingerprint(fingerprint, checkpoint.fingerprint)
-  return REQUIRED_BACKENDS.filter(backend => checkpoint.backends?.[backend]?.status === 'passed')
+  const completed = []
+  for (const backend of REQUIRED_BACKENDS) {
+    const entry = checkpoint.backends?.[backend]
+    if (!entry) break
+    if (entry.status !== 'passed') break
+    const expectedArtifact = artifactResolver(backend)
+    if (entry.artifactPath !== expectedArtifact || !existsSync(expectedArtifact)) {
+      throw new Error(`${backend} checkpoint artifact path is invalid`)
+    }
+    if (sha256File(expectedArtifact) !== entry.artifactSha256) throw new Error(`${backend} checkpoint artifact hash mismatch`)
+    const fileArchitecture = inspectArtifact(expectedArtifact)
+    if (!fileArchitecture.includes(fingerprint.arch) || entry.fileArchitecture !== fileArchitecture) {
+      throw new Error(`${backend} checkpoint artifact architecture is invalid`)
+    }
+    const expectedProbeKeys = backend === 'plot' ? ['protocol', 'pdf', 'tiff'] : ['protocol']
+    if (expectedProbeKeys.some(key => entry.probe?.[key] !== 'passed')) throw new Error(`${backend} checkpoint probe evidence is invalid`)
+    const currentProbe = await probe(backend, expectedArtifact)
+    if (expectedProbeKeys.some(key => currentProbe?.[key] !== 'passed')) throw new Error(`${backend} checkpoint protocol re-probe failed`)
+    completed.push(backend)
+  }
+  return completed
 }
 
 function appendCheckpoint(checkpointPath, fingerprint, backend, entry) {
@@ -126,8 +191,9 @@ async function defaultRunner(job, { onMeaningfulLine }) {
     cwd: ROOT,
     env: { ...process.env, ...job.env },
     stdio: ['ignore', 'pipe', 'pipe'],
+    detached: process.platform === 'darwin',
   })
-  const log = createWriteStream(job.logPath, { flags: 'a' })
+  const log = createWriteStream(job.logPath, { flags: 'w' })
   const tail = []
   let lastMeaningfulLine = ''
   const consume = chunk => {
@@ -135,7 +201,7 @@ async function defaultRunner(job, { onMeaningfulLine }) {
     log.write(text)
     for (const line of text.split(/\r?\n/)) {
       if (line.trim()) {
-        lastMeaningfulLine = line.trim()
+        lastMeaningfulLine = line.trim().slice(-1024)
         tail.push(lastMeaningfulLine)
         if (tail.length > 80) tail.shift()
         onMeaningfulLine(lastMeaningfulLine)
@@ -144,61 +210,92 @@ async function defaultRunner(job, { onMeaningfulLine }) {
   }
   child.stdout.on('data', consume)
   child.stderr.on('data', consume)
-  const timeout = setTimeout(() => child.kill('SIGTERM'), Number(job.env.EASYCRIS_NUITKA_TIMEOUT_SECS) * 1000)
+  let timedOut = false
+  const innerTimeoutMs = Number(job.env.EASYCRIS_NUITKA_TIMEOUT_SECS) * 1000
+  const cancelTermination = scheduleProcessTermination({
+    pid: child.pid,
+    timeoutMs: innerTimeoutMs + 30_000,
+    signalProcess: (pid, signal) => {
+      timedOut = true
+      try { signalDarwinProcessGroup(pid, signal) } catch { child.kill(signal) }
+    },
+  })
   const result = await new Promise((resolve, reject) => {
     child.on('error', reject)
-    child.on('close', code => resolve({ code, tail, lastMeaningfulLine }))
+    child.on('close', (code, signal) => resolve({ code, signal, timedOut, tail, lastMeaningfulLine }))
   })
-  clearTimeout(timeout)
+  cancelTermination()
   await new Promise(resolve => log.end(resolve))
   return result
 }
 
-async function runProtocolProbes(backend, artifactPath) {
-  const input = backend === 'plot' ? '{"action":"ping"}\n' : '{}\n'
+async function runBoundedProcess(command, input, timeoutMs = PROBE_TIMEOUT_MS) {
+  const child = spawn(command, [], { cwd: ROOT, stdio: ['pipe', 'pipe', 'pipe'], detached: process.platform === 'darwin' })
+  let stdout = ''
+  let stderr = ''
+  const append = (current, chunk) => (current + String(chunk)).slice(-MAX_CAPTURE_BYTES)
+  child.stdout.on('data', chunk => { stdout = append(stdout, chunk) })
+  child.stderr.on('data', chunk => { stderr = append(stderr, chunk) })
+  let timedOut = false
+  const cancelTermination = scheduleProcessTermination({
+    pid: child.pid, timeoutMs,
+    signalProcess: (pid, signal) => {
+      timedOut = true
+      try { signalDarwinProcessGroup(pid, signal) } catch { child.kill(signal) }
+    },
+  })
   const result = await new Promise((resolve, reject) => {
-    const child = spawn(artifactPath, [], { cwd: ROOT, stdio: ['pipe', 'pipe', 'pipe'] })
-    let stdout = ''
-    let stderr = ''
-    child.stdout.on('data', chunk => { stdout += chunk })
-    child.stderr.on('data', chunk => { stderr += chunk })
     child.on('error', reject)
-    child.on('close', code => resolve({ code, stdout, stderr }))
+    child.on('close', (code, signal) => resolve({ code, signal, timedOut, stdout, stderr }))
     child.stdin.end(input)
   })
-  if (result.code !== 0 || !result.stdout.trim()) throw new Error(`${backend} protocol probe failed: ${result.stderr.trim()}`)
+  cancelTermination()
+  return result
+}
+
+export function assertSuccessfulJson(result, label) {
+  if (result.code !== 0 || result.signal || result.timedOut) throw new Error(`${label} protocol probe process failed: ${result.stderr || ''}`)
+  let payload
+  try { payload = JSON.parse(result.stdout) } catch { throw new Error(`${label} protocol probe did not return JSON`) }
+  if (payload?.success !== true) throw new Error(`${label} protocol probe did not report success=true`)
+  return payload
+}
+
+export async function runProtocolProbes(backend, artifactPath, { runProcess = runBoundedProcess, probeRoot = path.join(ROOT, '_tmp', 'nuitka-probes') } = {}) {
+  const inputs = {
+    stats: JSON.stringify({ test: '__warmup__', parameters: { warmup_families: [] } }),
+    rnaseq: JSON.stringify({ test: 'rnaseq_validate_samples', data: { counts_sample_ids: ['s1'], metadata_sample_ids: ['s1'] }, params: {} }),
+    plot: JSON.stringify({ action: 'ping' }),
+  }
+  const result = await runProcess(artifactPath, `${inputs[backend]}\n`, PROBE_TIMEOUT_MS)
+  assertSuccessfulJson(result, backend)
   if (backend !== 'plot') return { protocol: 'passed' }
-  const probeRoot = path.join(ROOT, '_tmp', 'nuitka-probes')
   await mkdir(probeRoot, { recursive: true })
-  const outputs = ['pdf', 'tiff'].map(format => path.join(probeRoot, `plot-probe.${format}`))
-  for (const [index, outputPath] of outputs.entries()) {
-    const exportResult = await new Promise((resolve, reject) => {
-      const child = spawn(artifactPath, [], { cwd: ROOT, stdio: ['pipe', 'pipe', 'pipe'] })
-      let stdout = ''
-      child.stdout.on('data', chunk => { stdout += chunk })
-      child.on('error', reject)
-      child.on('close', code => resolve({ code, stdout }))
-      child.stdin.end(JSON.stringify({ action: 'export_plot', plotly_json: { data: [], layout: {} }, output_path: outputPath, options: { format: index === 0 ? 'pdf' : 'tiff' } }))
-    })
-    if (exportResult.code !== 0 || !existsSync(outputPath) || readFileSync(outputPath).length === 0) {
-      throw new Error(`plot ${index === 0 ? 'PDF' : 'TIFF'} export probe failed`)
+  for (const format of ['pdf', 'tiff']) {
+    const outputPath = path.join(probeRoot, `plot-${randomUUID()}.${format}`)
+    await rm(outputPath, { force: true })
+    const exportResult = await runProcess(artifactPath, JSON.stringify({ action: 'export_plot', plotly_json: { data: [], layout: {} }, output_path: outputPath, options: { format } }), PROBE_TIMEOUT_MS)
+    assertSuccessfulJson(exportResult, `plot ${format}`)
+    if (!existsSync(outputPath) || readFileSync(outputPath).length === 0) {
+      throw new Error(`plot ${format.toUpperCase()} export probe failed`)
     }
   }
   return { protocol: 'passed', pdf: 'passed', tiff: 'passed' }
 }
 
-export async function runCompileJobs({ jobs, fingerprint, checkpointPath, runner = defaultRunner, probe = runProtocolProbes, inspectArtifact = artifactPath => commandOutput('file', [artifactPath]) }) {
+export async function runCompileJobs({ jobs, fingerprint, checkpointPath, runner = defaultRunner, probe = runProtocolProbes, inspectArtifact = artifactPath => commandOutput('file', [artifactPath]), artifactResolver = backend => path.join(ROOT, 'python_embedded', 'dist', `${backend}.dist`, backend) }) {
   for (const job of jobs) {
     const startedAt = new Date().toISOString()
     const start = Date.now()
     let lastMeaningfulLine = ''
+    let result
     const heartbeat = setInterval(() => {
       console.log(`[compile-python:macos] ${job.backend} elapsed=${Math.floor((Date.now() - start) / 1000)}s log=${job.logPath} last=${lastMeaningfulLine || '(waiting)'}`)
     }, 55_000)
     try {
-      const result = await runner(job, { onMeaningfulLine: line => { lastMeaningfulLine = line } })
-      if (result.code !== 0) throw new Error(`${job.backend} compilation failed; log: ${job.logPath}\n${boundedTail(result.tail || [])}`)
-      const artifactPath = path.join(ROOT, 'python_embedded', 'dist', `${job.backend}.dist`, job.backend)
+      result = await runner(job, { onMeaningfulLine: line => { lastMeaningfulLine = line } })
+      if (result.code !== 0 || result.signal || result.timedOut) throw new Error(`${job.backend} compilation failed; log: ${job.logPath}\n${boundedTail(result.tail || [])}`)
+      const artifactPath = artifactResolver(job.backend)
       if (!existsSync(artifactPath)) throw new Error(`${job.backend} artifact missing: ${artifactPath}`)
       const fileArchitecture = inspectArtifact(artifactPath)
       if (!fileArchitecture.includes(fingerprint.arch)) throw new Error(`${job.backend} architecture mismatch: ${fileArchitecture}`)
@@ -210,7 +307,7 @@ export async function runCompileJobs({ jobs, fingerprint, checkpointPath, runner
     } catch (error) {
       appendCheckpoint(checkpointPath, fingerprint, job.backend, {
         status: 'failed', startedAt, endedAt: new Date().toISOString(), durationSeconds: (Date.now() - start) / 1000,
-        exitStatus: 1, logPath: job.logPath, error: error.message,
+        exitStatus: typeof result?.code === 'number' ? result.code : 1, signal: result?.signal ?? null, timedOut: result?.timedOut ?? false, logPath: job.logPath, error: error.message,
       })
       throw error
     } finally {
@@ -234,6 +331,9 @@ async function main() {
   requireIgnoredNuitkaRoot(logRoot)
   const python = path.join(ROOT, '.venv-nuitka-build', 'bin', 'python')
   if (!existsSync(python)) throw new Error(`Nuitka builder Python not found: ${python}`)
+  const builderPythonVersion = commandOutput(python, ['--version'])
+  const builderNuitkaVersion = commandOutput(python, ['-m', 'nuitka', '--version'])
+  assertBuilderVersions(builderPythonVersion, builderNuitkaVersion)
   const jobs = buildCompileJobs({ arch, headSha, timeoutSeconds, logRoot }).map(job => ({ ...job, python }))
   const checkpointPath = path.join(logRoot, headSha, arch, 'checkpoint.json')
   if (planOnly) {
@@ -245,14 +345,18 @@ async function main() {
   if (!existsSync(runtimeManifest)) throw new Error(`Runtime manifest missing: ${runtimeManifest}`)
   const fingerprint = {
     headSha, cleanTree: true, arch,
-    pythonVersion: commandOutput(python, ['--version']),
-    nuitkaVersion: commandOutput(python, ['-m', 'nuitka', '--version']),
+    pythonVersion: builderPythonVersion,
+    nuitkaVersion: builderNuitkaVersion,
     runtimeManifestSha256: sha256File(runtimeManifest),
-    backendSourceSha256: createHash('sha256').update(await readFile(path.join(ROOT, 'scripts', 'compile_python_nuitka.py'))).digest('hex'),
+    backendSourceSha256: await backendSourceHash(ROOT),
   }
-  const completed = completedBackends(readCheckpoint(checkpointPath), fingerprint)
+  const artifactResolver = backend => path.join(ROOT, 'python_embedded', 'dist', `${backend}.dist`, backend)
+  const completed = await validateReusableCheckpoints({
+    checkpoint: readCheckpoint(checkpointPath), fingerprint, artifactResolver,
+    inspectArtifact: artifactPath => commandOutput('file', [artifactPath]), probe: runProtocolProbes,
+  })
   const selected = selectCompileJobs({ requestedBackend, resume, completedBackends: completed })
-  await runCompileJobs({ jobs: jobs.filter(job => selected.includes(job.backend)), fingerprint, checkpointPath })
+  await runCompileJobs({ jobs: jobs.filter(job => selected.includes(job.backend)), fingerprint, checkpointPath, artifactResolver })
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
