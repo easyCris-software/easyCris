@@ -72,13 +72,20 @@ def executable_name(backend: str, target_platform: str) -> str:
     return f"{backend}.exe" if target_platform == "win32" else backend
 
 
-def platform_nuitka_args(target_platform: str, target_arch: str) -> list[str]:
+def platform_nuitka_args(
+    target_platform: str,
+    target_arch: str,
+    output_filename: str | None = None,
+) -> list[str]:
     if target_platform == "win32":
         return ["--windows-console-mode=force", "--msvc=latest"]
     if target_platform == "darwin":
         if target_arch not in {"x86_64", "arm64"}:
             raise ValueError(f"Unsupported Darwin architecture: {target_arch}")
-        return [f"--macos-target-arch={target_arch}"]
+        args = [f"--macos-target-arch={target_arch}"]
+        if output_filename:
+            args.append(f"--output-filename={output_filename}")
+        return args
     raise ValueError(f"Unsupported target platform: {target_platform}")
 
 
@@ -600,7 +607,7 @@ def compile_backend(
         f"--report={report_path}",
         "--report-diffable",
         f"--report-user-provided=backend={name}",
-        *platform_nuitka_args(TARGET_PLATFORM, TARGET_ARCH),
+        *platform_nuitka_args(TARGET_PLATFORM, TARGET_ARCH, name),
         *extra_args,
     ]
     if name == "rnaseq":
