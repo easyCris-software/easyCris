@@ -13,6 +13,7 @@ import {
   runProtocolProbes,
   scheduleProcessTermination,
   selectCompileJobs,
+  truncateAttemptLog,
   validateReusableCheckpoints,
 } from './compile-python-macos.mjs'
 
@@ -85,7 +86,7 @@ test('a failed rnaseq compile stops the chain and records no passing rnaseq chec
       checkpointPath,
       runner: async job => {
         started.push(job.backend)
-        if (job.backend === 'rnaseq') return { code: 7, tail: ['RNA-seq compiler failed'] }
+        if (job.backend === 'rnaseq') return { code: 7, signal: 'SIGTERM', timedOut: true, tail: ['RNA-seq compiler failed'] }
         const artifact = path.join(artifactRoot, `${job.backend}.dist`, job.backend)
         await mkdir(path.dirname(artifact), { recursive: true })
         await writeFile(artifact, 'fixture')
@@ -101,6 +102,9 @@ test('a failed rnaseq compile stops the chain and records no passing rnaseq chec
   const checkpoint = JSON.parse(await readFile(checkpointPath, 'utf8'))
   assert.equal(checkpoint.backends.stats.status, 'passed')
   assert.equal(checkpoint.backends.rnaseq.status, 'failed')
+  assert.equal(checkpoint.backends.rnaseq.exitStatus, 7)
+  assert.equal(checkpoint.backends.rnaseq.signal, 'SIGTERM')
+  assert.equal(checkpoint.backends.rnaseq.timedOut, true)
   assert.equal(checkpoint.backends.plot, undefined)
   await rm(temporary, { recursive: true, force: true })
 })
@@ -162,21 +166,61 @@ test('compile and probe termination schedules TERM then KILL after bounded grace
   const callbacks = []
   const signals = []
   const cancel = scheduleProcessTermination({
-    pid: 321, timeoutMs: 9_030_000, setTimer: callback => { callbacks.push(callback); return callbacks.length }, clearTimer: () => {},
+    pid: 321, timeoutMs: 9_030_000, setTimer: (callback, delay) => { callbacks.push({ callback, delay }); return callbacks.length }, clearTimer: () => {},
     signalProcess: (_pid, signal) => signals.push(signal),
   })
   assert.equal(callbacks.length, 1)
-  callbacks[0]()
+  assert.equal(callbacks[0].delay, 9_030_000)
+  callbacks[0].callback()
   assert.deepEqual(signals, ['SIGTERM'])
   assert.equal(callbacks.length, 2)
-  callbacks[1]()
+  assert.equal(callbacks[1].delay, 5_000)
+  callbacks[1].callback()
   assert.deepEqual(signals, ['SIGTERM', 'SIGKILL'])
   cancel()
 })
 
-test('backend source hash covers all three backend entrypoints', async () => {
-  const digest = await backendSourceHash(process.cwd())
-  assert.match(digest, /^[a-f0-9]{64}$/)
+test('backend source hash changes for each compiler/backend input', async () => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'easycris-source-hash-test-'))
+  const inputs = ['scripts/compile_python_nuitka.py', 'python_embedded/stats.py', 'python_embedded/rnaseq.py', 'python_embedded/plot.py']
+  for (const [index, input] of inputs.entries()) {
+    const target = path.join(temporary, input)
+    await mkdir(path.dirname(target), { recursive: true })
+    await writeFile(target, `fixture-${index}`)
+  }
+  const baseline = await backendSourceHash(temporary)
+  for (const input of inputs) {
+    const target = path.join(temporary, input)
+    await writeFile(target, `${await readFile(target, 'utf8')}-changed`)
+    assert.notEqual(await backendSourceHash(temporary), baseline, input)
+    await writeFile(target, (await readFile(target, 'utf8')).replace('-changed', ''))
+  }
+  await rm(temporary, { recursive: true, force: true })
+})
+
+test('resume rejects schema, path, architecture, failed fresh probes, and incomplete plot evidence', async () => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'easycris-resume-reject-test-'))
+  const artifact = path.join(temporary, 'stats')
+  await writeFile(artifact, 'artifact')
+  const digest = (await import('node:crypto')).createHash('sha256').update('artifact').digest('hex')
+  const base = { schemaVersion: 1, fingerprint: currentFingerprint, backends: { stats: { status: 'passed', artifactPath: artifact, artifactSha256: digest, fileArchitecture: 'Mach-O x86_64', probe: { protocol: 'passed' } } } }
+  const args = extra => ({ checkpoint: extra, fingerprint: currentFingerprint, artifactResolver: () => artifact, inspectArtifact: () => 'Mach-O x86_64', probe: async () => ({ protocol: 'passed' }) })
+  await assert.rejects(() => validateReusableCheckpoints(args({ ...base, schemaVersion: 9 })), /schema/)
+  await assert.rejects(() => validateReusableCheckpoints(args({ ...base, backends: { stats: { ...base.backends.stats, artifactPath: '/wrong' } } })), /artifact path/)
+  await assert.rejects(() => validateReusableCheckpoints({ ...args(base), inspectArtifact: () => 'Mach-O arm64' }), /architecture/)
+  await assert.rejects(() => validateReusableCheckpoints({ ...args(base), probe: async () => ({ protocol: 'failed' }) }), /re-probe/)
+  await rm(temporary, { recursive: true, force: true })
+})
+
+test('attempt logs truncate old output before a new attempt', async () => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'easycris-log-test-'))
+  const logPath = path.join(temporary, 'stats.log')
+  await writeFile(logPath, 'old compiler output')
+  const stream = await truncateAttemptLog(logPath)
+  stream.end('new compiler output')
+  await new Promise(resolve => stream.on('finish', resolve))
+  assert.equal(await readFile(logPath, 'utf8'), 'new compiler output')
+  await rm(temporary, { recursive: true, force: true })
 })
 
 test('builder validation requires Python 3.12 and exactly Nuitka 2.8.10', () => {

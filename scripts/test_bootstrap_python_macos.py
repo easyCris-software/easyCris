@@ -77,6 +77,8 @@ class BootstrapCommandContractTests(unittest.TestCase):
 
         def runner(command: list[str], **kwargs):
             calls.append(command)
+            if command[-1] == "--version":
+                return "Python 3.12.13"
             if "download" in command:
                 destination = Path(command[command.index("--dest") + 1])
                 destination.mkdir(parents=True, exist_ok=True)
@@ -181,12 +183,50 @@ class BootstrapCommandContractTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "wheel tag"):
                 bootstrap_python_macos.validate_x86_gseapy_wheel(root / "gseapy-1.1.11-py3-none-any.whl", valid_runner)
 
+    def test_existing_wrong_builder_fails_before_deleting_outputs_or_installing(self):
+        # Mutation caught: silently replacing or using a Python 3.11 builder after destructive provisioning starts.
+        calls = []
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            runtime = root / "python_embedded"
+            runtime.mkdir()
+            for name in ("requirements-rnaseq.txt", "requirements-macos.txt"):
+                (runtime / name).write_text((ROOT / "python_embedded" / name).read_text(encoding="utf-8"), encoding="utf-8")
+            dependencies = runtime / "python_dependencies"
+            dependencies.mkdir()
+            marker = dependencies / "keep.txt"
+            marker.write_text("keep", encoding="utf-8")
+            wheelhouse = root / "_tmp" / "python-wheelhouse" / "arm64"
+            wheelhouse.mkdir(parents=True)
+            wheel_marker = wheelhouse / "keep.txt"
+            wheel_marker.write_text("keep", encoding="utf-8")
+            builder = root / ".venv-nuitka-build" / "bin"
+            builder.mkdir(parents=True)
+            (builder / "python").touch()
+
+            def runner(command, **_kwargs):
+                calls.append(command)
+                if command[-1] == "--version":
+                    return "Python 3.11.9"
+                raise AssertionError(command)
+
+            with self.assertRaisesRegex(RuntimeError, "Python 3.12"):
+                bootstrap_python_macos.bootstrap(
+                    root=root, runner=runner, system_name="Darwin", version_info=(3, 12), machine_name="arm64",
+                    create_venv=lambda _path: (_ for _ in ()).throw(AssertionError("must not recreate builder")), write_manifest=False,
+                )
+            self.assertTrue(marker.exists())
+            self.assertTrue(wheel_marker.exists())
+            self.assertEqual(calls, [[str(builder / "python"), "--version"]])
+
     def _run_bootstrap_with_arch(self, arch: str, include_events: bool = False):
         calls: list[list[str]] = []
         events: list[str] = []
 
         def runner(command: list[str], **kwargs):
             calls.append(command)
+            if command[-1] == "--version":
+                return "Python 3.12.13"
             if "download" in command:
                 destination = Path(command[command.index("--dest") + 1])
                 destination.mkdir(parents=True, exist_ok=True)

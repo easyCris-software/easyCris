@@ -77,6 +77,15 @@ def validate_host(
     return machine_name
 
 
+def validate_builder_python(version_output: str) -> None:
+    """Fail before provisioning if a previously created builder is not Python 3.12."""
+    if not re.match(r"^Python 3\.12(?:\.\d+)?\b", version_output.strip()):
+        raise RuntimeError(
+            "Nuitka builder must use Python 3.12. Remove .venv-nuitka-build and rerun the macOS bootstrap. "
+            f"Detected: {version_output.strip()}"
+        )
+
+
 def run_checked(command: list[str], **kwargs) -> str:
     """Run a checked command without ever silently continuing on failed provisioning."""
     completed = subprocess.run(command, check=True, text=True, capture_output=True, **kwargs)
@@ -213,6 +222,7 @@ def bootstrap(
         (create_venv or (lambda path: venv.EnvBuilder(with_pip=True).create(path)))(build_venv)
     if not builder.exists():
         raise RuntimeError(f"Nuitka builder Python not found: {builder}")
+    validate_builder_python(_run(runner, [str(builder), "--version"], root))
     if wheelhouse.exists():
         shutil.rmtree(wheelhouse)
     if dependencies.exists():

@@ -185,15 +185,20 @@ function boundedTail(lines) {
   return lines.slice(-80).join('\n')
 }
 
+export async function truncateAttemptLog(logPath) {
+  await mkdir(path.dirname(logPath), { recursive: true })
+  writeFileSync(logPath, '')
+  return createWriteStream(logPath, { flags: 'a' })
+}
+
 async function defaultRunner(job, { onMeaningfulLine }) {
-  await mkdir(path.dirname(job.logPath), { recursive: true })
   const child = spawn(job.python, job.args, {
     cwd: ROOT,
     env: { ...process.env, ...job.env },
     stdio: ['ignore', 'pipe', 'pipe'],
     detached: process.platform === 'darwin',
   })
-  const log = createWriteStream(job.logPath, { flags: 'w' })
+  const log = await truncateAttemptLog(job.logPath)
   const tail = []
   let lastMeaningfulLine = ''
   const consume = chunk => {
