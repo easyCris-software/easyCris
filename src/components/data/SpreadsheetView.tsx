@@ -4063,12 +4063,14 @@ export function SpreadsheetView({
       return true
     }
     for (const modelRow of targetModelRows) {
-      if (!hasMaterializedRowData(modelRow)) {
+      // Activation only needs confirmation that preload resolved this row.
+      // Empty-row sentinels stay non-materialized for copy/cut/delete.
+      if (!rowDataRef.current.has(modelRow)) {
         return false
       }
     }
     return true
-  }, [hasMaterializedRowData])
+  }, [])
 
   const resolveActivationBundleTargetRows = useCallback(
     async (
@@ -16542,5 +16544,4 @@ export function SpreadsheetView({
 }
 
 export default SpreadsheetView
-
 
