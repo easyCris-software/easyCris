@@ -1,7 +1,7 @@
 // Python backend spawner module
 //
 // Handles:
-// - Spawning python.exe stats.py (or compiled .exe)
+// - Spawning a platform Python interpreter with stats.py (or a compiled backend)
 // - Writing JSON payload to stdin
 // - Reading JSON result from stdout
 // - Timeout handling (5 minutes max)
@@ -44,6 +44,52 @@ fn path_points_to_command_name(path: &Path) -> bool {
     path.parent().is_none() && path.components().count() == 1
 }
 
+#[derive(Clone, Copy)]
+#[allow(dead_code)] // Both supported target variants are retained for platform path contracts.
+enum TargetPlatform {
+    Windows,
+    MacOS,
+}
+
+fn host_platform() -> TargetPlatform {
+    #[cfg(windows)]
+    {
+        TargetPlatform::Windows
+    }
+    #[cfg(target_os = "macos")]
+    {
+        TargetPlatform::MacOS
+    }
+}
+
+fn venv_python_rel(platform: TargetPlatform) -> PathBuf {
+    match platform {
+        TargetPlatform::Windows => PathBuf::from(".venv-public/Scripts/python.exe"),
+        TargetPlatform::MacOS => PathBuf::from(".venv-public/bin/python"),
+    }
+}
+
+fn backend_executable_name(backend: &str, platform: TargetPlatform) -> String {
+    match platform {
+        TargetPlatform::Windows => format!("{backend}.exe"),
+        TargetPlatform::MacOS => backend.to_string(),
+    }
+}
+
+fn compiled_backend_rel(backend: &str) -> PathBuf {
+    PathBuf::from("python_embedded")
+        .join("dist")
+        .join(format!("{backend}.dist"))
+        .join(backend_executable_name(backend, host_platform()))
+}
+
+fn embedded_python_rel() -> Option<PathBuf> {
+    match host_platform() {
+        TargetPlatform::Windows => Some(PathBuf::from("python_embedded").join("python.exe")),
+        TargetPlatform::MacOS => None,
+    }
+}
+
 fn resolve_python_script_command(base_dir: &Path) -> PathBuf {
     if let Some(explicit_python) = std::env::var_os("EASYCRIS_PYTHON_EXE") {
         let explicit = PathBuf::from(explicit_python);
@@ -56,39 +102,32 @@ fn resolve_python_script_command(base_dir: &Path) -> PathBuf {
         );
     }
 
-    let embedded_python = base_dir.join(python_backend_script_rel());
-    if embedded_python.exists() {
-        return embedded_python;
+    if let Some(embedded_python_rel) = embedded_python_rel() {
+        let embedded_python = base_dir.join(embedded_python_rel);
+        if embedded_python.exists() {
+            return embedded_python;
+        }
     }
 
-    let venv_python = base_dir
-        .join(".venv-public")
-        .join("Scripts")
-        .join("python.exe");
+    let venv_python = base_dir.join(venv_python_rel(host_platform()));
     if venv_python.exists() {
         return venv_python;
     }
 
-    PathBuf::from("python")
+    match host_platform() {
+        TargetPlatform::Windows => PathBuf::from("python"),
+        TargetPlatform::MacOS => PathBuf::from("python3"),
+    }
 }
 
 /// Relative paths from executable directory
-const PYTHON_BACKEND_SCRIPT: &str = "python_embedded/python.exe";
 const PYTHON_BACKEND_ARG: &str = "python_embedded/stats.py";
-const PYTHON_BACKEND_EXE: &str = "python_embedded/dist/stats.dist/stats.exe";
 
 // Plot backend paths
 const PLOT_BACKEND_ARG: &str = "python_embedded/plot.py";
-const PLOT_BACKEND_EXE: &str = "python_embedded/dist/plot.dist/plot.exe";
 
 // RNA-seq backend paths
 const RNASEQ_BACKEND_ARG: &str = "python_embedded/rnaseq.py";
-const RNASEQ_BACKEND_EXE: &str = "python_embedded/dist/rnaseq.dist/rnaseq.exe";
-
-#[inline(always)]
-fn python_backend_script_rel() -> String {
-    PYTHON_BACKEND_SCRIPT.to_string()
-}
 
 #[inline(always)]
 fn stats_script_rel() -> String {
@@ -96,8 +135,8 @@ fn stats_script_rel() -> String {
 }
 
 #[inline(always)]
-fn stats_exe_rel() -> String {
-    PYTHON_BACKEND_EXE.to_string()
+fn stats_exe_rel() -> PathBuf {
+    compiled_backend_rel("stats")
 }
 
 #[inline(always)]
@@ -106,8 +145,8 @@ fn plot_script_rel() -> String {
 }
 
 #[inline(always)]
-fn plot_exe_rel() -> String {
-    PLOT_BACKEND_EXE.to_string()
+fn plot_exe_rel() -> PathBuf {
+    compiled_backend_rel("plot")
 }
 
 #[inline(always)]
@@ -116,8 +155,8 @@ fn rnaseq_script_rel() -> String {
 }
 
 #[inline(always)]
-fn rnaseq_exe_rel() -> String {
-    RNASEQ_BACKEND_EXE.to_string()
+fn rnaseq_exe_rel() -> PathBuf {
+    compiled_backend_rel("rnaseq")
 }
 
 #[inline(always)]
@@ -160,6 +199,18 @@ pub(crate) fn get_python_base_dir() -> PathBuf {
             if python_dir.exists() {
                 log::debug!("Found python_embedded at exe dir: {:?}", exe_dir);
                 return exe_dir.to_path_buf();
+            }
+
+            #[cfg(target_os = "macos")]
+            if let Some(bundle_resources_dir) = macos_bundle_python_base_dir_candidate(exe_dir) {
+                let python_dir = bundle_resources_dir.join("python_embedded");
+                if python_dir.exists() {
+                    log::debug!(
+                        "Found python_embedded in macOS updater bundle resources: {:?}",
+                        bundle_resources_dir
+                    );
+                    return bundle_resources_dir;
+                }
             }
 
             // Development mode: check parent directories
@@ -226,6 +277,19 @@ fn installed_python_base_dir_candidate(local_data_dir: &Path, app_dir: &str) -> 
         .join(app_dir)
         .join("_up_")
         .join("bundle_resources")
+}
+
+fn macos_bundle_python_base_dir_candidate(exe_dir: &Path) -> Option<PathBuf> {
+    if exe_dir.file_name().and_then(|name| name.to_str()) != Some("MacOS") {
+        return None;
+    }
+
+    exe_dir.parent().map(|contents_dir| {
+        contents_dir
+            .join("Resources")
+            .join("_up_")
+            .join("bundle_resources")
+    })
 }
 
 /// Maximum execution time (5 minutes)
@@ -394,9 +458,9 @@ fn stats_failure_code(error_type: &str) -> &'static str {
 /// Backend mode (development vs production)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BackendMode {
-    /// Development: python.exe stats.py
+    /// Development: platform Python interpreter with stats.py
     Script,
-    /// Production: compiled stats.exe
+    /// Production: compiled stats backend
     Compiled,
     /// Hardened release: compiled backend is required and script fallback is forbidden.
     CompiledRequired,
@@ -428,7 +492,7 @@ fn choose_backend_mode(build_profile: &str, compiled_exists: bool) -> BackendMod
 }
 
 fn detect_backend_mode_for(
-    compiled_rel_path: String,
+    compiled_rel_path: PathBuf,
     script_log_label: &str,
     compiled_log_label: &str,
     required_log_label: &str,
@@ -1390,6 +1454,30 @@ mod tests {
     use serde_json::json;
 
     #[test]
+    fn compiled_backend_names_follow_platform() {
+        assert_eq!(
+            backend_executable_name("stats", TargetPlatform::Windows),
+            "stats.exe"
+        );
+        assert_eq!(
+            backend_executable_name("stats", TargetPlatform::MacOS),
+            "stats"
+        );
+    }
+
+    #[test]
+    fn venv_python_paths_follow_platform() {
+        assert_eq!(
+            venv_python_rel(TargetPlatform::Windows),
+            PathBuf::from(".venv-public/Scripts/python.exe")
+        );
+        assert_eq!(
+            venv_python_rel(TargetPlatform::MacOS),
+            PathBuf::from(".venv-public/bin/python")
+        );
+    }
+
+    #[test]
     fn test_choose_backend_mode_for_open_profiles() {
         assert!(matches!(
             choose_backend_mode("dev", false),
@@ -1446,6 +1534,19 @@ mod tests {
                 "easycris"
             ),
             Path::new(r"C:\Users\me\AppData\Local\easycris\_up_\bundle_resources").to_path_buf()
+        );
+    }
+
+    #[test]
+    fn macos_bundle_python_base_dir_candidate_uses_updater_resources() {
+        let exe_path = Path::new("/Applications/easyCris.app/Contents/MacOS/easycris");
+        let exe_dir = exe_path.parent().expect("executable path has a parent");
+
+        assert_eq!(
+            macos_bundle_python_base_dir_candidate(exe_dir),
+            Some(PathBuf::from(
+                "/Applications/easyCris.app/Contents/Resources/_up_/bundle_resources"
+            ))
         );
     }
 
