@@ -39,7 +39,7 @@ describe('FormulaService large dataset guards', () => {
     formulaService.setAsyncAggregateContext(asyncContext)
     formulaService.setBackendEvalContext(backendContext)
 
-    const result = formulaService.evaluate('=A1', { row: 1, col: 1, sheet: 'Sheet1' })
+    const result = formulaService.evaluate('=A1', { row: 2, col: 1, sheet: 'Sheet1' })
     expect(result.error?.type).toBe('#VALUE!')
     expect(result.error?.message).toContain('row order')
   })
@@ -73,7 +73,7 @@ describe('FormulaService large dataset guards', () => {
       enqueueBackendEval: vi.fn(),
     })
 
-    const result = formulaService.evaluate('=A1', { row: 1, col: 1, sheet: 'Sheet1' })
+    const result = formulaService.evaluate('=A1', { row: 2, col: 1, sheet: 'Sheet1' })
     expect(result.error).toBeUndefined()
     expect(result.value).toBe(42)
   })

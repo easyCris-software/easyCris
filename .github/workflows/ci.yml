@@ -48,6 +48,9 @@ jobs:
       - name: Typecheck
         run: npm run -s typecheck
 
+      - name: Run frontend tests
+        run: npm run -s test:run
+
       - name: Build frontend
         env:
           NODE_OPTIONS: --max-old-space-size=4096

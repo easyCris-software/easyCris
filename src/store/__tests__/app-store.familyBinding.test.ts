@@ -3,10 +3,17 @@
  *   - null familyId captured = no binding (explicit "no family" signal)
  *   - non-existent dataset = no orphan family binding
  */
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useAppStore } from '@/store/app-store'
 import { useDataStore } from '@/store/data-store'
 import type { Dataset } from '@/store/data-store'
+
+vi.mock('@/services/cacheService', () => ({
+  default: {
+    createEmptyDuckDB: vi.fn().mockResolvedValue(undefined),
+    setActiveProjectId: vi.fn().mockResolvedValue('project-1'),
+  },
+}))
 
 // Minimal Dataset stub
 function makeDataset(overrides: Partial<Dataset> = {}): Dataset {

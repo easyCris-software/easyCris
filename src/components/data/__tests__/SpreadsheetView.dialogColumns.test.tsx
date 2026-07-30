@@ -227,6 +227,10 @@ describe('SpreadsheetView Sort/Outline dialog column filtering', () => {
 
     await act(async () => { await openSort() })
 
+    fireEvent.keyDown(screen.getByRole('combobox', { name: 'Sort by column' }), {
+      key: 'ArrowDown',
+    })
+
     // col-0 and col-2 options should appear; col-1 should not
     expect(screen.getByRole('option', { name: /Column 1/ })).toBeInTheDocument()
     expect(screen.queryByRole('option', { name: /Column 2/ })).not.toBeInTheDocument()
@@ -283,6 +287,10 @@ describe('SpreadsheetView Sort/Outline dialog column filtering', () => {
 
     // Open sort dialog — col-1 must appear even though nonNullCount = 0
     await act(async () => { await openSort() })
+
+    fireEvent.keyDown(screen.getByRole('combobox', { name: 'Sort by column' }), {
+      key: 'ArrowDown',
+    })
 
     expect(screen.getByRole('option', { name: /Column 2/ })).toBeInTheDocument()
   })
@@ -343,6 +351,9 @@ describe('SpreadsheetView Sort/Outline dialog column filtering', () => {
 
     // Dialog renders exactly once
     expect(screen.getAllByRole('heading', { name: /Sort Data/ })).toHaveLength(1)
+    fireEvent.keyDown(screen.getByRole('combobox', { name: 'Sort by column' }), {
+      key: 'ArrowDown',
+    })
     // Only data-bearing columns appear (col-0 and col-2)
     expect(screen.getByRole('option', { name: /Column 1/ })).toBeInTheDocument()
     expect(screen.queryByRole('option', { name: /Column 2/ })).not.toBeInTheDocument()
