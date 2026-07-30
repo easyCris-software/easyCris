@@ -74,6 +74,7 @@ const tauriHarness = vi.hoisted(() => ({
 const undoHarness = vi.hoisted(() => ({
   undo: vi.fn().mockResolvedValue(null),
   redo: vi.fn().mockResolvedValue(null),
+  recordGridTransaction: vi.fn().mockResolvedValue(undefined),
 }))
 const storeHarness = vi.hoisted(() => {
   const dataset = {

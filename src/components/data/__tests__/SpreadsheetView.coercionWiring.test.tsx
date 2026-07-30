@@ -190,6 +190,18 @@ vi.mock('@/services/cacheService', () => ({
   default: {
     getDatasetStorageInfo: vi.fn().mockResolvedValue(null),
     getRowsHybrid: vi.fn().mockResolvedValue([]),
+    flushOverlay: vi.fn().mockResolvedValue(undefined),
+    getAllColumnStats: vi.fn().mockResolvedValue([]),
+    getPersistedColumnIds: vi.fn().mockResolvedValue([]),
+    getGridMutationQueueState: vi.fn().mockReturnValue({
+      status: 'idle',
+      failedQueueId: null,
+      error: null,
+    }),
+    subscribeGridMutationQueue: vi.fn((_datasetId: string, listener: (state: any) => void) => {
+      listener({ status: 'idle', failedQueueId: null, error: null })
+      return () => undefined
+    }),
   },
 }))
 
@@ -197,6 +209,7 @@ vi.mock('@/lib/grid/editExecutor', () => ({
   createEditExecutor: vi.fn(() => ({
     execute: harness.executeEdits,
     executeSingle: harness.executeSingleEdit,
+    applyDataStoreUpdate: vi.fn(),
   })),
 }))
 

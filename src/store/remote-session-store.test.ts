@@ -240,7 +240,7 @@ describe('useRemoteSessionStore', () => {
 
     await useRemoteSessionStore.getState().revoke()
 
-    expect(revokeRemoteControl).toHaveBeenCalledWith('session-1')
+    expect(revokeRemoteControl).toHaveBeenCalledWith('session-1', undefined)
     expect(stopRemoteSession).toHaveBeenCalled()
     expect(useRemoteSessionStore.getState().status?.current_session).toBeNull()
     expect(useRemoteSessionStore.getState().invite).toBeNull()
@@ -265,7 +265,7 @@ describe('useRemoteSessionStore', () => {
 
     await useRemoteSessionStore.getState().revoke()
 
-    expect(revokeRemoteControl).toHaveBeenCalledWith('session-1')
+    expect(revokeRemoteControl).toHaveBeenCalledWith('session-1', undefined)
     expect(stopRemoteSession).toHaveBeenCalled()
     expect(useRemoteSessionStore.getState().status?.current_session).toBeNull()
     expect(useRemoteSessionStore.getState().invite).toBeNull()
