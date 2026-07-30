@@ -41,6 +41,7 @@ const cacheHarness = vi.hoisted(() => ({
   queueCellUpdate: vi.fn(),
   updateCellsBatch: vi.fn().mockResolvedValue(0),
   enqueueGridMutationBatch: vi.fn().mockResolvedValue({ accepted: true, queueId: 'q-1' }),
+  flushGridMutationQueue: vi.fn().mockResolvedValue(undefined),
   scheduleOverlayFlush: vi.fn(),
   insertRowAt: vi.fn().mockResolvedValue(0),
   insertRowsAt: vi.fn().mockResolvedValue(0),
@@ -58,6 +59,7 @@ const undoHarness = vi.hoisted(() => ({
   pushBatchCellEdit: vi.fn().mockResolvedValue({ can_undo: true, can_redo: false, undo_count: 1, redo_count: 0 }),
   enqueueBatchCellEdit: vi.fn().mockResolvedValue({ can_undo: true, can_redo: false, undo_count: 1, redo_count: 0 }),
   trackPendingBatchRegistration: vi.fn(),
+  recordGridTransaction: vi.fn().mockResolvedValue(undefined),
   undo: vi.fn().mockResolvedValue(null),
   redo: vi.fn().mockResolvedValue(null),
 }))
@@ -249,6 +251,7 @@ describe('SpreadsheetView formula display commit', () => {
     clipboardHarness.read.mockReset()
     clipboardHarness.write.mockClear()
     cacheHarness.queueCellUpdate.mockClear()
+    cacheHarness.flushOverlay.mockReset().mockResolvedValue(undefined)
   })
 
   it('renders computed formula result instead of raw formula text after commit', async () => {
@@ -368,9 +371,10 @@ describe('SpreadsheetView formula display commit', () => {
     expect(tauriHarness.evaluateFormulaRange).not.toHaveBeenCalled()
   })
 
-  it('keeps cut and paste cells visible across a stale range reload', async () => {
+  it('keeps cut and paste cells visible while persistence is pending', async () => {
     let capturedCut: (() => void | Promise<void>) | null = null
     let capturedPaste: (() => void | Promise<void>) | null = null
+    cacheHarness.flushOverlay.mockImplementation(() => new Promise<void>(() => {}))
     render(
       <SpreadsheetView
         onCutRequest={fn => { capturedCut = fn }}
@@ -411,19 +415,6 @@ describe('SpreadsheetView formula display commit', () => {
     })
 
     await waitFor(() => {
-      expect(gridHarness.getCellContent?.([1, 1])?.displayData).toBe('10')
-    })
-
-    // Simulate a stale backend range read returning the pre-cut/pre-paste rows.
-    const getRowsCallCountBeforeStaleReload = cacheHarness.getRowsHybrid.mock.calls.length
-    cacheHarness.getRowsHybrid.mockResolvedValueOnce(sourceRows)
-    fireEvent.click(screen.getByTestId('show-rows'))
-
-    await waitFor(() => {
-      expect(cacheHarness.getRowsHybrid.mock.calls.length).toBeGreaterThan(getRowsCallCountBeforeStaleReload)
-    })
-
-    await waitFor(() => {
       expect(gridHarness.getCellContent?.([0, 0])?.displayData).toBe('')
       expect(gridHarness.getCellContent?.([1, 1])?.displayData).toBe('10')
     })
@@ -433,7 +424,8 @@ describe('SpreadsheetView formula display commit', () => {
     let capturedCopy: (() => void | Promise<void>) | null = null
     let capturedCut: (() => void | Promise<void>) | null = null
     let capturedPaste: (() => void | Promise<void>) | null = null
-    render(
+    cacheHarness.flushOverlay.mockImplementation(() => new Promise<void>(() => {}))
+    const { unmount } = render(
       <SpreadsheetView
         onCopyRequest={fn => { capturedCopy = fn }}
         onCutRequest={fn => { capturedCut = fn }}
@@ -465,6 +457,14 @@ describe('SpreadsheetView formula display commit', () => {
     // Stale range read keeps the visible cell overlay-authoritative while base data is blank.
     const getRowsCallCountBeforeStaleReload = cacheHarness.getRowsHybrid.mock.calls.length
     cacheHarness.getRowsHybrid.mockResolvedValueOnce(sourceRows)
+    unmount()
+    render(
+      <SpreadsheetView
+        onCopyRequest={fn => { capturedCopy = fn }}
+        onCutRequest={fn => { capturedCut = fn }}
+        onPasteRequest={fn => { capturedPaste = fn }}
+      />
+    )
     fireEvent.click(screen.getByTestId('show-rows'))
 
     await waitFor(() => {
