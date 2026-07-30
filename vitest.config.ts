@@ -1,8 +1,9 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { existsSync } from 'node:fs'
-import { availableParallelism } from 'node:os'
 import path from 'path'
+
+import { resolveVitestMaxWorkers } from './vitest.workerPolicy'
 
 const privateE2eUtilsPath = path.resolve(__dirname, 'e2e/utils')
 const hasPrivateE2eDependencyClosure = (...helperFiles: string[]) =>
@@ -42,7 +43,9 @@ const privateE2eContractTests = [
     : ['src/utils/__tests__/validationPathAliases.test.ts']),
 ]
 
-const maxWorkers = Math.max(1, Math.min(4, availableParallelism() - 1))
+const maxWorkers = resolveVitestMaxWorkers({
+  ci: process.env.CI === 'true',
+})
 
 export default defineConfig({
   plugins: [react()],
@@ -52,8 +55,9 @@ export default defineConfig({
     setupFiles: ['./src/test-utils/setup.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     // AppShell contract suites reset modules and import the full shell. Bounding
-    // concurrent transforms prevents hook starvation while retaining parallelism;
-    // reserve one CPU when possible and never exceed the verified four-worker cap.
+    // concurrent transforms prevents hook starvation while retaining parallelism.
+    // Hosted CI has less predictable shared resources, so keep it at the verified
+    // two-worker ceiling; local runs reserve one CPU and may use up to four.
     maxWorkers,
     exclude: [
       'node_modules',
