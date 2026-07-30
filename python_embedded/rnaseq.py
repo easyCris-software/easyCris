@@ -13,6 +13,10 @@ import socket
 import sys
 from typing import Any, Dict, List, Optional, Tuple
 
+from platform_trust import configure_platform_trust
+
+configure_platform_trust()
+
 def _is_offline_mode_enabled() -> bool:
     raw = str(os.environ.get("EASYCRIS_OFFLINE", "0")).strip().lower()
     return raw in {"1", "true", "yes", "on"}
