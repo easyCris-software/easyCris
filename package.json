@@ -10,6 +10,7 @@
         "build": "tsc && vite build",
         "build:e2e": "node scripts/build-e2e.mjs",
         "compile-python": ".venv-nuitka-build\\Scripts\\python.exe scripts/compile_python_nuitka.py",
+        "test:runtime-platform": "node --test scripts/python-runtime-constants.test.mjs",
         "rnaseq:cache:refresh": "python_embedded\\python.exe scripts/generate_rnaseq_gene_caches.py",
         "updater:json": "node scripts/generate-updater-json.mjs",
         "updater:json:dry": "node scripts/generate-updater-json.mjs --dry-run",
