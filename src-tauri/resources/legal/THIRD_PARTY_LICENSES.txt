@@ -1151,7 +1151,7 @@ Licenses
 651. zvariant_derive (MIT) versions: 5.8.0
 652. zvariant_utils (MIT) versions: 3.2.1
 
-### Python (pip) (140)
+### Python (pip) (141)
 
 1. anndata 0.12.7 (BSD-3-Clause)
 2. anyio 4.12.1 (MIT)
@@ -1170,129 +1170,130 @@ Licenses
 15. biothings_client 0.4.1 (BSD-3-Clause)
 16. bleach 6.3.0 (Apache-2.0)
 17. cattrs 25.3.0 (MIT)
-18. cffi 2.0.0 (MIT)
-19. charset-normalizer 3.4.4 (MIT)
-20. colorama 0.4.6 (BSD-3-Clause)
-21. contourpy 1.3.3 (BSD-3-Clause)
-22. cycler 0.12.1 (BSD-3-Clause)
-23. debugpy 1.8.17 (MIT)
-24. decorator 5.2.1 (BSD-3-Clause)
-25. defusedxml 0.7.1 (PSF-2.0)
-26. dill 0.4.0 (BSD-3-Clause)
-27. donfig 0.8.1.post1 (MIT)
-28. drm_basic 0.1 (MIT)
-29. duckdb 1.1.3 (MIT)
-30. executing 2.2.1 (MIT)
-31. fastjsonschema 2.21.2 (BSD-3-Clause)
-32. fonttools 4.61.1 (MIT)
-33. formulaic 1.2.1 (MIT)
-34. formulaic-contrasts 1.0.0 (BSD-3-Clause)
-35. future 1.0.0 (MIT)
-36. google-crc32c 1.8.0 (UNKNOWN)
-37. gseapy 1.1.11 (MIT)
-38. h11 0.16.0 (MIT)
-39. h5py 3.15.1 (BSD-3-Clause)
-40. httpcore 1.0.9 (BSD-3-Clause)
-41. httpx 0.28.1 (BSD-3-Clause)
-42. idna 3.11 (BSD-3-Clause)
-43. iniconfig 2.3.0 (MIT)
-44. interface-meta 1.3.0 (MIT)
-45. isoduration 20.11.0 (ISC)
-46. jedi 0.19.2 (MIT)
-47. Jinja2 3.1.6 (BSD-3-Clause)
-48. joblib 1.5.3 (BSD-3-Clause)
-49. json5 0.12.1 (Apache-2.0)
-50. jsonpointer 3.0.0 (BSD-3-Clause)
-51. jsonschema 4.25.1 (MIT)
-52. jsonschema-specifications 2025.9.1 (MIT)
-53. kaleido 0.1.0.post1 (MIT)
-54. kiwisolver 1.4.9 (BSD-3-Clause)
-55. lark 1.3.1 (MIT)
-56. lifelines 0.30.0 (MIT)
-57. lmfit 1.3.4 (BSD-3-Clause)
-58. logistro 2.0.1 (MIT)
-59. lxml 6.0.2 (BSD-3-Clause)
-60. MarkupSafe 3.0.3 (BSD-3-Clause)
-61. matplotlib 3.10.7 (PSF-2.0)
-62. matplotlib-inline 0.2.1 (UNKNOWN)
-63. mistune 3.1.4 (BSD-3-Clause)
-64. mygene 3.2.2 (BSD-3-Clause)
-65. narwhals 2.12.0 (MIT)
-66. natsort 8.4.0 (MIT)
-67. nest-asyncio 1.6.0 (BSD-3-Clause)
-68. Nuitka 2.8.9 (Apache-2.0)
-69. numcodecs 0.16.5 (MIT)
-70. numpy 1.26.4 (BSD-3-Clause)
-71. ordered-set 4.1.0 (MIT)
-72. orjson 3.11.4 (MIT)
-73. packaging 26.0 (Apache-2.0)
-74. pandas 2.3.3 (BSD-3-Clause)
-75. pandocfilters 1.5.1 (BSD-3-Clause)
-76. parso 0.8.5 (MIT)
-77. patsy 1.0.2 (BSD-3-Clause)
-78. pillow 12.1.0 (MIT-CMU)
-79. platformdirs 4.5.0 (MIT)
-80. plotly 5.24.1 (MIT)
-81. pluggy 1.6.0 (MIT)
-82. polars 1.20.0 (MIT)
-83. prometheus_client 0.23.1 (Apache-2.0 AND BSD-2-Clause)
-84. prompt_toolkit 3.0.52 (BSD-3-Clause)
-85. psutil 7.1.3 (BSD-3-Clause)
-86. pure_eval 0.2.3 (MIT)
-87. pyarrow 22.0.0 (Apache-2.0)
-88. pycparser 2.23 (BSD-3-Clause)
-89. pydeseq2 0.5.3 (MIT)
-90. Pygments 2.19.2 (BSD-3-Clause)
-91. pyparsing 3.3.2 (MIT)
-92. PyProcessMacro 1.0.12 (MIT)
-93. pytest 9.0.1 (MIT)
-94. pytest-timeout 2.4.0 (DFSG approved)
-95. python-dateutil 2.9.0.post0 (Apache-2.0)
-96. python-json-logger 4.0.0 (BSD-3-Clause)
-97. python-pptx 0.6.23 (MIT)
-98. pytz 2025.2 (MIT)
-99. pywin32 311 (PSF-2.0)
-100. pywinpty 3.0.2 (MIT)
-101. PyYAML 6.0.3 (MIT)
-102. referencing 0.37.0 (MIT)
-103. requests 2.32.5 (Apache-2.0)
-104. requests-cache 1.2.1 (BSD-3-Clause)
-105. rfc3339-validator 0.1.4 (MIT)
-106. rfc3986-validator 0.1.1 (MIT)
-107. rfc3987-syntax 1.1.0 (MIT)
-108. rpds-py 0.28.0 (MIT)
-109. scikit-learn 1.7.2 (BSD-3-Clause)
-110. scikit-posthocs 0.11.4 (MIT)
-111. scipy 1.14.1 (BSD-3-Clause)
-112. seaborn 0.13.2 (BSD-3-Clause)
-113. Send2Trash 1.8.3 (BSD-3-Clause)
-114. session_info 1.0.1 (BSD-3-Clause)
-115. simplejson 3.20.2 (Academic Free License (AFL))
-116. six 1.17.0 (MIT)
-117. sniffio 1.3.1 (Apache-2.0)
-118. soupsieve 2.8 (MIT)
-119. stack-data 0.6.3 (MIT)
-120. statsmodels 0.14.4 (BSD-3-Clause)
-121. stdlib-list 0.12.0 (MIT)
-122. tenacity 9.1.2 (Apache-2.0)
-123. terminado 0.18.1 (BSD-3-Clause)
-124. threadpoolctl 3.6.0 (BSD-3-Clause)
-125. tinycss2 1.4.0 (BSD-3-Clause)
-126. tornado 6.5.2 (Apache-2.0)
-127. traitlets 5.14.3 (BSD-3-Clause)
-128. typing_extensions 4.15.0 (PSF-2.0)
-129. tzdata 2025.3 (Apache-2.0)
-130. uncertainties 3.2.3 (BSD-3-Clause)
-131. uri-template 1.3.0 (MIT)
-132. url-normalize 2.2.1 (MIT)
-133. urllib3 2.6.3 (MIT)
-134. webcolors 25.10.0 (BSD-3-Clause)
-135. webencodings 0.5.1 (BSD-3-Clause)
-136. websocket-client 1.9.0 (Apache-2.0)
-137. wrapt 2.0.1 (Copyright (c) 2013-2025, Graham Dumpleton)
-138. xlsxwriter 3.2.9 (BSD-3-Clause)
-139. zarr 3.1.5 (MIT)
-140. zstandard 0.25.0 (BSD-3-Clause)
+18. certifi 2026.7.22 (MPL-2.0)
+19. cffi 2.0.0 (MIT)
+20. charset-normalizer 3.4.4 (MIT)
+21. colorama 0.4.6 (BSD-3-Clause)
+22. contourpy 1.3.3 (BSD-3-Clause)
+23. cycler 0.12.1 (BSD-3-Clause)
+24. debugpy 1.8.17 (MIT)
+25. decorator 5.2.1 (BSD-3-Clause)
+26. defusedxml 0.7.1 (PSF-2.0)
+27. dill 0.4.0 (BSD-3-Clause)
+28. donfig 0.8.1.post1 (MIT)
+29. drm_basic 0.1 (MIT)
+30. duckdb 1.1.3 (MIT)
+31. executing 2.2.1 (MIT)
+32. fastjsonschema 2.21.2 (BSD-3-Clause)
+33. fonttools 4.61.1 (MIT)
+34. formulaic 1.2.1 (MIT)
+35. formulaic-contrasts 1.0.0 (BSD-3-Clause)
+36. future 1.0.0 (MIT)
+37. google-crc32c 1.8.0 (UNKNOWN)
+38. gseapy 1.1.11 (MIT)
+39. h11 0.16.0 (MIT)
+40. h5py 3.15.1 (BSD-3-Clause)
+41. httpcore 1.0.9 (BSD-3-Clause)
+42. httpx 0.28.1 (BSD-3-Clause)
+43. idna 3.11 (BSD-3-Clause)
+44. iniconfig 2.3.0 (MIT)
+45. interface-meta 1.3.0 (MIT)
+46. isoduration 20.11.0 (ISC)
+47. jedi 0.19.2 (MIT)
+48. Jinja2 3.1.6 (BSD-3-Clause)
+49. joblib 1.5.3 (BSD-3-Clause)
+50. json5 0.12.1 (Apache-2.0)
+51. jsonpointer 3.0.0 (BSD-3-Clause)
+52. jsonschema 4.25.1 (MIT)
+53. jsonschema-specifications 2025.9.1 (MIT)
+54. kaleido 0.1.0.post1 (MIT)
+55. kiwisolver 1.4.9 (BSD-3-Clause)
+56. lark 1.3.1 (MIT)
+57. lifelines 0.30.0 (MIT)
+58. lmfit 1.3.4 (BSD-3-Clause)
+59. logistro 2.0.1 (MIT)
+60. lxml 6.0.2 (BSD-3-Clause)
+61. MarkupSafe 3.0.3 (BSD-3-Clause)
+62. matplotlib 3.10.7 (PSF-2.0)
+63. matplotlib-inline 0.2.1 (UNKNOWN)
+64. mistune 3.1.4 (BSD-3-Clause)
+65. mygene 3.2.2 (BSD-3-Clause)
+66. narwhals 2.12.0 (MIT)
+67. natsort 8.4.0 (MIT)
+68. nest-asyncio 1.6.0 (BSD-3-Clause)
+69. Nuitka 2.8.9 (Apache-2.0)
+70. numcodecs 0.16.5 (MIT)
+71. numpy 1.26.4 (BSD-3-Clause)
+72. ordered-set 4.1.0 (MIT)
+73. orjson 3.11.4 (MIT)
+74. packaging 26.0 (Apache-2.0)
+75. pandas 2.3.3 (BSD-3-Clause)
+76. pandocfilters 1.5.1 (BSD-3-Clause)
+77. parso 0.8.5 (MIT)
+78. patsy 1.0.2 (BSD-3-Clause)
+79. pillow 12.1.0 (MIT-CMU)
+80. platformdirs 4.5.0 (MIT)
+81. plotly 5.24.1 (MIT)
+82. pluggy 1.6.0 (MIT)
+83. polars 1.20.0 (MIT)
+84. prometheus_client 0.23.1 (Apache-2.0 AND BSD-2-Clause)
+85. prompt_toolkit 3.0.52 (BSD-3-Clause)
+86. psutil 7.1.3 (BSD-3-Clause)
+87. pure_eval 0.2.3 (MIT)
+88. pyarrow 22.0.0 (Apache-2.0)
+89. pycparser 2.23 (BSD-3-Clause)
+90. pydeseq2 0.5.3 (MIT)
+91. Pygments 2.19.2 (BSD-3-Clause)
+92. pyparsing 3.3.2 (MIT)
+93. PyProcessMacro 1.0.12 (MIT)
+94. pytest 9.0.1 (MIT)
+95. pytest-timeout 2.4.0 (DFSG approved)
+96. python-dateutil 2.9.0.post0 (Apache-2.0)
+97. python-json-logger 4.0.0 (BSD-3-Clause)
+98. python-pptx 0.6.23 (MIT)
+99. pytz 2025.2 (MIT)
+100. pywin32 311 (PSF-2.0)
+101. pywinpty 3.0.2 (MIT)
+102. PyYAML 6.0.3 (MIT)
+103. referencing 0.37.0 (MIT)
+104. requests 2.32.5 (Apache-2.0)
+105. requests-cache 1.2.1 (BSD-3-Clause)
+106. rfc3339-validator 0.1.4 (MIT)
+107. rfc3986-validator 0.1.1 (MIT)
+108. rfc3987-syntax 1.1.0 (MIT)
+109. rpds-py 0.28.0 (MIT)
+110. scikit-learn 1.7.2 (BSD-3-Clause)
+111. scikit-posthocs 0.11.4 (MIT)
+112. scipy 1.14.1 (BSD-3-Clause)
+113. seaborn 0.13.2 (BSD-3-Clause)
+114. Send2Trash 1.8.3 (BSD-3-Clause)
+115. session_info 1.0.1 (BSD-3-Clause)
+116. simplejson 3.20.2 (Academic Free License (AFL))
+117. six 1.17.0 (MIT)
+118. sniffio 1.3.1 (Apache-2.0)
+119. soupsieve 2.8 (MIT)
+120. stack-data 0.6.3 (MIT)
+121. statsmodels 0.14.4 (BSD-3-Clause)
+122. stdlib-list 0.12.0 (MIT)
+123. tenacity 9.1.2 (Apache-2.0)
+124. terminado 0.18.1 (BSD-3-Clause)
+125. threadpoolctl 3.6.0 (BSD-3-Clause)
+126. tinycss2 1.4.0 (BSD-3-Clause)
+127. tornado 6.5.2 (Apache-2.0)
+128. traitlets 5.14.3 (BSD-3-Clause)
+129. typing_extensions 4.15.0 (PSF-2.0)
+130. tzdata 2025.3 (Apache-2.0)
+131. uncertainties 3.2.3 (BSD-3-Clause)
+132. uri-template 1.3.0 (MIT)
+133. url-normalize 2.2.1 (MIT)
+134. urllib3 2.6.3 (MIT)
+135. webcolors 25.10.0 (BSD-3-Clause)
+136. webencodings 0.5.1 (BSD-3-Clause)
+137. websocket-client 1.9.0 (Apache-2.0)
+138. wrapt 2.0.1 (Copyright (c) 2013-2025, Graham Dumpleton)
+139. xlsxwriter 3.2.9 (BSD-3-Clause)
+140. zarr 3.1.5 (MIT)
+141. zstandard 0.25.0 (BSD-3-Clause)
 
 ### Other Third-Party Components (8)
 
@@ -2465,9 +2466,35 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+certifi
+2026.7.22
+Summary ref: Python (pip) #18
+MPL-2.0
+This package contains a modified version of ca-bundle.crt:
+
+ca-bundle.crt -- Bundle of CA Root Certificates
+
+This is a bundle of X.509 certificates of public Certificate Authorities
+(CA). These were automatically extracted from Mozilla's root certificates
+file (certdata.txt).  This file can be found in the mozilla source tree:
+https://hg.mozilla.org/mozilla-central/file/tip/security/nss/lib/ckfw/builtins/certdata.txt
+It contains the certificates in PEM format and therefore
+can be directly used with curl / libcurl / php_curl, or with
+an Apache+mod_ssl webserver for SSL client authentication.
+Just configure this file as the SSLCACertificateFile.#
+
+***** BEGIN LICENSE BLOCK *****
+This Source Code Form is subject to the terms of the Mozilla Public License,
+v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain
+one at http://mozilla.org/MPL/2.0/.
+
+***** END LICENSE BLOCK *****
+@(#) $RCSfile: certdata.txt,v $ $Revision: 1.80 $ $Date: 2011/11/03 15:11:58 $
+
+
 cffi
 2.0.0
-Summary ref: Python (pip) #18
+Summary ref: Python (pip) #19
 MIT
 
 Except when otherwise stated (look for LICENSE files in directories or
@@ -2495,7 +2522,7 @@ documentation is licensed as follows:
 
 charset-normalizer
 3.4.4
-Summary ref: Python (pip) #19
+Summary ref: Python (pip) #20
 MIT
 MIT License
 
@@ -2522,7 +2549,7 @@ SOFTWARE.
 
 colorama
 0.4.6
-Summary ref: Python (pip) #20
+Summary ref: Python (pip) #21
 BSD License
 Copyright (c) 2010 Jonathan Hartley
 All rights reserved.
@@ -2555,7 +2582,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 contourpy
 1.3.3
-Summary ref: Python (pip) #21
+Summary ref: Python (pip) #22
 BSD License
 BSD 3-Clause License
 
@@ -2590,7 +2617,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 cycler
 0.12.1
-Summary ref: Python (pip) #22
+Summary ref: Python (pip) #23
 BSD License
 Copyright (c) 2015, matplotlib project
 All rights reserved.
@@ -2623,7 +2650,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 debugpy
 1.8.17
-Summary ref: Python (pip) #23
+Summary ref: Python (pip) #24
 MIT License
     debugpy
 
@@ -2652,7 +2679,7 @@ MIT License
 
 decorator
 5.2.1
-Summary ref: Python (pip) #24
+Summary ref: Python (pip) #25
 BSD License
 Copyright (c) 2005-2025, Michele Simionato
 All rights reserved.
@@ -2685,7 +2712,7 @@ DAMAGE.
 
 defusedxml
 0.7.1
-Summary ref: Python (pip) #25
+Summary ref: Python (pip) #26
 Python Software Foundation License
 PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
 --------------------------------------------
@@ -2739,7 +2766,7 @@ Agreement.
 
 dill
 0.4.0
-Summary ref: Python (pip) #26
+Summary ref: Python (pip) #27
 BSD License
 Copyright (c) 2004-2016 California Institute of Technology.
 Copyright (c) 2016-2025 The Uncertainty Quantification Foundation.
@@ -2779,7 +2806,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 donfig
 0.8.1.post1
-Summary ref: Python (pip) #27
+Summary ref: Python (pip) #28
 MIT License
 Copyright (c) 2018- Donfig Developers
 Copyright (c) 2014-2018, Anaconda, Inc. and contributors
@@ -2805,7 +2832,7 @@ SOFTWARE.
 
 drm_basic
 0.1
-Summary ref: Python (pip) #28
+Summary ref: Python (pip) #29
 MIT License
 MIT License
 
@@ -2832,7 +2859,7 @@ SOFTWARE.
 
 duckdb
 1.1.3
-Summary ref: Python (pip) #29
+Summary ref: Python (pip) #30
 MIT License
                                  Apache License
                            Version 2.0, January 2004
@@ -3098,7 +3125,7 @@ data/mllib/images/multi-channel/chr30.4.184.jpg
 
 executing
 2.2.1
-Summary ref: Python (pip) #30
+Summary ref: Python (pip) #31
 MIT License
 MIT License
 
@@ -3125,7 +3152,7 @@ SOFTWARE.
 
 fastjsonschema
 2.21.2
-Summary ref: Python (pip) #31
+Summary ref: Python (pip) #32
 BSD License
 Copyright (c) 2018, Michal Horejsek
 All rights reserved.
@@ -3158,7 +3185,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 fonttools
 4.61.1
-Summary ref: Python (pip) #32
+Summary ref: Python (pip) #33
 MIT
 MIT License
 
@@ -3185,7 +3212,7 @@ SOFTWARE.
 
 formulaic
 1.2.1
-Summary ref: Python (pip) #33
+Summary ref: Python (pip) #34
 MIT License
 Copyright 2019 Matthew Wardrop and contributors
 
@@ -3209,7 +3236,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 formulaic-contrasts
 1.0.0
-Summary ref: Python (pip) #34
+Summary ref: Python (pip) #35
 BSD 3-Clause License
 
 Copyright (c) 2024, Gregor Sturm
@@ -3272,7 +3299,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 future
 1.0.0
-Summary ref: Python (pip) #35
+Summary ref: Python (pip) #36
 MIT License
 Copyright (c) 2013-2024 Python Charmers, Australia
 
@@ -3297,7 +3324,7 @@ THE SOFTWARE.
 
 google-crc32c
 1.8.0
-Summary ref: Python (pip) #36
+Summary ref: Python (pip) #37
 Apache-2.0
 
                                  Apache License
@@ -3505,7 +3532,7 @@ Apache-2.0
 
 gseapy
 1.1.11
-Summary ref: Python (pip) #37
+Summary ref: Python (pip) #38
 MIT License
 BSD 3-Clause License
 
@@ -3540,7 +3567,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 h11
 0.16.0
-Summary ref: Python (pip) #38
+Summary ref: Python (pip) #39
 MIT License
 The MIT License (MIT)
 
@@ -3568,7 +3595,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 h5py
 3.15.1
-Summary ref: Python (pip) #39
+Summary ref: Python (pip) #40
 BSD-3-Clause
 Copyright (c) 2008 Andrew Collette and contributors
 All rights reserved.
@@ -3604,7 +3631,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 httpcore
 1.0.9
-Summary ref: Python (pip) #40
+Summary ref: Python (pip) #41
 BSD License
 Copyright Â© 2020, [Encode OSS Ltd](https://www.encode.io/).
 All rights reserved.
@@ -3637,7 +3664,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 httpx
 0.28.1
-Summary ref: Python (pip) #41
+Summary ref: Python (pip) #42
 BSD License
 Copyright Â© 2019, [Encode OSS Ltd](https://www.encode.io/).
 All rights reserved.
@@ -3655,7 +3682,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 idna
 3.11
-Summary ref: Python (pip) #42
+Summary ref: Python (pip) #43
 BSD-3-Clause
 BSD 3-Clause License
 
@@ -3692,7 +3719,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 iniconfig
 2.3.0
-Summary ref: Python (pip) #43
+Summary ref: Python (pip) #44
 MIT
 The MIT License (MIT)
 
@@ -3719,7 +3746,7 @@ SOFTWARE.
 
 interface-meta
 1.3.0
-Summary ref: Python (pip) #44
+Summary ref: Python (pip) #45
 MIT License
 MIT License
 
@@ -3746,7 +3773,7 @@ SOFTWARE.
 
 isoduration
 20.11.0
-Summary ref: Python (pip) #45
+Summary ref: Python (pip) #46
 ISC License (ISCL)
 Copyright (c) 2020 VÃ­ctor MuÃ±oz <victorm@marshland.es>
 
@@ -3765,7 +3792,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 jedi
 0.19.2
-Summary ref: Python (pip) #46
+Summary ref: Python (pip) #47
 MIT License
 All contributions towards Jedi are MIT licensed.
 
@@ -3795,7 +3822,7 @@ THE SOFTWARE.
 
 Jinja2
 3.1.6
-Summary ref: Python (pip) #47
+Summary ref: Python (pip) #48
 BSD License
 Copyright 2007 Pallets
 
@@ -3829,7 +3856,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 joblib
 1.5.2
-Summary ref: Python (pip) #48
+Summary ref: Python (pip) #49
 BSD License
 BSD 3-Clause License
 
@@ -3864,7 +3891,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 json5
 0.12.1
-Summary ref: Python (pip) #49
+Summary ref: Python (pip) #50
 Apache Software License
 Files: Everything except for the benchmarks/*.json files.
 
@@ -4151,7 +4178,7 @@ SOFTWARE.
 
 jsonpointer
 3.0.0
-Summary ref: Python (pip) #50
+Summary ref: Python (pip) #51
 BSD License
 Copyright (c) 2011 Stefan KÃ¶gl <stefan@skoegl.net>
 All rights reserved.
@@ -4182,7 +4209,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 jsonschema
 4.25.1
-Summary ref: Python (pip) #51
+Summary ref: Python (pip) #52
 MIT
 Copyright (c) 2013 Julian Berman
 
@@ -4207,7 +4234,7 @@ THE SOFTWARE.
 
 jsonschema-specifications
 2025.9.1
-Summary ref: Python (pip) #52
+Summary ref: Python (pip) #53
 MIT
 Copyright (c) 2022 Julian Berman
 
@@ -4232,7 +4259,7 @@ THE SOFTWARE.
 
 kaleido
 0.1.0.post1
-Summary ref: Python (pip) #53
+Summary ref: Python (pip) #54
 MIT
 All code developed in this repository is released under the MIT license (1).
 
@@ -4299,7 +4326,7 @@ THE SOFTWARE.
 
 kiwisolver
 1.4.9
-Summary ref: Python (pip) #54
+Summary ref: Python (pip) #55
 BSD License
 =========================
  The Kiwi licensing terms
@@ -4376,7 +4403,7 @@ to indicate the copyright and license terms:
 
 lark
 1.3.1
-Summary ref: Python (pip) #55
+Summary ref: Python (pip) #56
 MIT License
 Copyright Â© 2017 Erez Shinan
 
@@ -4400,7 +4427,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 lifelines
 0.30.0
-Summary ref: Python (pip) #56
+Summary ref: Python (pip) #57
 MIT License
 MIT License
 
@@ -4427,7 +4454,7 @@ SOFTWARE.
 
 lmfit
 1.3.4
-Summary ref: Python (pip) #57
+Summary ref: Python (pip) #58
 BSD-3-Clause
 BSD-3-Clause
 
@@ -4505,7 +4532,7 @@ released under a MIT license.
 
 logistro
 2.0.1
-Summary ref: Python (pip) #58
+Summary ref: Python (pip) #59
 MIT License
 
 Copyright (c) 2025 GeoPozo
@@ -4553,7 +4580,7 @@ SOFTWARE.
 
 lxml
 6.0.2
-Summary ref: Python (pip) #59
+Summary ref: Python (pip) #60
 BSD-3-Clause
 BSD 3-Clause License
 
@@ -4590,7 +4617,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 MarkupSafe
 3.0.3
-Summary ref: Python (pip) #60
+Summary ref: Python (pip) #61
 BSD-3-Clause
 Copyright 2010 Pallets
 
@@ -4624,7 +4651,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 matplotlib
 3.10.7
-Summary ref: Python (pip) #61
+Summary ref: Python (pip) #62
 Python Software Foundation License
 License agreement for matplotlib versions 1.3.0 and later
 =========================================================
@@ -4729,7 +4756,7 @@ Agreement.
 
 matplotlib-inline
 0.2.1
-Summary ref: Python (pip) #62
+Summary ref: Python (pip) #63
 BSD-3-Clause
 BSD 3-Clause License
 
@@ -4764,7 +4791,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 mistune
 3.1.4
-Summary ref: Python (pip) #63
+Summary ref: Python (pip) #64
 BSD License
 Copyright (c) 2014, Hsiaoming Yang
 
@@ -4784,7 +4811,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 mygene
 3.2.2
-Summary ref: Python (pip) #64
+Summary ref: Python (pip) #65
 BSD License
 Copyright (c) 2012-2019, Chunlei Wu <cwu@scripps.edu>
 All rights reserved.
@@ -4813,7 +4840,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 narwhals
 2.12.0
-Summary ref: Python (pip) #65
+Summary ref: Python (pip) #66
 MIT License
 MIT License
 
@@ -4840,7 +4867,7 @@ SOFTWARE.
 
 natsort
 8.4.0
-Summary ref: Python (pip) #66
+Summary ref: Python (pip) #67
 MIT License
 Copyright (c) 2012-2023 Seth M. Morton
 
@@ -4865,7 +4892,7 @@ SOFTWARE.
 
 nest-asyncio
 1.6.0
-Summary ref: Python (pip) #67
+Summary ref: Python (pip) #68
 BSD License
 BSD 2-Clause License
 
@@ -4896,7 +4923,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Nuitka
 2.8.10
-Summary ref: Python (pip) #68
+Summary ref: Python (pip) #69
 Apache Software License
 
                                  Apache License
@@ -5104,7 +5131,7 @@ Apache Software License
 
 numcodecs
 0.16.5
-Summary ref: Python (pip) #69
+Summary ref: Python (pip) #70
 MIT
 The MIT License (MIT)
 
@@ -5131,7 +5158,7 @@ SOFTWARE.
 
 numpy
 1.26.4
-Summary ref: Python (pip) #70
+Summary ref: Python (pip) #71
 BSD License
 Copyright (c) 2005-2023, NumPy Developers.
 All rights reserved.
@@ -6108,13 +6135,13 @@ License: LGPL-2.1-or-later
 
 ordered-set
 4.1.0
-Summary ref: Python (pip) #71
+Summary ref: Python (pip) #72
 MIT License
 
 
 orjson
 3.11.4
-Summary ref: Python (pip) #72
+Summary ref: Python (pip) #73
 Apache Software License; MIT License
                               Apache License
                         Version 2.0, January 2004
@@ -6321,7 +6348,7 @@ limitations under the License.
 
 packaging
 26.0
-Summary ref: Python (pip) #73
+Summary ref: Python (pip) #74
 Apache-2.0 OR BSD-2-Clause
 This software is made available under the terms of *either* of the licenses
 found in LICENSE.APACHE or LICENSE.BSD. Contributions to this software is made
@@ -6330,7 +6357,7 @@ under the terms of *both* these licenses.
 
 pandas
 2.3.3
-Summary ref: Python (pip) #74
+Summary ref: Python (pip) #75
 BSD License
 BSD 3-Clause License
 
@@ -6367,7 +6394,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 pandocfilters
 1.5.1
-Summary ref: Python (pip) #75
+Summary ref: Python (pip) #76
 BSD License
 Copyright (c) 2013, John MacFarlane
 All rights reserved.
@@ -6400,7 +6427,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 parso
 0.8.5
-Summary ref: Python (pip) #76
+Summary ref: Python (pip) #77
 MIT License
 All contributions towards parso are MIT licensed.
 
@@ -6492,7 +6519,7 @@ Agreement.
 
 patsy
 1.0.2
-Summary ref: Python (pip) #77
+Summary ref: Python (pip) #78
 BSD License
 The bulk of Patsy is distributed under a simple 2-clause BSD license:
 
@@ -6579,7 +6606,7 @@ changes. For this, see comments in patsy/compat.py.
 
 pillow
 12.1.0
-Summary ref: Python (pip) #78
+Summary ref: Python (pip) #79
 MIT-CMU
 The Python Imaging Library (PIL) is
 
@@ -8206,7 +8233,7 @@ freely, subject to the following restrictions:
 
 platformdirs
 4.5.0
-Summary ref: Python (pip) #79
+Summary ref: Python (pip) #80
 MIT License
 MIT License
 
@@ -8233,7 +8260,7 @@ SOFTWARE.
 
 plotly
 5.24.1
-Summary ref: Python (pip) #80
+Summary ref: Python (pip) #81
 MIT License
 The MIT License (MIT)
 
@@ -8260,7 +8287,7 @@ THE SOFTWARE.
 
 pluggy
 1.6.0
-Summary ref: Python (pip) #81
+Summary ref: Python (pip) #82
 MIT License
 The MIT License (MIT)
 
@@ -8287,7 +8314,7 @@ SOFTWARE.
 
 polars
 1.20.0
-Summary ref: Python (pip) #82
+Summary ref: Python (pip) #83
 MIT License
 Copyright (c) 2020 Ritchie Vink
 Some portions Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
@@ -8313,7 +8340,7 @@ SOFTWARE.
 
 prometheus_client
 0.23.1
-Summary ref: Python (pip) #83
+Summary ref: Python (pip) #84
 Apache-2.0 AND BSD-2-Clause
                                  Apache License
                            Version 2.0, January 2004
@@ -8520,7 +8547,7 @@ Apache-2.0 AND BSD-2-Clause
 
 psutil
 7.1.3
-Summary ref: Python (pip) #85
+Summary ref: Python (pip) #86
 BSD-3-Clause
 BSD 3-Clause License
 
@@ -8555,7 +8582,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 pure_eval
 0.2.3
-Summary ref: Python (pip) #86
+Summary ref: Python (pip) #87
 MIT License
 MIT License
 
@@ -8582,7 +8609,7 @@ SOFTWARE.
 
 pyarrow
 22.0.0
-Summary ref: Python (pip) #87
+Summary ref: Python (pip) #88
 Apache Software License
 
                                  Apache License
@@ -10913,7 +10940,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 pycparser
 2.23
-Summary ref: Python (pip) #88
+Summary ref: Python (pip) #89
 BSD License
 pycparser -- A C parser in Python
 
@@ -10946,7 +10973,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 pydeseq2
 0.5.3
-Summary ref: Python (pip) #89
+Summary ref: Python (pip) #90
 MIT License
 
 Copyright (c) 2022 Owkin
@@ -10993,7 +11020,7 @@ SOFTWARE.
 
 Pygments
 2.19.2
-Summary ref: Python (pip) #90
+Summary ref: Python (pip) #91
 BSD License
 Copyright (c) 2006-2022 by the respective authors (see AUTHORS file).
 All rights reserved.
@@ -11024,7 +11051,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 pyparsing
 3.3.2
-Summary ref: Python (pip) #91
+Summary ref: Python (pip) #92
 MIT
 Copyright (c) 2003-2025  Paul McGuire
 
@@ -11050,7 +11077,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 PyProcessMacro
 1.0.12
-Summary ref: Python (pip) #92
+Summary ref: Python (pip) #93
 MIT
 MIT License
 
@@ -11077,7 +11104,7 @@ SOFTWARE.
 
 pytest
 9.0.1
-Summary ref: Python (pip) #93
+Summary ref: Python (pip) #94
 MIT
 The MIT License (MIT)
 
@@ -11104,7 +11131,7 @@ SOFTWARE.
 
 pytest-timeout
 2.4.0
-Summary ref: Python (pip) #94
+Summary ref: Python (pip) #95
 DFSG approved; MIT License
 The MIT License
 
@@ -11132,7 +11159,7 @@ THE SOFTWARE.
 
 python-dateutil
 2.9.0.post0
-Summary ref: Python (pip) #95
+Summary ref: Python (pip) #96
 Apache Software License; BSD License
 Copyright 2017- Paul Ganssle <paul@ganssle.io>
 Copyright 2017- dateutil contributors (see AUTHORS file)
@@ -11192,7 +11219,7 @@ The above BSD License Applies to all code, even that also covered by Apache 2.0.
 
 python-json-logger
 4.0.0
-Summary ref: Python (pip) #96
+Summary ref: Python (pip) #97
 BSD License
 Copyright (c) 2011, Zakaria Zajac and the python-json-logger Contributors
 All rights reserved.
@@ -11207,7 +11234,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 python-pptx
 0.6.23
-Summary ref: Python (pip) #97
+Summary ref: Python (pip) #98
 MIT License
 The MIT License (MIT)
 Copyright (c) 2013 Steve Canny, https://github.com/scanny
@@ -11233,7 +11260,7 @@ THE SOFTWARE.
 
 pytz
 2025.2
-Summary ref: Python (pip) #98
+Summary ref: Python (pip) #99
 MIT License
 Copyright (c) 2003-2019 Stuart Bishop <stuart@stuartbishop.net>
 
@@ -11258,13 +11285,13 @@ DEALINGS IN THE SOFTWARE.
 
 pywin32
 311
-Summary ref: Python (pip) #99
+Summary ref: Python (pip) #100
 Python Software Foundation License
 
 
 pywinpty
 3.0.2
-Summary ref: Python (pip) #100
+Summary ref: Python (pip) #101
 MIT License
 MIT License
 
@@ -11291,7 +11318,7 @@ SOFTWARE.
 
 PyYAML
 6.0.3
-Summary ref: Python (pip) #101
+Summary ref: Python (pip) #102
 MIT License
 Copyright (c) 2017-2021 Ingy dÃ¶t Net
 Copyright (c) 2006-2016 Kirill Simonov
@@ -11317,7 +11344,7 @@ SOFTWARE.
 
 referencing
 0.37.0
-Summary ref: Python (pip) #102
+Summary ref: Python (pip) #103
 MIT
 Copyright (c) 2022 Julian Berman
 
@@ -11342,7 +11369,7 @@ THE SOFTWARE.
 
 requests
 2.32.5
-Summary ref: Python (pip) #103
+Summary ref: Python (pip) #104
 Apache Software License
 
                                  Apache License
@@ -11523,7 +11550,7 @@ Apache Software License
 
 requests-cache
 1.2.1
-Summary ref: Python (pip) #104
+Summary ref: Python (pip) #105
 BSD License
 BSD 2-Clause License
 
@@ -11555,7 +11582,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 rfc3339-validator
 0.1.4
-Summary ref: Python (pip) #105
+Summary ref: Python (pip) #106
 MIT License
 MIT License
 
@@ -11582,7 +11609,7 @@ SOFTWARE.
 
 rfc3986-validator
 0.1.1
-Summary ref: Python (pip) #106
+Summary ref: Python (pip) #107
 MIT License
 MIT License
 
@@ -11609,7 +11636,7 @@ SOFTWARE.
 
 rfc3987-syntax
 1.1.0
-Summary ref: Python (pip) #107
+Summary ref: Python (pip) #108
 Apache Software License
 MIT License
 
@@ -11636,7 +11663,7 @@ SOFTWARE.
 
 rpds-py
 0.28.0
-Summary ref: Python (pip) #108
+Summary ref: Python (pip) #109
 MIT
 Copyright (c) 2023 Julian Berman
 
@@ -11661,7 +11688,7 @@ THE SOFTWARE.
 
 scikit-learn
 1.7.2
-Summary ref: Python (pip) #109
+Summary ref: Python (pip) #110
 BSD-3-Clause
 BSD 3-Clause License
 
@@ -11721,7 +11748,7 @@ VC\atlmfc\lib\amd64\mfcmifc80.dll
 
 scikit-posthocs
 0.11.4
-Summary ref: Python (pip) #110
+Summary ref: Python (pip) #111
 MIT License
 Copyright (c) 2024 Maksim Terpilovskii
 
@@ -11746,7 +11773,7 @@ SOFTWARE.
 
 scipy
 1.14.1
-Summary ref: Python (pip) #111
+Summary ref: Python (pip) #112
 BSD License
 Copyright (c) 2001-2002 Enthought, Inc. 2003-2024, SciPy Developers.
 All rights reserved.
@@ -12686,7 +12713,7 @@ License: LGPL-2.1-or-later
 
 seaborn
 0.13.2
-Summary ref: Python (pip) #112
+Summary ref: Python (pip) #113
 BSD License
 Copyright (c) 2012-2023, Michael L. Waskom
 All rights reserved.
@@ -12719,7 +12746,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Send2Trash
 1.8.3
-Summary ref: Python (pip) #113
+Summary ref: Python (pip) #114
 BSD License
 Copyright (c) 2017, Virgil Dupras
 All rights reserved.
@@ -12735,7 +12762,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 session_info
 1.0.1
-Summary ref: Python (pip) #114
+Summary ref: Python (pip) #115
 BSD-3
 BSD 3-Clause License
 
@@ -12770,7 +12797,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 simplejson
 3.20.2
-Summary ref: Python (pip) #115
+Summary ref: Python (pip) #116
 Academic Free License (AFL); MIT License
 simplejson is dual-licensed software. It is available under the terms
 of the MIT license, or the Academic Free License version 2.1. The full
@@ -12855,7 +12882,7 @@ This license is Copyright (C) 2003-2004 Lawrence E. Rosen. All rights reserved. 
 
 six
 1.17.0
-Summary ref: Python (pip) #116
+Summary ref: Python (pip) #117
 MIT License
 Copyright (c) 2010-2024 Benjamin Peterson
 
@@ -12879,7 +12906,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 sniffio
 1.3.1
-Summary ref: Python (pip) #117
+Summary ref: Python (pip) #118
 Apache Software License; MIT License
 This software is made available under the terms of *either* of the
 licenses found in LICENSE.APACHE2 or LICENSE.MIT. Contributions to are
@@ -12888,7 +12915,7 @@ made under the terms of *both* these licenses.
 
 soupsieve
 2.8
-Summary ref: Python (pip) #118
+Summary ref: Python (pip) #119
 MIT License
 MIT License
 
@@ -12915,7 +12942,7 @@ SOFTWARE.
 
 stack-data
 0.6.3
-Summary ref: Python (pip) #119
+Summary ref: Python (pip) #120
 MIT License
 MIT License
 
@@ -12942,7 +12969,7 @@ SOFTWARE.
 
 statsmodels
 0.14.4
-Summary ref: Python (pip) #120
+Summary ref: Python (pip) #121
 BSD License
 Copyright (C) 2006, Jonathan E. Taylor
 All rights reserved.
@@ -12982,7 +13009,7 @@ DAMAGE.
 
 stdlib-list
 0.12.0
-Summary ref: Python (pip) #121
+Summary ref: Python (pip) #122
 MIT License
 The MIT License (MIT)
 
@@ -13009,7 +13036,7 @@ SOFTWARE.
 
 tenacity
 9.1.2
-Summary ref: Python (pip) #122
+Summary ref: Python (pip) #123
 Apache Software License
 
                                  Apache License
@@ -13217,7 +13244,7 @@ Apache Software License
 
 terminado
 0.18.1
-Summary ref: Python (pip) #123
+Summary ref: Python (pip) #124
 BSD License
 BSD 2-Clause License
 
@@ -13250,7 +13277,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 threadpoolctl
 3.6.0
-Summary ref: Python (pip) #124
+Summary ref: Python (pip) #125
 BSD License
 Copyright (c) 2019, threadpoolctl contributors
 
@@ -13280,7 +13307,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 tinycss2
 1.4.0
-Summary ref: Python (pip) #125
+Summary ref: Python (pip) #126
 BSD License
 BSD 3-Clause License
 
@@ -13315,7 +13342,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 tornado
 6.5.2
-Summary ref: Python (pip) #126
+Summary ref: Python (pip) #127
 Apache Software License
 
                                  Apache License
@@ -13523,7 +13550,7 @@ Apache Software License
 
 traitlets
 5.14.3
-Summary ref: Python (pip) #127
+Summary ref: Python (pip) #128
 BSD License
 BSD 3-Clause License
 
@@ -13559,7 +13586,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 typing_extensions
 4.15.0
-Summary ref: Python (pip) #128
+Summary ref: Python (pip) #129
 PSF-2.0
 A. HISTORY OF THE SOFTWARE
 ==========================
@@ -13844,7 +13871,7 @@ PERFORMANCE OF THIS SOFTWARE.
 
 tzdata
 2025.3
-Summary ref: Python (pip) #129
+Summary ref: Python (pip) #130
 Apache-2.0
 Apache Software License 2.0
 
@@ -13865,7 +13892,7 @@ limitations under the License.
 
 uncertainties
 3.2.3
-Summary ref: Python (pip) #130
+Summary ref: Python (pip) #131
 BSD License
 Copyright (c) 2010-2020, Eric O. LEBIGOT (EOL).
 All rights reserved.
@@ -13881,7 +13908,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 uri-template
 1.3.0
-Summary ref: Python (pip) #131
+Summary ref: Python (pip) #132
 MIT License
 MIT License
 
@@ -13908,7 +13935,7 @@ SOFTWARE.
 
 url-normalize
 2.2.1
-Summary ref: Python (pip) #132
+Summary ref: Python (pip) #133
 MIT
 MIT License
 
@@ -13935,7 +13962,7 @@ SOFTWARE.
 
 urllib3
 2.5.0
-Summary ref: Python (pip) #133
+Summary ref: Python (pip) #134
 MIT
 MIT License
 
@@ -13962,7 +13989,7 @@ SOFTWARE.
 
 webcolors
 25.10.0
-Summary ref: Python (pip) #134
+Summary ref: Python (pip) #135
 BSD License
 Copyright (c) James Bennett, and contributors.
 All rights reserved.
@@ -13996,13 +14023,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 webencodings
 0.5.1
-Summary ref: Python (pip) #135
+Summary ref: Python (pip) #136
 BSD License
 
 
 websocket-client
 1.9.0
-Summary ref: Python (pip) #136
+Summary ref: Python (pip) #137
 Apache Software License
 
                                  Apache License
@@ -14210,7 +14237,7 @@ Apache Software License
 
 wrapt
 2.0.1
-Summary ref: Python (pip) #137
+Summary ref: Python (pip) #138
 Copyright (c) 2013-2025, Graham Dumpleton
 All rights reserved.
 
@@ -14264,7 +14291,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 xlsxwriter
 3.2.9
-Summary ref: Python (pip) #138
+Summary ref: Python (pip) #139
 BSD License
 BSD 2-Clause License
 
@@ -14295,7 +14322,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 zarr
 3.1.5
-Summary ref: Python (pip) #139
+Summary ref: Python (pip) #140
 MIT
 The MIT License (MIT)
 
@@ -14322,7 +14349,7 @@ SOFTWARE.
 
 zstandard
 0.25.0
-Summary ref: Python (pip) #140
+Summary ref: Python (pip) #141
 BSD-3-Clause
 Copyright (c) 2016, Gregory Szorc
 All rights reserved.

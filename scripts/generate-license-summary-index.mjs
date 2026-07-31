@@ -40,6 +40,7 @@ const PYTHON_RUNTIME_DEPENDENCIES_DIR = resolve('python_embedded/python_dependen
 const PYTHON_REQUIREMENTS_PATHS = [
   resolve('python_embedded/requirements-validated.txt'),
   resolve('python_embedded/requirements-rnaseq.txt'),
+  resolve('python_embedded/requirements-macos.txt'),
 ]
 
 const LEGACY_MARKER_NPM = 'JavaScript Runtime Dependencies (NPM)'
@@ -74,7 +75,7 @@ const SPDX_PREFERENCE = [
 
 const SPDX_ALLOWED = new Set(SPDX_PREFERENCE)
 
-const FIRST_PARTY_EXCLUSIONS = new Set(['easycris-community', 'easycris', 'certifi'])
+const FIRST_PARTY_EXCLUSIONS = new Set(['easycris-community', 'easycris'])
 const NON_RUNTIME_EXCLUSIONS = new Set()
 
 const JS_LICENSE_OVERRIDES = new Map([
