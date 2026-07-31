@@ -12,9 +12,9 @@ const defaults = {
 const sourceOfTruthPath = 'legal/source-of-truth.json'
 
 const legacyMarkers = new Set([
-  'JavaScript Runtime Dependencies (NPM)',
-  'Rust Crate Notices (Cargo)',
-  'Python Package Licenses Summary',
+  'javascript runtime dependencies (npm)',
+  'rust crate notices (cargo)',
+  'python package licenses summary',
 ])
 
 const spdxNoisePattern =
@@ -110,7 +110,7 @@ function validateArtifacts(paths) {
 }
 
 function validateNoticeNoise(canonical, lines) {
-  if (/C:\\Users\\/.test(canonical)) {
+  if (/[A-Z]:\\+Users\\+/i.test(canonical)) {
     fail(
       'Third-party license bundle contains blocked noise token (machine-specific absolute Windows path).'
     )
@@ -123,7 +123,7 @@ function validateNoticeNoise(canonical, lines) {
 
   for (const line of lines) {
     const trimmed = line.trim()
-    if (legacyMarkers.has(trimmed)) {
+    if (legacyMarkers.has(trimmed.toLowerCase())) {
       fail(
         `Third-party license bundle contains blocked noise token (legacy inventory marker): ${trimmed}`
       )
@@ -158,12 +158,12 @@ function validatePackageBlocks(lines) {
       continue
     }
 
-    if (/^License file:\s*node_modules[\\/]/.test(trimmed)) {
+    if (/^License file:\s*node_modules[\\/]/i.test(trimmed)) {
       fail(
         `Third-party license bundle contains package-block noise (node_modules license path): ${trimmed}`
       )
     }
-    if (/^Repository:\s*https?:\/\//.test(trimmed)) {
+    if (/^Repository:\s*https?:\/\//i.test(trimmed)) {
       fail(
         `Third-party license bundle contains package-block noise (repository line): ${trimmed}`
       )
@@ -178,14 +178,14 @@ function validatePackageBlocks(lines) {
         `Third-party license bundle contains markdown artifact inside a package section: ${trimmed}`
       )
     }
-    if (/<\/?legalese>/.test(trimmed)) {
+    if (/<\/?legalese>/i.test(trimmed)) {
       fail(
         `Third-party license bundle contains HTML/README artifact inside a package section: ${trimmed}`
       )
     }
     if (
-      /^module\.exports\b/.test(trimmed) ||
-      /^(var|let|const)\s+\w+\s*=.*require\(/.test(trimmed)
+      /^module\.exports\b/i.test(trimmed) ||
+      /^(var|let|const)\s+\w+\s*=.*require\(/i.test(trimmed)
     ) {
       fail(
         `Third-party license bundle contains code artifact inside a package section: ${trimmed}`
@@ -210,13 +210,14 @@ function validateRequiredOtherLicenses(lines, otherArtifactPath) {
   if (requiredTitles.length === 0) {
     return
   }
-  if (!lines.includes('Other License Texts')) {
+  const normalizedLines = new Set(lines.map(line => line.toLowerCase()))
+  if (!normalizedLines.has('other license texts')) {
     fail(
       "Third-party license bundle is missing required 'Other License Texts' section."
     )
   }
   for (const title of requiredTitles) {
-    if (!lines.includes(title)) {
+    if (!normalizedLines.has(title.toLowerCase())) {
       fail(
         `Third-party license bundle is missing required other-license text title: ${title}`
       )

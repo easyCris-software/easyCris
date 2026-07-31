@@ -179,6 +179,7 @@ test('rejects machine-specific Windows and macOS paths in inventory artifacts', 
 test('rejects machine-specific Windows and macOS paths in the notice bundle', async t => {
   for (const [kind, path] of [
     ['Windows', 'C:\\Users\\alice\\package'],
+    ['escaped Windows', 'C:\\\\Users\\\\alice\\\\package'],
     ['macOS', '/Users/alice/package'],
   ]) {
     await t.test(kind, nested => {
@@ -196,6 +197,7 @@ test('rejects machine-specific Windows and macOS paths in the notice bundle', as
 test('rejects legacy inventory section markers', async t => {
   for (const marker of [
     'JavaScript Runtime Dependencies (NPM)',
+    'javascript runtime dependencies (npm)',
     'Rust Crate Notices (Cargo)',
     'Python Package Licenses Summary',
   ]) {
@@ -234,7 +236,9 @@ test('rejects package-block extraction noise', async t => {
   for (const [kind, line] of [
     ['Windows node_modules path', 'License file: node_modules\\pkg\\LICENSE'],
     ['POSIX node_modules path', 'License file: node_modules/pkg/LICENSE'],
+    ['mixed-case node_modules path', 'LICENSE FILE: NODE_MODULES/pkg/LICENSE'],
     ['repository', 'Repository: https://example.com/repository'],
+    ['mixed-case repository', 'rEpOsItOrY: HTTPS://example.com/repository'],
     ['fence', '```text'],
     ['markdown heading', '## Installation'],
     [
@@ -242,8 +246,11 @@ test('rejects package-block extraction noise', async t => {
       '[![Build](https://example.com/badge.svg)](https://example.com)',
     ],
     ['legalese HTML', '<legalese>'],
+    ['mixed-case legalese HTML', '<LEGALESE>'],
     ['CommonJS export', 'module.exports = example'],
+    ['mixed-case CommonJS export', 'MODULE.EXPORTS = example'],
     ['CommonJS require', "const example = require('example')"],
+    ['mixed-case CommonJS require', "CONST example = REQUIRE('example')"],
   ]) {
     await t.test(kind, nested => {
       const notice = baseNotice.replace('MIT License', `MIT License\n${line}`)
@@ -281,6 +288,17 @@ test('requires every required other-license title but ignores optional titles', 
     runChecker(root),
     /missing required other-license text title: Required Example License/
   )
+})
+
+test('matches required other-license sections and titles case-insensitively', t => {
+  const notice = baseNotice
+    .replace('Other License Texts', 'other license texts')
+    .replace('Required Example License', 'required example license')
+  const { root } = makeFixture(t, { canonical: notice, mirror: notice })
+
+  const result = runChecker(root)
+
+  assert.equal(result.status, 0, result.stderr)
 })
 
 test('reports malformed source-of-truth configuration', t => {
