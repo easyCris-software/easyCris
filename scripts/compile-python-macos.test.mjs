@@ -6,6 +6,7 @@ import test from 'node:test'
 
 import {
   assertCheckpointFingerprint,
+  assertBuilderDeploymentTarget,
   assertBuilderVersions,
   assertSuccessfulJson,
   backendSourceHash,
@@ -19,11 +20,13 @@ import {
   truncateAttemptLog,
   validateReusableCheckpoints,
 } from './compile-python-macos.mjs'
+import { assertPlotExportArtifact } from './plot-export-signatures.mjs'
 
 const currentFingerprint = Object.freeze({
   headSha: 'abc123def456',
   cleanTree: true,
   arch: 'x86_64',
+  deploymentTarget: '14.0',
   pythonVersion: '3.12.11',
   nuitkaVersion: '2.8.10',
   runtimeManifestSha256: 'runtime-sha256',
@@ -42,12 +45,13 @@ test('buildCompileJobs schedules the three backends in checkpoint order', () => 
       backend: job.backend,
       args: job.args,
       timeout: job.env.EASYCRIS_NUITKA_TIMEOUT_SECS,
+      deploymentTarget: job.env.MACOSX_DEPLOYMENT_TARGET,
       logPath: job.logPath,
     })),
     [
-      { backend: 'stats', args: ['scripts/compile_python_nuitka.py', 'stats'], timeout: '9000', logPath: '/tmp/nuitka/abc123def456/x86_64/stats.log' },
-      { backend: 'rnaseq', args: ['scripts/compile_python_nuitka.py', 'rnaseq'], timeout: '9000', logPath: '/tmp/nuitka/abc123def456/x86_64/rnaseq.log' },
-      { backend: 'plot', args: ['scripts/compile_python_nuitka.py', 'plot'], timeout: '9000', logPath: '/tmp/nuitka/abc123def456/x86_64/plot.log' },
+      { backend: 'stats', args: ['scripts/compile_python_nuitka.py', 'stats'], timeout: '9000', deploymentTarget: '14.0', logPath: '/tmp/nuitka/abc123def456/x86_64/stats.log' },
+      { backend: 'rnaseq', args: ['scripts/compile_python_nuitka.py', 'rnaseq'], timeout: '9000', deploymentTarget: '14.0', logPath: '/tmp/nuitka/abc123def456/x86_64/rnaseq.log' },
+      { backend: 'plot', args: ['scripts/compile_python_nuitka.py', 'plot'], timeout: '9000', deploymentTarget: '14.0', logPath: '/tmp/nuitka/abc123def456/x86_64/plot.log' },
     ],
   )
 })
@@ -209,7 +213,12 @@ test('compiled protocol and export probes allow 120 seconds for a cold start', a
     runProcess: async (_command, input, timeoutMs) => {
       observedTimeouts.push(timeoutMs)
       const payload = JSON.parse(input)
-      if (payload.output_path) await writeFile(payload.output_path, 'fresh export')
+      if (payload.output_path) {
+        const bytes = payload.options.format === 'pdf'
+          ? Buffer.from('%PDF-1.4\n% fixture\n')
+          : Buffer.from([0x49, 0x49, 0x2a, 0x00, 0x08, 0x00, 0x00, 0x00])
+        await writeFile(payload.output_path, bytes)
+      }
       return {
         code: 0,
         signal: null,
@@ -222,6 +231,17 @@ test('compiled protocol and export probes allow 120 seconds for a cold start', a
 
   assert.deepEqual(observedTimeouts, [120_000, 120_000, 120_000])
   assert.deepEqual(result, { protocol: 'passed', pdf: 'passed', tiff: 'passed' })
+})
+
+test('plot export signatures reject nonempty corrupt PDF and TIFF files', async t => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'easycris-export-signature-test-'))
+  t.after(() => rm(temporary, { recursive: true, force: true }))
+  const pdf = path.join(temporary, 'plot.pdf')
+  const tiff = path.join(temporary, 'plot.tiff')
+  await writeFile(pdf, 'not a pdf')
+  await writeFile(tiff, 'not a tiff')
+  assert.throws(() => assertPlotExportArtifact(pdf, 'pdf'), /PDF signature/)
+  assert.throws(() => assertPlotExportArtifact(tiff, 'tiff'), /TIFF signature/)
 })
 
 test('protocol process failures identify timeout, signal, and exit status', () => {
@@ -358,4 +378,11 @@ test('builder validation requires Python 3.12 and exactly Nuitka 2.8.10', () => 
   assert.doesNotThrow(() => assertBuilderVersions('Python 3.12.13', '2.8.10\nCommercial: None\nPython: 3.12.13'))
   assert.throws(() => assertBuilderVersions('Python 3.13.0', '2.8.10'), /Python 3\.12/)
   assert.throws(() => assertBuilderVersions('Python 3.12.13', '2.8.11'), /Nuitka 2\.8\.10/)
+})
+
+test('builder validation rejects a Python toolchain newer than the macOS 14 floor', () => {
+  assert.doesNotThrow(() => assertBuilderDeploymentTarget('10.13'))
+  assert.doesNotThrow(() => assertBuilderDeploymentTarget('14'))
+  assert.throws(() => assertBuilderDeploymentTarget('15.0'), /macOS 14\.0/)
+  assert.throws(() => assertBuilderDeploymentTarget(''), /deployment target/)
 })

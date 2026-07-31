@@ -22,6 +22,8 @@ plotly==5.24.1
 kaleido==0.2.1
 # Darwin uses the system trust store; Windows retains its existing certifi shim.
 truststore==0.10.4
+# Keep the resolved CA bundle aligned with the generated MPL-2.0 legal record.
+certifi==2026.7.22
 gseapy==1.1.11
 pytest==9.0.1
 polars==1.20.0

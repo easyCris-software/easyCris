@@ -11,6 +11,11 @@ import { spawn, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
 import { REQUIRED_BACKENDS } from './python-runtime-constants.mjs'
+import {
+  MACOS_DEPLOYMENT_TARGET,
+  validateDarwinTree,
+} from './darwin-artifact-validation.mjs'
+import { assertPlotExportArtifact } from './plot-export-signatures.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const CHECKPOINT_SCHEMA_VERSION = 1
@@ -61,13 +66,16 @@ export function buildCompileJobs({ arch, headSha, timeoutSeconds, logRoot }) {
       EASYCRIS_NUITKA_TIMEOUT_SECS: String(timeoutSeconds),
       EASYCRIS_TARGET_PLATFORM: 'darwin',
       EASYCRIS_TARGET_ARCH: arch,
+      MACOSX_DEPLOYMENT_TARGET: MACOS_DEPLOYMENT_TARGET,
+      _PYTHON_HOST_PLATFORM: `macosx-${MACOS_DEPLOYMENT_TARGET}-${arch}`,
+      ARCHFLAGS: `-arch ${arch}`,
     },
     logPath: path.join(logRoot, headSha, arch, `${backend}.log`),
   }))
 }
 
 export function assertCheckpointFingerprint(current, checkpoint) {
-  for (const key of ['headSha', 'cleanTree', 'arch', 'pythonVersion', 'nuitkaVersion', 'runtimeManifestSha256', 'backendSourceSha256']) {
+  for (const key of ['headSha', 'cleanTree', 'arch', 'deploymentTarget', 'pythonVersion', 'nuitkaVersion', 'runtimeManifestSha256', 'backendSourceSha256']) {
     if (current[key] !== checkpoint[key]) {
       const label = key === 'runtimeManifestSha256' ? 'runtime manifest hash' : key.replace(/([A-Z])/g, ' $1').toLowerCase()
       throw new Error(`Checkpoint fingerprint mismatch: ${label} changed`)
@@ -113,6 +121,23 @@ export function assertBuilderVersions(pythonVersion, nuitkaVersion) {
   if (nuitkaVersion.trim().split(/\r?\n/, 1)[0] !== '2.8.10') throw new Error(`Nuitka builder must use Nuitka 2.8.10: ${nuitkaVersion}`)
 }
 
+export function assertBuilderDeploymentTarget(rawTarget) {
+  const match = /^(\d+)(?:\.(\d+))?$/.exec(String(rawTarget).trim())
+  if (!match) throw new Error(`Nuitka builder must report a macOS deployment target: ${rawTarget || '(empty)'}`)
+  const actual = [Number(match[1]), Number(match[2] || 0)]
+  const supported = MACOS_DEPLOYMENT_TARGET.split('.').map(Number)
+  if (actual[0] > supported[0] || (actual[0] === supported[0] && actual[1] > supported[1])) {
+    throw new Error(`Nuitka builder target ${rawTarget} cannot produce the declared macOS ${MACOS_DEPLOYMENT_TARGET} runtime`)
+  }
+}
+
+export function assertDarwinArtifactTree(artifactPath, arch, validate = validateDarwinTree) {
+  const errors = validate(path.dirname(artifactPath), arch, {
+    label: `${path.basename(artifactPath)} runtime payload`,
+  })
+  if (errors.length > 0) throw new Error(errors.join('\n'))
+}
+
 export async function backendSourceHash(root = ROOT) {
   const inputs = [
     path.join(root, 'scripts', 'compile_python_nuitka.py'),
@@ -148,6 +173,7 @@ export async function validateReusableCheckpoints({
   fingerprint,
   artifactResolver,
   inspectArtifact,
+  validateArtifactTree = assertDarwinArtifactTree,
   probe,
   backends = REQUIRED_BACKENDS,
 }) {
@@ -168,6 +194,7 @@ export async function validateReusableCheckpoints({
     if (!fileArchitecture.includes(fingerprint.arch) || entry.fileArchitecture !== fileArchitecture) {
       throw new Error(`${backend} checkpoint artifact architecture is invalid`)
     }
+    validateArtifactTree(expectedArtifact, fingerprint.arch)
     const expectedProbeKeys = backend === 'plot' ? ['protocol', 'pdf', 'tiff'] : ['protocol']
     if (expectedProbeKeys.some(key => entry.probe?.[key] !== 'passed')) throw new Error(`${backend} checkpoint probe evidence is invalid`)
     const currentProbe = await probe(backend, expectedArtifact)
@@ -308,6 +335,7 @@ export async function runProtocolProbes(backend, artifactPath, { runProcess = ru
     if (!existsSync(outputPath) || readFileSync(outputPath).length === 0) {
       throw new Error(`plot ${format.toUpperCase()} export probe failed`)
     }
+    assertPlotExportArtifact(outputPath, format)
   }
   return { protocol: 'passed', pdf: 'passed', tiff: 'passed' }
 }
@@ -320,6 +348,7 @@ export async function runCompileJobs({
   runner = defaultRunner,
   probe = runProtocolProbes,
   inspectArtifact = artifactPath => commandOutput('file', [artifactPath]),
+  validateArtifactTree = assertDarwinArtifactTree,
   artifactResolver = backend => path.join(ROOT, 'python_embedded', 'dist', `${backend}.dist`, backend),
 }) {
   if (resetCheckpoint) await rm(checkpointPath, { force: true })
@@ -338,6 +367,7 @@ export async function runCompileJobs({
       if (!existsSync(artifactPath)) throw new Error(`${job.backend} artifact missing: ${artifactPath}`)
       const fileArchitecture = inspectArtifact(artifactPath)
       if (!fileArchitecture.includes(fingerprint.arch)) throw new Error(`${job.backend} architecture mismatch: ${fileArchitecture}`)
+      validateArtifactTree(artifactPath, fingerprint.arch)
       const probeResult = await probe(job.backend, artifactPath)
       appendCheckpoint(checkpointPath, fingerprint, job.backend, {
         status: 'passed', startedAt, endedAt: new Date().toISOString(), durationSeconds: (Date.now() - start) / 1000,
@@ -373,6 +403,11 @@ async function main() {
   const builderPythonVersion = commandOutput(python, ['--version'])
   const builderNuitkaVersion = commandOutput(python, ['-m', 'nuitka', '--version'])
   assertBuilderVersions(builderPythonVersion, builderNuitkaVersion)
+  const builderDeploymentTarget = commandOutput(python, [
+    '-c',
+    'import sysconfig; print(sysconfig.get_config_var("MACOSX_DEPLOYMENT_TARGET") or "")',
+  ])
+  assertBuilderDeploymentTarget(builderDeploymentTarget)
   const jobs = buildCompileJobs({ arch, headSha, timeoutSeconds, logRoot }).map(job => ({ ...job, python }))
   const checkpointPath = path.join(logRoot, headSha, arch, 'checkpoint.json')
   if (planOnly) {
@@ -384,6 +419,7 @@ async function main() {
   if (!existsSync(runtimeManifest)) throw new Error(`Runtime manifest missing: ${runtimeManifest}`)
   const fingerprint = {
     headSha, cleanTree: true, arch,
+    deploymentTarget: MACOS_DEPLOYMENT_TARGET,
     pythonVersion: builderPythonVersion,
     nuitkaVersion: builderNuitkaVersion,
     runtimeManifestSha256: sha256File(runtimeManifest),

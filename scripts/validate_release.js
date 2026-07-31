@@ -10,6 +10,12 @@ import {
   assertRuntimePlatform,
   backendExecutableName,
 } from './python-runtime-constants.mjs'
+import {
+  inspectDarwinBinary,
+  validateDarwinBinaryDescription,
+  validateDarwinTree,
+} from './darwin-artifact-validation.mjs'
+import { assertPlotExportArtifact } from './plot-export-signatures.mjs'
 import { cleanTransientKaleidoLogs } from './stage_python_runtime.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -314,11 +320,7 @@ function defaultDarwinRunner({ command, args, input, cwd }) {
 }
 
 function defaultMachOInspector(targetPath) {
-  const result = spawnSync('file', ['-b', targetPath], { encoding: 'utf8' })
-  if (result.status !== 0) {
-    throw new Error((result.stderr || '').trim() || `file exited ${result.status}`)
-  }
-  return result.stdout.trim()
+  return inspectDarwinBinary(targetPath)
 }
 
 function isPathLikeExecutable(executable) {
@@ -356,6 +358,12 @@ function runDarwinProbe({ executable, args = [], payload, label, outputFormat, r
         localErrors.push(`Backend probe did not produce expected output file for ${label}: ${outputPath}`)
       } else if (fs.statSync(outputPath).size <= 0) {
         localErrors.push(`Backend probe produced empty output file for ${label}: ${outputPath}`)
+      } else {
+        try {
+          assertPlotExportArtifact(outputPath, outputFormat)
+        } catch (error) {
+          localErrors.push(`Backend probe ${error.message} (${label})`)
+        }
       }
     }
   } finally {
@@ -376,6 +384,12 @@ function validateDarwinMachO(targetPath, label, expectedArchitecture, inspectMac
   if (!description.includes('Mach-O') || !architectures.includes(expectedArchitecture)) {
     localErrors.push(`${label} architecture mismatch: expected ${expectedArchitecture}, got ${description || '(empty result)'} (${targetPath})`)
   }
+  localErrors.push(...validateDarwinBinaryDescription({
+    description,
+    expectedArchitecture,
+    label,
+    targetPath,
+  }).filter(error => !error.includes('architecture mismatch')))
 }
 
 function validateDarwinRnaSeqCaches(backendDistDir, label, localErrors) {
@@ -473,6 +487,10 @@ function validateDarwinBackendTree(distRoot, label, localErrors, { expectedArchi
       inspectMachO,
       localErrors,
     })
+    localErrors.push(...validateDarwinTree(backendDistDir, expectedArchitecture, {
+      inspect: inspectMachO,
+      label: `${label} ${backend}.dist payload`,
+    }))
   }
 }
 

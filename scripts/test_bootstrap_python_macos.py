@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT / "python_embedded"))
 class MacRequirementsContractTests(unittest.TestCase):
     """Protect the validated scientific stack from accidental Darwin drift."""
 
-    def test_macos_requirements_only_replace_kaleido_and_add_truststore(self):
+    def test_macos_requirements_only_replace_kaleido_and_add_darwin_trust_pins(self):
         # Mutation caught: changing any validated scientific pin on Darwin.
         validated = bootstrap_python_macos.parse_pinned_requirements(
             ROOT / "python_embedded" / "requirements-validated.txt"
@@ -33,6 +33,7 @@ class MacRequirementsContractTests(unittest.TestCase):
         expected = dict(validated)
         expected["kaleido"] = "0.2.1"
         expected["truststore"] = "0.10.4"
+        expected["certifi"] = "2026.7.22"
         self.assertEqual(darwin, expected)
         self.assertEqual(darwin["plotly"], "5.24.1")
 

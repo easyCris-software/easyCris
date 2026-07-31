@@ -85,14 +85,20 @@ function makeFixtureTree(root) {
 }
 
 function x86_64Inspector() {
-  return 'Mach-O 64-bit executable x86_64'
+  return 'Mach-O 64-bit executable x86_64\ncmd LC_BUILD_VERSION\n  minos 14.0'
 }
 
-function successfulRunner(calls, { emptyExports = false } = {}) {
+function successfulRunner(calls, { emptyExports = false, corruptExports = false } = {}) {
   return ({ command, args, input }) => {
     calls.push({ command, args, input })
     const payload = JSON.parse(input)
-    if (payload.output_path) fs.writeFileSync(payload.output_path, emptyExports ? '' : 'export')
+    if (payload.output_path) {
+      const format = path.extname(payload.output_path).slice(1)
+      const validBytes = format === 'pdf'
+        ? Buffer.from('%PDF-1.4\n% fixture\n')
+        : Buffer.from([0x49, 0x49, 0x2a, 0x00, 0x08, 0x00, 0x00, 0x00])
+      fs.writeFileSync(payload.output_path, emptyExports ? '' : corruptExports ? 'corrupt export' : validBytes)
+    }
     return { status: 0, stdout: JSON.stringify({ success: true }), stderr: '' }
   }
 }
@@ -268,6 +274,22 @@ test('Darwin validation removes only generated Kaleido logs and rejects empty ex
   assert.equal(fs.existsSync(unrelatedLog), true)
 })
 
+test('Darwin validation rejects nonempty corrupt PDF and TIFF exports', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  const result = validateDarwinRuntime({
+    paths,
+    requireScriptCompiledPlotParity: true,
+    runner: successfulRunner([], { corruptExports: true }),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
+    probeOutputDir: path.join(root, 'probe-output'),
+  })
+  assert.ok(result.errors.some(error => error.includes('PDF signature')))
+  assert.ok(result.errors.some(error => error.includes('TIFF signature')))
+})
+
 test('Darwin validation rejects a missing installed backend', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
   t.after(() => fs.rmSync(root, { recursive: true, force: true }))
@@ -375,8 +397,8 @@ test('Darwin validation rejects wrong-architecture launchers and native payloads
     installedApp: paths.appPath,
     runner: successfulRunner([]),
     inspectMachO: target => mismatches.has(target)
-      ? 'Mach-O 64-bit executable arm64'
-      : 'Mach-O 64-bit executable x86_64',
+      ? 'Mach-O 64-bit executable arm64\ncmd LC_BUILD_VERSION\n  minos 14.0'
+      : x86_64Inspector(),
     expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'probe-output'),
   })
@@ -384,6 +406,23 @@ test('Darwin validation rejects wrong-architecture launchers and native payloads
   assert.ok(result.errors.some(error => error.includes('source stats.dist executable architecture mismatch')))
   assert.ok(result.errors.some(error => error.includes('staged rnaseq.dist NumPy native module architecture mismatch')))
   assert.ok(result.errors.some(error => error.includes('installed plot.dist Kaleido native payload architecture mismatch')))
+})
+
+test('Darwin validation rejects every shipped Mach-O newer than the macOS 14 floor', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  const incompatible = path.join(paths.sourceDist, 'stats.dist', 'numpy', 'core', '_multiarray_umath.so')
+  const result = validateDarwinRuntime({
+    paths,
+    runner: successfulRunner([]),
+    inspectMachO: target => target === incompatible
+      ? 'Mach-O 64-bit executable x86_64\ncmd LC_BUILD_VERSION\n  minos 15.0'
+      : x86_64Inspector(),
+    expectedArchitecture: 'x64',
+    probeOutputDir: path.join(root, 'probe-output'),
+  })
+  assert.ok(result.errors.some(error => error.includes('minimum macOS version 15.0 exceeds 14.0')))
 })
 
 test('macOS resources reject Windows-only payloads', t => {

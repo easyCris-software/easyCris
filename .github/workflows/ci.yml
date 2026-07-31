@@ -141,6 +141,11 @@ jobs:
       - name: Staging and validation contract tests
         run: node --test scripts/runtime-artifact-layout.test.mjs scripts/validate-release.test.mjs
 
+      - name: Third-party license synchronization
+        run: |
+          npm run -s license:check-sync
+          node --test scripts/check-third-party-license-sync.test.mjs
+
       - name: CI workflow privacy contract
         run: node --test scripts/ci-workflow-contract.test.mjs
 

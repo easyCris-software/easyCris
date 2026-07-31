@@ -44,6 +44,13 @@ test('macOS PR quality lane excludes private E2E and expensive release work', ()
   }
 })
 
+test('public CI enforces cross-platform third-party license synchronization', () => {
+  const macosJob = macosQualityJob(workflow)
+  assert.notEqual(macosJob, undefined)
+  assert.match(macosJob, /npm run -s license:check-sync/)
+  assert.match(macosJob, /check-third-party-license-sync\.test\.mjs/)
+})
+
 test('macOS fast job boundary excludes protected sibling contents', () => {
   const workflowWithProtectedSibling = `${workflow}
 
