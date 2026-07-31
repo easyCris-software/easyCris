@@ -90,7 +90,7 @@
         "convert:validation-fixtures": "node scripts/convert-validation-to-fixtures.js",
         "license:summary": "node scripts/generate-license-summary-index.mjs && npm run -s license:check-sync",
         "license:summary:check": "node scripts/generate-license-summary-index.mjs --check",
-        "license:check-sync": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-third-party-license-sync.ps1",
+        "license:check-sync": "node scripts/check-third-party-license-sync.mjs",
         "mem:start": "cd %USERPROFILE%\\.claude-mem && npx pm2 start ecosystem.config.cjs",
         "mem:stop": "cd %USERPROFILE%\\.claude-mem && npx pm2 stop claude-mem-worker",
         "mem:restart": "cd %USERPROFILE%\\.claude-mem && npx pm2 restart claude-mem-worker",
