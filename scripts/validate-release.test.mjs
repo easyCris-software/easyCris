@@ -5,12 +5,63 @@ import os from 'node:os'
 import path from 'node:path'
 import {
   buildDarwinPlotParityMatrix,
+  normalizeDarwinArchitecture,
   readTargetPlatform as readValidationTargetPlatform,
   resolveInstalledDarwinDist,
   validateDarwinRuntime,
   validateMacBundleResources,
   shouldRunWindowsScriptPlotParity,
 } from './validate_release.js'
+
+const RNASEQ_CACHE_FILES = [
+  'gene_symbols_human_ensembl.json',
+  'gene_symbols_human_entrez.json',
+  'gene_symbols_human_uniprot.json',
+  'gene_symbols_human_uniprot_swissprot.json',
+  'gene_symbols_mouse_ensembl.json',
+  'gene_symbols_mouse_entrez.json',
+  'gene_symbols_mouse_uniprot.json',
+  'gene_symbols_mouse_uniprot_swissprot.json',
+]
+
+const RNASEQ_CACHE_METADATA = {
+  human_ensembl_ensembl_version: '113',
+  mouse_ensembl_ensembl_version: '113',
+  human_entrez_source_name: 'NCBI',
+  human_uniprot_source_name: 'UniProt',
+  human_uniprot_swissprot_source_name: 'Swiss-Prot',
+  mouse_entrez_source_name: 'NCBI',
+  mouse_uniprot_source_name: 'UniProt',
+  mouse_uniprot_swissprot_source_name: 'Swiss-Prot',
+}
+
+function writeDarwinRuntimePayload(dist) {
+  for (const backend of ['stats', 'rnaseq', 'plot']) {
+    const numpyNative = path.join(dist, `${backend}.dist`, 'numpy', 'core', '_multiarray_umath.so')
+    fs.mkdirSync(path.dirname(numpyNative), { recursive: true })
+    fs.writeFileSync(numpyNative, 'Mach-O fixture')
+  }
+
+  const cacheDir = path.join(dist, 'rnaseq.dist', 'rnaseq_module', 'gene_cache')
+  fs.mkdirSync(cacheDir, { recursive: true })
+  fs.writeFileSync(path.join(cacheDir, 'gene_cache_meta.json'), JSON.stringify(RNASEQ_CACHE_METADATA))
+  for (const cacheFile of RNASEQ_CACHE_FILES) {
+    fs.writeFileSync(path.join(cacheDir, cacheFile), '{}')
+  }
+
+  const kaleidoRoot = path.join(dist, 'plot.dist', 'kaleido', 'executable')
+  fs.mkdirSync(path.join(kaleidoRoot, 'bin'), { recursive: true })
+  fs.writeFileSync(path.join(kaleidoRoot, 'kaleido'), '#!/bin/sh\n')
+  for (const nativeFile of [
+    'kaleido',
+    'libEGL.dylib',
+    'libGLESv2.dylib',
+    'libswiftshader_libEGL.dylib',
+    'libswiftshader_libGLESv2.dylib',
+  ]) {
+    fs.writeFileSync(path.join(kaleidoRoot, 'bin', nativeFile), 'Mach-O fixture')
+  }
+}
 
 function makeFixtureTree(root) {
   const sourceDist = path.join(root, 'python_embedded', 'dist')
@@ -23,6 +74,7 @@ function makeFixtureTree(root) {
       fs.mkdirSync(path.dirname(executable), { recursive: true })
       fs.writeFileSync(executable, '#!/bin/sh\n')
     }
+    writeDarwinRuntimePayload(dist)
   }
   const scriptPython = path.join(root, 'bin', 'python3.12')
   const scriptPlot = path.join(root, 'python_embedded', 'plot.py')
@@ -30,6 +82,10 @@ function makeFixtureTree(root) {
   fs.writeFileSync(scriptPython, '#!/bin/sh\n')
   fs.writeFileSync(scriptPlot, '# plot\n')
   return { sourceDist, stagedDist, appPath, installedDist, scriptPython, scriptPlot }
+}
+
+function x86_64Inspector() {
+  return 'Mach-O 64-bit executable x86_64'
 }
 
 function successfulRunner(calls, { emptyExports = false } = {}) {
@@ -73,6 +129,39 @@ test('builds script and compiled Darwin PDF/TIFF parity probes', () => {
   )
 })
 
+test('normalizes Node Darwin architecture labels to Mach-O labels', () => {
+  assert.equal(normalizeDarwinArchitecture('x64'), 'x86_64')
+  assert.equal(normalizeDarwinArchitecture('x86_64'), 'x86_64')
+  assert.equal(normalizeDarwinArchitecture('arm64'), 'arm64')
+  assert.throws(() => normalizeDarwinArchitecture('ia32'), /Unsupported Darwin architecture/)
+})
+
+test('Darwin validation always runs compiled source and staged PDF/TIFF exports', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  const calls = []
+
+  const result = validateDarwinRuntime({
+    paths,
+    runner: successfulRunner(calls),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
+    probeOutputDir: path.join(root, 'probe-output'),
+  })
+
+  assert.deepEqual(result.errors, [])
+  const exportCommands = calls
+    .filter(call => JSON.parse(call.input).action === 'export_plot')
+    .map(call => path.relative(root, call.command))
+  assert.deepEqual(exportCommands, [
+    'python_embedded/dist/plot.dist/plot',
+    'python_embedded/dist/plot.dist/plot',
+    'bundle_resources/python_embedded/dist/plot.dist/plot',
+    'bundle_resources/python_embedded/dist/plot.dist/plot',
+  ])
+})
+
 test('Darwin community validation runs all script and compiled PDF/TIFF parity probes', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
   t.after(() => fs.rmSync(root, { recursive: true, force: true }))
@@ -83,6 +172,8 @@ test('Darwin community validation runs all script and compiled PDF/TIFF parity p
     paths,
     requireScriptCompiledPlotParity: true,
     runner: successfulRunner(calls),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'probe-output'),
   })
 
@@ -99,6 +190,8 @@ test('Darwin parity accepts a bare PATH command and rejects a missing path-like 
     paths: { ...paths, scriptPython: 'python3.12' },
     requireScriptCompiledPlotParity: true,
     runner: successfulRunner(calls),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'bare-probe-output'),
   })
   assert.deepEqual(bareCommandResult.errors, [])
@@ -110,6 +203,8 @@ test('Darwin parity accepts a bare PATH command and rejects a missing path-like 
     paths: { ...paths, scriptPython: missingCommand },
     requireScriptCompiledPlotParity: true,
     runner: successfulRunner(missingCalls),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'missing-probe-output'),
   })
   assert.ok(missingPathResult.errors.some(error => error.includes(missingCommand)))
@@ -124,6 +219,8 @@ test('Darwin RNA-seq probe uses valid matching IDs and requires success=true', t
   const result = validateDarwinRuntime({
     paths,
     runner: successfulRunner(calls),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'probe-output'),
   })
   assert.deepEqual(result.errors, [])
@@ -139,6 +236,8 @@ test('Darwin RNA-seq probe uses valid matching IDs and requires success=true', t
     const rejected = validateDarwinRuntime({
       paths,
       runner: () => ({ status: 0, stdout: JSON.stringify(response), stderr: '' }),
+      inspectMachO: x86_64Inspector,
+      expectedArchitecture: 'x64',
       probeOutputDir: path.join(root, `rejected-probe-output-${String(response.success)}`),
     })
     assert.ok(rejected.errors.some(error => error.includes('did not report success=true')))
@@ -159,6 +258,8 @@ test('Darwin validation removes only generated Kaleido logs and rejects empty ex
     paths,
     requireScriptCompiledPlotParity: true,
     runner: successfulRunner([], { emptyExports: true }),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'probe-output'),
   })
 
@@ -177,6 +278,8 @@ test('Darwin validation rejects a missing installed backend', t => {
     paths,
     installedApp: paths.appPath,
     runner: successfulRunner([]),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'probe-output'),
   })
 
@@ -202,6 +305,8 @@ test('Darwin validation cleans installed Kaleido logs and scans full staged and 
     paths,
     installedApp: paths.appPath,
     runner: successfulRunner([]),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'probe-output'),
   })
 
@@ -209,6 +314,76 @@ test('Darwin validation cleans installed Kaleido logs and scans full staged and 
   assert.equal(fs.existsSync(installedUnrelatedLog), true)
   assert.ok(result.errors.some(error => error.includes(stagedSibling)))
   assert.ok(result.errors.some(error => error.includes(installedSibling)))
+})
+
+test('Darwin validation rejects missing NumPy, RNA-seq, and Kaleido payloads', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  fs.rmSync(path.join(paths.sourceDist, 'stats.dist', 'numpy', 'core', '_multiarray_umath.so'))
+  fs.rmSync(path.join(paths.stagedDist, 'rnaseq.dist', 'rnaseq_module', 'gene_cache', 'gene_symbols_human_entrez.json'))
+  fs.rmSync(path.join(paths.installedDist, 'plot.dist', 'kaleido', 'executable', 'bin', 'kaleido'))
+  fs.rmSync(path.join(paths.stagedDist, 'plot.dist', 'kaleido', 'executable', 'bin', 'libswiftshader_libEGL.dylib'))
+
+  const result = validateDarwinRuntime({
+    paths,
+    installedApp: paths.appPath,
+    runner: successfulRunner([]),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
+    probeOutputDir: path.join(root, 'probe-output'),
+  })
+
+  assert.ok(result.errors.some(error => error.includes('source stats.dist NumPy native module')))
+  assert.ok(result.errors.some(error => error.includes('staged rnaseq.dist rnaseq cache file')))
+  assert.ok(result.errors.some(error => error.includes('installed plot.dist Kaleido native executable')))
+  assert.ok(result.errors.some(error => error.includes('staged plot.dist Kaleido native payload')))
+})
+
+test('Darwin validation rejects incomplete RNA-seq cache metadata', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  fs.writeFileSync(
+    path.join(paths.sourceDist, 'rnaseq.dist', 'rnaseq_module', 'gene_cache', 'gene_cache_meta.json'),
+    JSON.stringify({ ...RNASEQ_CACHE_METADATA, human_entrez_source_name: '' }),
+  )
+
+  const result = validateDarwinRuntime({
+    paths,
+    runner: successfulRunner([]),
+    inspectMachO: x86_64Inspector,
+    expectedArchitecture: 'x64',
+    probeOutputDir: path.join(root, 'probe-output'),
+  })
+
+  assert.ok(result.errors.some(error => error.includes('source rnaseq.dist rnaseq cache metadata key: human_entrez_source_name')))
+})
+
+test('Darwin validation rejects wrong-architecture launchers and native payloads in every tree', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const paths = makeFixtureTree(root)
+  const mismatches = new Set([
+    path.join(paths.sourceDist, 'stats.dist', 'stats'),
+    path.join(paths.stagedDist, 'rnaseq.dist', 'numpy', 'core', '_multiarray_umath.so'),
+    path.join(paths.installedDist, 'plot.dist', 'kaleido', 'executable', 'bin', 'libEGL.dylib'),
+  ])
+
+  const result = validateDarwinRuntime({
+    paths,
+    installedApp: paths.appPath,
+    runner: successfulRunner([]),
+    inspectMachO: target => mismatches.has(target)
+      ? 'Mach-O 64-bit executable arm64'
+      : 'Mach-O 64-bit executable x86_64',
+    expectedArchitecture: 'x64',
+    probeOutputDir: path.join(root, 'probe-output'),
+  })
+
+  assert.ok(result.errors.some(error => error.includes('source stats.dist executable architecture mismatch')))
+  assert.ok(result.errors.some(error => error.includes('staged rnaseq.dist NumPy native module architecture mismatch')))
+  assert.ok(result.errors.some(error => error.includes('installed plot.dist Kaleido native payload architecture mismatch')))
 })
 
 test('macOS resources reject Windows-only payloads', t => {

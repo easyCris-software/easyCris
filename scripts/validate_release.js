@@ -71,6 +71,12 @@ const RNASEQ_DISALLOWED_MISLEADING_KEYS = [
   'mouse_uniprot_ensembl_version',
   'mouse_uniprot_swissprot_ensembl_version',
 ]
+const DARWIN_KALEIDO_NATIVE_LIBRARY_FILES = [
+  'libEGL.dylib',
+  'libGLESv2.dylib',
+  'libswiftshader_libEGL.dylib',
+  'libswiftshader_libGLESv2.dylib',
+]
 const BACKEND_PROBE_TIMEOUT_MS = 120000
 const RNASEQ_REAL_COUNTS_CSV = path.join(
   rootDir,
@@ -249,6 +255,12 @@ export function buildDarwinPlotParityMatrix(paths) {
   ]
 }
 
+export function normalizeDarwinArchitecture(architecture = os.arch()) {
+  if (architecture === 'x64' || architecture === 'x86_64') return 'x86_64'
+  if (architecture === 'arm64') return 'arm64'
+  throw new Error(`Unsupported Darwin architecture: ${architecture}`)
+}
+
 export function shouldRunWindowsScriptPlotParity({ communityMode }) {
   return !communityMode
 }
@@ -301,6 +313,14 @@ function defaultDarwinRunner({ command, args, input, cwd }) {
   })
 }
 
+function defaultMachOInspector(targetPath) {
+  const result = spawnSync('file', ['-b', targetPath], { encoding: 'utf8' })
+  if (result.status !== 0) {
+    throw new Error((result.stderr || '').trim() || `file exited ${result.status}`)
+  }
+  return result.stdout.trim()
+}
+
 function isPathLikeExecutable(executable) {
   return path.isAbsolute(executable) || executable.includes('/') || executable.includes('\\')
 }
@@ -343,15 +363,116 @@ function runDarwinProbe({ executable, args = [], payload, label, outputFormat, r
   }
 }
 
-function validateDarwinBackendTree(distRoot, label, localErrors) {
+function validateDarwinMachO(targetPath, label, expectedArchitecture, inspectMachO, localErrors) {
+  if (!fs.existsSync(targetPath)) return
+  let description
+  try {
+    description = String(inspectMachO(targetPath))
+  } catch (error) {
+    localErrors.push(`Failed to inspect ${label} architecture: ${targetPath} (${error.message})`)
+    return
+  }
+  const architectures = description.match(/\b(?:x86_64|arm64)\b/g) || []
+  if (!description.includes('Mach-O') || !architectures.includes(expectedArchitecture)) {
+    localErrors.push(`${label} architecture mismatch: expected ${expectedArchitecture}, got ${description || '(empty result)'} (${targetPath})`)
+  }
+}
+
+function validateDarwinRnaSeqCaches(backendDistDir, label, localErrors) {
+  const cacheDir = path.join(backendDistDir, 'rnaseq_module', 'gene_cache')
+  if (!fs.existsSync(cacheDir)) {
+    localErrors.push(`Missing ${label} rnaseq gene_cache directory: ${cacheDir}`)
+    return
+  }
+  for (const cacheFile of RNASEQ_REQUIRED_CACHE_FILES) {
+    const cachePath = path.join(cacheDir, cacheFile)
+    if (!fs.existsSync(cachePath)) {
+      localErrors.push(`Missing ${label} rnaseq cache file: ${cachePath}`)
+    }
+  }
+
+  const metadataPath = path.join(cacheDir, 'gene_cache_meta.json')
+  if (!fs.existsSync(metadataPath)) return
+  let metadata
+  try {
+    metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'))
+  } catch (error) {
+    localErrors.push(`Failed to parse ${label} rnaseq cache metadata: ${metadataPath} (${error.message})`)
+    return
+  }
+  for (const key of RNASEQ_REQUIRED_CACHE_METADATA_KEYS) {
+    if (typeof metadata?.[key] !== 'string' || metadata[key].trim().length === 0) {
+      localErrors.push(`Missing ${label} rnaseq cache metadata key: ${key}`)
+    }
+  }
+  for (const key of RNASEQ_DISALLOWED_MISLEADING_KEYS) {
+    if (typeof metadata?.[key] === 'string' && metadata[key].trim().length > 0) {
+      localErrors.push(`Misleading ${label} rnaseq metadata key present: ${key}`)
+    }
+  }
+}
+
+function validateDarwinRuntimePayloadForLocation(
+  backend,
+  backendDistDir,
+  label,
+  { expectedArchitecture, inspectMachO, localErrors }
+) {
+  const numpyRoot = path.join(backendDistDir, 'numpy')
+  const numpyNativeModules = walkFilesRecursive(numpyRoot).filter(filePath => filePath.endsWith('.so'))
+  const multiarrayModule = numpyNativeModules.find(filePath => path.basename(filePath) === '_multiarray_umath.so')
+  if (!multiarrayModule) {
+    localErrors.push(`Missing ${label} NumPy native module: expected _multiarray_umath.so under ${numpyRoot}`)
+  }
+  for (const nativeModule of numpyNativeModules) {
+    validateDarwinMachO(nativeModule, `${label} NumPy native module`, expectedArchitecture, inspectMachO, localErrors)
+  }
+
+  if (backend === 'rnaseq') {
+    validateDarwinRnaSeqCaches(backendDistDir, label, localErrors)
+  }
+
+  if (backend === 'plot') {
+    const kaleidoRoot = path.join(backendDistDir, 'kaleido', 'executable')
+    const wrapper = path.join(kaleidoRoot, 'kaleido')
+    const nativeExecutable = path.join(kaleidoRoot, 'bin', 'kaleido')
+    if (!fs.existsSync(wrapper)) {
+      localErrors.push(`Missing ${label} Kaleido executable wrapper: ${wrapper}`)
+    }
+    if (!fs.existsSync(nativeExecutable)) {
+      localErrors.push(`Missing ${label} Kaleido native executable: ${nativeExecutable}`)
+    } else {
+      validateDarwinMachO(nativeExecutable, `${label} Kaleido native executable`, expectedArchitecture, inspectMachO, localErrors)
+    }
+    for (const fileName of DARWIN_KALEIDO_NATIVE_LIBRARY_FILES) {
+      const nativePayload = path.join(kaleidoRoot, 'bin', fileName)
+      if (!fs.existsSync(nativePayload)) {
+        localErrors.push(`Missing ${label} Kaleido native payload: ${nativePayload}`)
+      } else {
+        validateDarwinMachO(nativePayload, `${label} Kaleido native payload`, expectedArchitecture, inspectMachO, localErrors)
+      }
+    }
+  }
+}
+
+function validateDarwinBackendTree(distRoot, label, localErrors, { expectedArchitecture, inspectMachO }) {
   for (const backend of REQUIRED_BACKENDS) {
+    const backendDistDir = path.join(distRoot, `${backend}.dist`)
     const executable = path.join(distRoot, `${backend}.dist`, backendExecutableName(backend, 'darwin'))
-    if (!fs.existsSync(path.join(distRoot, `${backend}.dist`))) {
-      localErrors.push(`Missing ${label} ${backend}.dist: ${path.join(distRoot, `${backend}.dist`)}`)
+    if (!fs.existsSync(backendDistDir)) {
+      localErrors.push(`Missing ${label} ${backend}.dist: ${backendDistDir}`)
+      continue
     }
     if (!fs.existsSync(executable)) {
       localErrors.push(`Missing ${label} ${backend}.dist executable: ${executable}`)
+    } else {
+      validateDarwinMachO(executable, `${label} ${backend}.dist executable`, expectedArchitecture, inspectMachO, localErrors)
     }
+    validateDarwinRuntimePayloadForLocation(backend, backendDistDir, `${label} ${backend}.dist`, {
+      expectedArchitecture,
+      inspectMachO,
+      localErrors,
+    })
   }
 }
 
@@ -397,9 +518,12 @@ export function validateDarwinRuntime({
   requireScriptCompiledPlotParity: requireParity = false,
   installedApp,
   runner = defaultDarwinRunner,
+  inspectMachO = defaultMachOInspector,
+  expectedArchitecture = os.arch(),
   probeOutputDir: outputDir = probeOutputDir,
 } = {}) {
   const localErrors = []
+  const normalizedArchitecture = normalizeDarwinArchitecture(expectedArchitecture)
   const sourceDistPath = paths?.sourceDist
   const stagedDistPath = paths?.stagedDist
   const generatedKaleidoRoots = [
@@ -423,7 +547,10 @@ export function validateDarwinRuntime({
         localErrors.push(`Missing ${tree.label} Python dist directory`)
         continue
       }
-      validateDarwinBackendTree(tree.dist, tree.label, localErrors)
+      validateDarwinBackendTree(tree.dist, tree.label, localErrors, {
+        expectedArchitecture: normalizedArchitecture,
+        inspectMachO,
+      })
       for (const backend of REQUIRED_BACKENDS) {
         const executable = path.join(tree.dist, `${backend}.dist`, backendExecutableName(backend, 'darwin'))
         const probe = darwinBackendProbe(backend)
@@ -439,24 +566,23 @@ export function validateDarwinRuntime({
       }
     }
 
-    if (requireParity) {
-      for (const parityProbe of buildDarwinPlotParityMatrix({
-        scriptPython: paths.scriptPython,
-        scriptPlot: paths.scriptPlot,
-        sourceDist: sourceDistPath,
-        stagedDist: stagedDistPath,
-      })) {
-        runDarwinProbe({
-          executable: parityProbe.executable,
-          args: parityProbe.args,
-          payload: buildPlotExportProbe(parityProbe.format).payload,
-          label: `${parityProbe.scope}_${parityProbe.format}`,
-          outputFormat: parityProbe.format,
-          runner,
-          probeOutputDir: outputDir,
-          localErrors,
-        })
-      }
+    for (const parityProbe of buildDarwinPlotParityMatrix({
+      scriptPython: paths.scriptPython,
+      scriptPlot: paths.scriptPlot,
+      sourceDist: sourceDistPath,
+      stagedDist: stagedDistPath,
+    })) {
+      if (parityProbe.scope === 'script' && !requireParity) continue
+      runDarwinProbe({
+        executable: parityProbe.executable,
+        args: parityProbe.args,
+        payload: buildPlotExportProbe(parityProbe.format).payload,
+        label: `${parityProbe.scope}_${parityProbe.format}`,
+        outputFormat: parityProbe.format,
+        runner,
+        probeOutputDir: outputDir,
+        localErrors,
+      })
     }
 
     if (installedDist) {

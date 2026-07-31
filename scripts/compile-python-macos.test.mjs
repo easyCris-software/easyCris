@@ -10,9 +10,12 @@ import {
   assertSuccessfulJson,
   backendSourceHash,
   buildCompileJobs,
+  runCompileJobs,
   runProtocolProbes,
+  resolveReusableBackendsForInvocation,
   scheduleProcessTermination,
   selectCompileJobs,
+  shouldResetCheckpointForInvocation,
   truncateAttemptLog,
   validateReusableCheckpoints,
 } from './compile-python-macos.mjs'
@@ -69,6 +72,71 @@ test('checkpoint helpers select valid resumable work and reject changed evidence
     () => selectCompileJobs({ requestedBackend: null, resume: true, completedBackends: ['rnaseq'] }),
     /contiguous backend prefix/,
   )
+})
+
+test('plain fresh all-backend builds ignore reusable checkpoints', async () => {
+  const completed = await resolveReusableBackendsForInvocation({
+    requestedBackend: null,
+    resume: false,
+    validate: async () => {
+      throw new Error('stale checkpoint must not be inspected')
+    },
+  })
+  assert.deepEqual(completed, [])
+})
+
+test('checkpoint reset is limited to fresh all-backend and stats rebuilds', () => {
+  assert.equal(shouldResetCheckpointForInvocation({ requestedBackend: null, resume: false }), true)
+  assert.equal(shouldResetCheckpointForInvocation({ requestedBackend: 'stats', resume: false }), true)
+  assert.equal(shouldResetCheckpointForInvocation({ requestedBackend: 'rnaseq', resume: false }), false)
+  assert.equal(shouldResetCheckpointForInvocation({ requestedBackend: 'plot', resume: false }), false)
+  assert.equal(shouldResetCheckpointForInvocation({ requestedBackend: null, resume: true }), false)
+})
+
+test('resume and requested-backend builds validate only their reusable prerequisite prefix', async () => {
+  for (const invocation of [
+    { requestedBackend: null, resume: true, expected: ['stats', 'rnaseq', 'plot'] },
+    { requestedBackend: 'stats', resume: false, expected: [] },
+    { requestedBackend: 'rnaseq', resume: false, expected: ['stats'] },
+    { requestedBackend: 'plot', resume: false, expected: ['stats', 'rnaseq'] },
+  ]) {
+    const completed = await resolveReusableBackendsForInvocation({
+      ...invocation,
+      validate: async backends => backends,
+    })
+    assert.deepEqual(completed, invocation.expected)
+  }
+})
+
+test('fresh compile replaces a stale checkpoint before recording the first backend', async t => {
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'easycris-fresh-checkpoint-test-'))
+  t.after(() => rm(temporary, { recursive: true, force: true }))
+  const checkpointPath = path.join(temporary, 'checkpoint.json')
+  const artifact = path.join(temporary, 'stats.dist', 'stats')
+  await writeFile(checkpointPath, JSON.stringify({
+    schemaVersion: 1,
+    fingerprint: { ...currentFingerprint, headSha: 'stale-head' },
+    backends: { stats: { status: 'passed' } },
+  }))
+
+  await runCompileJobs({
+    jobs: [{ backend: 'stats', logPath: path.join(temporary, 'stats.log'), env: {} }],
+    fingerprint: currentFingerprint,
+    checkpointPath,
+    resetCheckpoint: true,
+    runner: async () => {
+      await mkdir(path.dirname(artifact), { recursive: true })
+      await writeFile(artifact, 'fresh stats artifact')
+      return { code: 0, signal: null, timedOut: false, tail: [] }
+    },
+    probe: async () => ({ protocol: 'passed' }),
+    inspectArtifact: () => 'Mach-O 64-bit executable x86_64',
+    artifactResolver: () => artifact,
+  })
+
+  const checkpoint = JSON.parse(await readFile(checkpointPath, 'utf8'))
+  assert.equal(checkpoint.fingerprint.headSha, currentFingerprint.headSha)
+  assert.equal(checkpoint.backends.stats.status, 'passed')
 })
 
 test('a failed rnaseq compile stops the chain and records no passing rnaseq checkpoint', async () => {

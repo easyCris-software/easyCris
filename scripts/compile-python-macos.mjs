@@ -143,12 +143,19 @@ function readCheckpoint(checkpointPath) {
   return JSON.parse(readFileSync(checkpointPath, 'utf8'))
 }
 
-export async function validateReusableCheckpoints({ checkpoint, fingerprint, artifactResolver, inspectArtifact, probe }) {
+export async function validateReusableCheckpoints({
+  checkpoint,
+  fingerprint,
+  artifactResolver,
+  inspectArtifact,
+  probe,
+  backends = REQUIRED_BACKENDS,
+}) {
   if (!checkpoint.fingerprint) return []
   if (checkpoint.schemaVersion !== CHECKPOINT_SCHEMA_VERSION) throw new Error('Checkpoint schema version is invalid')
   assertCheckpointFingerprint(fingerprint, checkpoint.fingerprint)
   const completed = []
-  for (const backend of REQUIRED_BACKENDS) {
+  for (const backend of backends) {
     const entry = checkpoint.backends?.[backend]
     if (!entry) break
     if (entry.status !== 'passed') break
@@ -168,6 +175,19 @@ export async function validateReusableCheckpoints({ checkpoint, fingerprint, art
     completed.push(backend)
   }
   return completed
+}
+
+export async function resolveReusableBackendsForInvocation({ requestedBackend, resume, validate }) {
+  if (!resume && requestedBackend === null) return []
+  const backends = resume
+    ? [...REQUIRED_BACKENDS]
+    : REQUIRED_BACKENDS.slice(0, REQUIRED_BACKENDS.indexOf(requestedBackend))
+  if (backends.length === 0) return []
+  return validate(backends)
+}
+
+export function shouldResetCheckpointForInvocation({ requestedBackend, resume }) {
+  return !resume && (requestedBackend === null || requestedBackend === REQUIRED_BACKENDS[0])
 }
 
 function appendCheckpoint(checkpointPath, fingerprint, backend, entry) {
@@ -288,7 +308,17 @@ export async function runProtocolProbes(backend, artifactPath, { runProcess = ru
   return { protocol: 'passed', pdf: 'passed', tiff: 'passed' }
 }
 
-export async function runCompileJobs({ jobs, fingerprint, checkpointPath, runner = defaultRunner, probe = runProtocolProbes, inspectArtifact = artifactPath => commandOutput('file', [artifactPath]), artifactResolver = backend => path.join(ROOT, 'python_embedded', 'dist', `${backend}.dist`, backend) }) {
+export async function runCompileJobs({
+  jobs,
+  fingerprint,
+  checkpointPath,
+  resetCheckpoint = false,
+  runner = defaultRunner,
+  probe = runProtocolProbes,
+  inspectArtifact = artifactPath => commandOutput('file', [artifactPath]),
+  artifactResolver = backend => path.join(ROOT, 'python_embedded', 'dist', `${backend}.dist`, backend),
+}) {
+  if (resetCheckpoint) await rm(checkpointPath, { force: true })
   for (const job of jobs) {
     const startedAt = new Date().toISOString()
     const start = Date.now()
@@ -356,12 +386,22 @@ async function main() {
     backendSourceSha256: await backendSourceHash(ROOT),
   }
   const artifactResolver = backend => path.join(ROOT, 'python_embedded', 'dist', `${backend}.dist`, backend)
-  const completed = await validateReusableCheckpoints({
-    checkpoint: readCheckpoint(checkpointPath), fingerprint, artifactResolver,
-    inspectArtifact: artifactPath => commandOutput('file', [artifactPath]), probe: runProtocolProbes,
+  const completed = await resolveReusableBackendsForInvocation({
+    requestedBackend,
+    resume,
+    validate: backends => validateReusableCheckpoints({
+      checkpoint: readCheckpoint(checkpointPath), fingerprint, artifactResolver,
+      inspectArtifact: artifactPath => commandOutput('file', [artifactPath]), probe: runProtocolProbes, backends,
+    }),
   })
   const selected = selectCompileJobs({ requestedBackend, resume, completedBackends: completed })
-  await runCompileJobs({ jobs: jobs.filter(job => selected.includes(job.backend)), fingerprint, checkpointPath, artifactResolver })
+  await runCompileJobs({
+    jobs: jobs.filter(job => selected.includes(job.backend)),
+    fingerprint,
+    checkpointPath,
+    resetCheckpoint: shouldResetCheckpointForInvocation({ requestedBackend, resume }),
+    artifactResolver,
+  })
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
