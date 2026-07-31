@@ -23,6 +23,7 @@ class PlatformCompileTests(unittest.TestCase):
         self.assertNotIn("--windows-console-mode=force", args)
         self.assertNotIn("--msvc=latest", args)
         self.assertIn("--macos-target-arch=x86_64", args)
+        self.assertIn("--static-libpython=no", args)
         self.assertEqual(executable_name("stats", "darwin"), "stats")
 
     def test_darwin_stats_compile_command_names_extensionless_output(self):

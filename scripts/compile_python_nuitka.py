@@ -82,7 +82,7 @@ def platform_nuitka_args(
     if target_platform == "darwin":
         if target_arch not in {"x86_64", "arm64"}:
             raise ValueError(f"Unsupported Darwin architecture: {target_arch}")
-        args = [f"--macos-target-arch={target_arch}"]
+        args = [f"--macos-target-arch={target_arch}", "--static-libpython=no"]
         if output_filename:
             args.append(f"--output-filename={output_filename}")
         return args
