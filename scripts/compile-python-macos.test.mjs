@@ -198,6 +198,68 @@ test('protocol probes reject exit-zero JSON failures and stale exports', async (
   await rm(temporary, { recursive: true, force: true })
 })
 
+test('compiled protocol and export probes allow 120 seconds for a cold start', async t => {
+  // Mutation caught: restoring the shorter 60-second wrapper bound that rejected a valid cold executable.
+  const temporary = await mkdtemp(path.join(os.tmpdir(), 'easycris-cold-probe-test-'))
+  t.after(() => rm(temporary, { recursive: true, force: true }))
+  const observedTimeouts = []
+
+  const result = await runProtocolProbes('plot', '/fake/plot', {
+    probeRoot: temporary,
+    runProcess: async (_command, input, timeoutMs) => {
+      observedTimeouts.push(timeoutMs)
+      const payload = JSON.parse(input)
+      if (payload.output_path) await writeFile(payload.output_path, 'fresh export')
+      return {
+        code: 0,
+        signal: null,
+        timedOut: false,
+        stdout: '{"success":true}',
+        stderr: 'RequestsDependencyWarning: optional charset detector differs',
+      }
+    },
+  })
+
+  assert.deepEqual(observedTimeouts, [120_000, 120_000, 120_000])
+  assert.deepEqual(result, { protocol: 'passed', pdf: 'passed', tiff: 'passed' })
+})
+
+test('protocol process failures identify timeout, signal, and exit status', () => {
+  const cases = [
+    {
+      result: { code: 0, signal: null, timedOut: true, stdout: '', stderr: 'warning only' },
+      expected: [/timed out=true/i, /signal=null/i, /exit status=0/i],
+    },
+    {
+      result: { code: null, signal: 'SIGKILL', timedOut: false, stdout: '', stderr: '' },
+      expected: [/timed out=false/i, /signal=SIGKILL/i, /exit status=null/i],
+    },
+    {
+      result: { code: 7, signal: null, timedOut: false, stdout: '', stderr: 'backend failure' },
+      expected: [/timed out=false/i, /signal=null/i, /exit status=7/i],
+    },
+  ]
+
+  for (const { result, expected } of cases) {
+    assert.throws(
+      () => assertSuccessfulJson(result, 'stats'),
+      error => expected.every(pattern => pattern.test(error.message)),
+    )
+  }
+})
+
+test('protocol success accepts non-fatal stderr warnings', () => {
+  const payload = assertSuccessfulJson({
+    code: 0,
+    signal: null,
+    timedOut: false,
+    stdout: '{"success":true,"result":"ready"}',
+    stderr: 'RequestsDependencyWarning: optional charset detector differs',
+  }, 'stats')
+
+  assert.deepEqual(payload, { success: true, result: 'ready' })
+})
+
 test('resume validates artifacts, hashes, architecture, and re-probes passed checkpoints', async () => {
   // Mutation caught: reusing a tampered or merely claimed-passed backend artifact.
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'easycris-resume-test-'))

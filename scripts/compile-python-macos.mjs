@@ -15,7 +15,7 @@ import { REQUIRED_BACKENDS } from './python-runtime-constants.mjs'
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const CHECKPOINT_SCHEMA_VERSION = 1
 const DEFAULT_TIMEOUT_SECONDS = 9000
-const PROBE_TIMEOUT_MS = 60_000
+const COMPILED_PROBE_TIMEOUT_MS = 120_000
 const KILL_GRACE_MS = 5_000
 const MAX_CAPTURE_BYTES = 64 * 1024
 
@@ -254,7 +254,7 @@ async function defaultRunner(job, { onMeaningfulLine }) {
   return result
 }
 
-async function runBoundedProcess(command, input, timeoutMs = PROBE_TIMEOUT_MS) {
+async function runBoundedProcess(command, input, timeoutMs = COMPILED_PROBE_TIMEOUT_MS) {
   const child = spawn(command, [], { cwd: ROOT, stdio: ['pipe', 'pipe', 'pipe'], detached: process.platform === 'darwin' })
   let stdout = ''
   let stderr = ''
@@ -279,7 +279,11 @@ async function runBoundedProcess(command, input, timeoutMs = PROBE_TIMEOUT_MS) {
 }
 
 export function assertSuccessfulJson(result, label) {
-  if (result.code !== 0 || result.signal || result.timedOut) throw new Error(`${label} protocol probe process failed: ${result.stderr || ''}`)
+  if (result.code !== 0 || result.signal || result.timedOut) {
+    const processState = `timed out=${result.timedOut === true}; signal=${result.signal ?? 'null'}; exit status=${result.code ?? 'null'}`
+    const stderr = String(result.stderr || '').trim()
+    throw new Error(`${label} protocol probe process failed (${processState})${stderr ? `: ${stderr}` : ''}`)
+  }
   let payload
   try { payload = JSON.parse(result.stdout) } catch { throw new Error(`${label} protocol probe did not return JSON`) }
   if (payload?.success !== true) throw new Error(`${label} protocol probe did not report success=true`)
@@ -292,14 +296,14 @@ export async function runProtocolProbes(backend, artifactPath, { runProcess = ru
     rnaseq: JSON.stringify({ test: 'rnaseq_validate_samples', data: { counts_sample_ids: ['s1'], metadata_sample_ids: ['s1'] }, params: {} }),
     plot: JSON.stringify({ action: 'ping' }),
   }
-  const result = await runProcess(artifactPath, `${inputs[backend]}\n`, PROBE_TIMEOUT_MS)
+  const result = await runProcess(artifactPath, `${inputs[backend]}\n`, COMPILED_PROBE_TIMEOUT_MS)
   assertSuccessfulJson(result, backend)
   if (backend !== 'plot') return { protocol: 'passed' }
   await mkdir(probeRoot, { recursive: true })
   for (const format of ['pdf', 'tiff']) {
     const outputPath = path.join(probeRoot, `plot-${randomUUID()}.${format}`)
     await rm(outputPath, { force: true })
-    const exportResult = await runProcess(artifactPath, JSON.stringify({ action: 'export_plot', plotly_json: { data: [], layout: {} }, output_path: outputPath, options: { format } }), PROBE_TIMEOUT_MS)
+    const exportResult = await runProcess(artifactPath, JSON.stringify({ action: 'export_plot', plotly_json: { data: [], layout: {} }, output_path: outputPath, options: { format } }), COMPILED_PROBE_TIMEOUT_MS)
     assertSuccessfulJson(exportResult, `plot ${format}`)
     if (!existsSync(outputPath) || readFileSync(outputPath).length === 0) {
       throw new Error(`plot ${format.toUpperCase()} export probe failed`)
