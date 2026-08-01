@@ -5,6 +5,7 @@ python._pth
 # Local runtime payloads must never be committed in OSS snapshot lane.
 python312.dll
 python_dependencies/
+runtime/
 *.pyd
 *.dll
 *.zip

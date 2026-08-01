@@ -13,7 +13,6 @@ import shutil
 import subprocess
 import sys
 import os
-import platform
 import stat
 import re
 import xml.etree.ElementTree as ET
@@ -21,15 +20,15 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+PYTHON_EXE = ROOT / "python_embedded" / "python.exe"
 PYTHON_DIR = ROOT / "python_embedded"
 PYTHON_DEPENDENCIES_DIR = PYTHON_DIR / "python_dependencies"
 DIST_DIR = PYTHON_DIR / "dist"
 COMPILE_SOURCE_DIR = DIST_DIR / "_compile_source"
 NUITKA_BOOTSTRAP_SCRIPT = ROOT / "scripts" / "run_nuitka_from_builder.py"
-TARGET_PLATFORM = os.environ.get("EASYCRIS_TARGET_PLATFORM", sys.platform)
-TARGET_ARCH = os.environ.get("EASYCRIS_TARGET_ARCH", platform.machine())
-PYTHON_EXE = ROOT / "python_embedded" / "python.exe"
-DEFAULT_NUITKA_BUILD_PYTHON = ROOT / ".venv-nuitka-build" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+DEFAULT_NUITKA_BUILD_PYTHON = (
+    ROOT / ".venv-nuitka-build" / ("Scripts" if os.name == "nt" else "bin") / ("python.exe" if os.name == "nt" else "python")
+)
 NUITKA_BUILD_PYTHON = Path(
     os.environ.get("EASYCRIS_NUITKA_BUILD_PYTHON", str(DEFAULT_NUITKA_BUILD_PYTHON))
 )
@@ -66,27 +65,6 @@ SOURCE_EXCLUDED_SUFFIXES = {
     ".whl",
     ".msi",
 }
-
-
-def executable_name(backend: str, target_platform: str) -> str:
-    return f"{backend}.exe" if target_platform == "win32" else backend
-
-
-def platform_nuitka_args(
-    target_platform: str,
-    target_arch: str,
-    output_filename: str | None = None,
-) -> list[str]:
-    if target_platform == "win32":
-        return ["--windows-console-mode=force", "--msvc=latest"]
-    if target_platform == "darwin":
-        if target_arch not in {"x86_64", "arm64"}:
-            raise ValueError(f"Unsupported Darwin architecture: {target_arch}")
-        args = [f"--macos-target-arch={target_arch}", "--static-libpython=no"]
-        if output_filename:
-            args.append(f"--output-filename={output_filename}")
-        return args
-    raise ValueError(f"Unsupported target platform: {target_platform}")
 
 
 def _version_key_from_path(path: Path) -> tuple[int, ...]:
@@ -309,7 +287,7 @@ BACKEND_ALIASES: dict[str, str] = {
 
 def kill_orphan_python_workers() -> None:
     """Kill stale compile-chain Python workers for this repo only."""
-    if TARGET_PLATFORM != "win32":
+    if sys.platform != "win32":
         return
     try:
         repo_marker = f"\\{ROOT.parent.name}\\{ROOT.name}".replace("'", "''")
@@ -366,7 +344,7 @@ def run_checked(command: list[str], timeout: int = COMPILE_TIMEOUT_SECS, env: di
 
 
 def remove_previous_outputs(name: str) -> None:
-    exe_path = DIST_DIR / executable_name(name, TARGET_PLATFORM)
+    exe_path = DIST_DIR / f"{name}.exe"
     dist_path = DIST_DIR / f"{name}.dist"
     build_path = DIST_DIR / f"{name}.build"
 
@@ -387,8 +365,6 @@ def remove_previous_outputs(name: str) -> None:
         try:
             shutil.rmtree(target, onerror=_onerror)
         except Exception:
-            if TARGET_PLATFORM != "win32":
-                raise
             # Fallback for stubborn Windows directory locks.
             subprocess.run(
                 ["cmd", "/c", "rmdir", "/s", "/q", str(target)],
@@ -433,31 +409,6 @@ def prepare_compile_source_tree(name: str) -> Path:
     return staged_root
 
 
-def validate_kaleido_payload(
-    payload_dir: Path,
-    target_platform: str,
-    target_arch: str,
-    inspect_file: callable,
-) -> None:
-    """Validate only Mach-O members; shell scripts and assets remain intact."""
-    if target_platform != "darwin":
-        return
-    macho_files = []
-    for candidate in payload_dir.rglob("*"):
-        if not candidate.is_file():
-            continue
-        inspected = inspect_file(candidate)
-        if "Mach-O" not in inspected:
-            continue
-        macho_files.append(candidate)
-        if target_arch not in inspected:
-            raise RuntimeError(
-                f"Kaleido payload architecture mismatch for {candidate}: expected {target_arch}, got {inspected.strip()}"
-            )
-    if not macho_files:
-        raise RuntimeError(f"No Mach-O files found in Kaleido payload: {payload_dir}")
-
-
 def prepare_kaleido_executable_payload(name: str) -> Path:
     """
     Stage Kaleido executable payload for deterministic packaging.
@@ -476,13 +427,6 @@ def prepare_kaleido_executable_payload(name: str) -> Path:
     shutil.copytree(src, staged_payload_dir, ignore=shutil.ignore_patterns("*.log"))
     for log_file in staged_payload_dir.rglob("*.log"):
         log_file.unlink(missing_ok=True)
-
-    validate_kaleido_payload(
-        staged_payload_dir,
-        TARGET_PLATFORM,
-        TARGET_ARCH,
-        lambda candidate: subprocess.run(["file", str(candidate)], check=True, capture_output=True, text=True).stdout,
-    )
 
     return staged_payload_dir
 
@@ -524,10 +468,9 @@ def validate_no_critical_excluded_dlls(report_path: Path, name: str) -> None:
 
 
 def ensure_output(name: str) -> None:
-    launcher = executable_name(name, TARGET_PLATFORM)
-    exe_path = DIST_DIR / launcher
+    exe_path = DIST_DIR / f"{name}.exe"
     dist_path = DIST_DIR / f"{name}.dist"
-    dist_exe_path = dist_path / launcher
+    dist_exe_path = dist_path / f"{name}.exe"
     exe_exists = exe_path.exists() or dist_exe_path.exists()
     if not exe_exists or not dist_path.exists():
         raise RuntimeError(
@@ -538,11 +481,10 @@ def ensure_output(name: str) -> None:
 
 
 def sync_top_level_exe(name: str) -> None:
-    """Normalize output contract for the selected target platform."""
-    launcher = executable_name(name, TARGET_PLATFORM)
-    exe_path = DIST_DIR / launcher
+    """Normalize output contract: always provide dist/<backend>.exe and dist/<backend>.dist/<backend>.exe."""
+    exe_path = DIST_DIR / f"{name}.exe"
     dist_path = DIST_DIR / f"{name}.dist"
-    dist_exe_path = dist_path / launcher
+    dist_exe_path = dist_path / f"{name}.exe"
 
     if not dist_exe_path.exists():
         raise RuntimeError(f"Missing compiled dist executable for {name}: {dist_exe_path}")
@@ -567,15 +509,12 @@ def compile_backend(
     compile_env = os.environ.copy()
     # Make vendored runtime deps visible to Nuitka plugin subprocess checks.
     existing_pythonpath = compile_env.get("PYTHONPATH")
-    pythonpath_parts = [str(PYTHON_DEPENDENCIES_DIR)]
-    if TARGET_PLATFORM == "win32":
-        pythonpath_parts.extend(
-            [
-                str(PYTHON_DEPENDENCIES_DIR / "win32"),
-                str(PYTHON_DEPENDENCIES_DIR / "win32" / "lib"),
-                str(PYTHON_DEPENDENCIES_DIR / "pywin32_system32"),
-            ]
-        )
+    pythonpath_parts = [
+        str(PYTHON_DEPENDENCIES_DIR),
+        str(PYTHON_DEPENDENCIES_DIR / "win32"),
+        str(PYTHON_DEPENDENCIES_DIR / "win32" / "lib"),
+        str(PYTHON_DEPENDENCIES_DIR / "pywin32_system32"),
+    ]
     if existing_pythonpath:
         pythonpath_parts.append(existing_pythonpath)
     compile_env["PYTHONPATH"] = os.pathsep.join(pythonpath_parts)
@@ -607,7 +546,8 @@ def compile_backend(
         f"--report={report_path}",
         "--report-diffable",
         f"--report-user-provided=backend={name}",
-        *platform_nuitka_args(TARGET_PLATFORM, TARGET_ARCH, name),
+        "--windows-console-mode=force",
+        "--msvc=latest",
         *extra_args,
     ]
     if name == "rnaseq":
@@ -629,23 +569,24 @@ def compile_backend(
         )
     command.append(str(staged_entrypoint))
     run_checked(command, env=compile_env)
-    if TARGET_PLATFORM == "win32":
-        validate_no_critical_excluded_dlls(report_path, name)
+    validate_no_critical_excluded_dlls(report_path, name)
     ensure_output(name)
     if kaleido_staged_payload_dir is not None:
         sync_kaleido_runtime_payload(DIST_DIR / f"{name}.dist", kaleido_staged_payload_dir)
     sync_top_level_exe(name)
-    if TARGET_PLATFORM == "win32":
-        bundle_msvc_runtime_dlls(name)
+    bundle_msvc_runtime_dlls(name)
 
     print(f"[compile-python] OK: {name}")
 
 
 def main() -> int:
-    if TARGET_PLATFORM not in {"win32", "darwin"}:
-        print(f"[compile-python] ERROR: Unsupported target platform: {TARGET_PLATFORM}", file=sys.stderr)
+    if sys.platform != "win32":
+        print(
+            f"[compile-python] ERROR: Windows-only compiler rejects target platform: {sys.platform}",
+            file=sys.stderr,
+        )
         return 1
-    if TARGET_PLATFORM == "win32" and not PYTHON_EXE.exists():
+    if not PYTHON_EXE.exists():
         print(
             f"[compile-python] ERROR: Embedded Python not found at: {PYTHON_EXE}",
             file=sys.stderr,
@@ -686,7 +627,7 @@ def main() -> int:
         print(
             "[compile-python] ERROR: Nuitka is not available in builder environment.\n"
             f"  Builder Python: {NUITKA_BUILD_PYTHON}\n"
-            f"  Install with: {NUITKA_BUILD_PYTHON} -m pip install nuitka==2.8.10",
+            "  Install with: .\\.venv-nuitka-build\\Scripts\\python.exe -m pip install nuitka==2.8.10",
             file=sys.stderr,
         )
         return 1

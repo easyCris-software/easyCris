@@ -73,11 +73,55 @@ test('generated notices disclose Darwin certifi while excluding EasyCris package
     )
     writeFixture(
       fixtureRoot,
+      'runtime-licenses-py.json',
+      JSON.stringify({
+        packages: [
+          { name: 'builder-only', version: '99.0.0' },
+          { name: 'easycris', version: '1.0.0' },
+        ],
+      })
+    )
+    writeFixture(
+      fixtureRoot,
       'legal/python-licenses.json',
       JSON.stringify([
-        { Name: 'numpy', Version: '1.0.0', License: 'BSD-3-Clause' },
-        { Name: 'certifi', Version: '2026.7.22', License: 'MPL-2.0' },
-        { Name: 'certifi', Version: '9999.1.1', License: 'MPL-2.0' },
+        {
+          Name: 'anyio',
+          Version: '4.11.0',
+          License: 'MIT',
+          LicenseText: 'Windows AnyIO license text',
+        },
+        {
+          Name: 'numpy',
+          Version: '1.0.0',
+          License: 'BSD-3-Clause',
+          LicenseText: 'Fixture NumPy license text',
+        },
+        {
+          Name: 'matplotlib-inline',
+          Version: '0.2.1',
+          License: 'UNKNOWN',
+          LicenseText:
+            'BSD 3-Clause License\nRedistribution and use in source and binary forms are permitted.\nNeither the name of the copyright holder nor contributors may endorse products.',
+        },
+        {
+          Name: 'certifi',
+          Version: '2026.7.22',
+          License: 'MPL-2.0',
+          LicenseText: certifiLicenseText,
+        },
+        {
+          Name: 'kaleido',
+          Version: '0.1.0.post1',
+          License: 'MIT',
+          LicenseText: 'Windows Kaleido license text',
+        },
+        {
+          Name: 'kaleido',
+          Version: '0.2.1',
+          License: 'MIT',
+          LicenseText: 'Darwin Kaleido license text',
+        },
         { Name: 'easycris', Version: '1.0.0', License: 'Apache-2.0' },
         { Name: 'easycris-community', Version: '1.0.0', License: 'Apache-2.0' },
       ])
@@ -90,13 +134,23 @@ test('generated notices disclose Darwin certifi while excluding EasyCris package
     writeFixture(
       fixtureRoot,
       'python_embedded/requirements-validated.txt',
-      'numpy==1.0.0\n'
+      'numpy==1.0.0\nkaleido==0.1.0.post1\n'
     )
     writeFixture(fixtureRoot, 'python_embedded/requirements-rnaseq.txt', '')
     writeFixture(
       fixtureRoot,
       'python_embedded/requirements-macos.txt',
       'certifi==2026.7.22\n'
+    )
+    writeFixture(
+      fixtureRoot,
+      'python_embedded/requirements-macos-x86_64.lock',
+      'kaleido==0.2.1 --hash=sha256:fixture\n'
+    )
+    writeFixture(
+      fixtureRoot,
+      'python_embedded/requirements-macos-arm64.lock',
+      'kaleido==0.2.1 --hash=sha256:fixture\n'
     )
     writeFixture(
       fixtureRoot,
@@ -115,6 +169,16 @@ certifi
 9999.1.1
 MPL-2.0
 Wrong competing certifi license text
+
+kaleido
+0.1.0.post1
+MIT
+Windows Kaleido license text
+
+kaleido
+0.2.1
+MIT
+Darwin Kaleido license text
 
 easycris
 1.0.0
@@ -166,8 +230,19 @@ Permission is hereby granted, free of charge, to any person obtaining a copy.
       'utf8'
     )
 
-    assert.match(output, /^1\. certifi 2026\.7\.22 \(MPL-2\.0\)$/m)
+    assert.match(output, /^\d+\. certifi 2026\.7\.22 \(MPL-2\.0\)$/m)
     assert.doesNotMatch(output, /certifi 9999\.1\.1/)
+    assert.match(output, /^\d+\. kaleido 0\.1\.0\.post1 \(MIT\)$/m)
+    assert.match(output, /^\d+\. kaleido 0\.2\.1 \(MIT\)$/m)
+    assert.match(output, /Windows Kaleido license text/)
+    assert.match(output, /Darwin Kaleido license text/)
+    assert.match(output, /anyio 4\.11\.0 \(MIT\)/)
+    assert.match(output, /Windows AnyIO license text/)
+    assert.match(
+      output,
+      /^\d+\. matplotlib-inline 0\.2\.1 \(BSD-3-Clause\)$/m
+    )
+    assert.doesNotMatch(output, /builder-only/)
     assert.match(
       output,
       new RegExp(certifiLicenseText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))

@@ -226,6 +226,7 @@ e2e/fixtures/ole/portability_project/
 # Hermes — contains real VPS IP, kept local only
 docs/SSH-QUICKSTART.md
 _tmp
+.venv-macos-build/
 
 # Local deployment notes with environment/resource IDs
 easycris-remote-signaling/DEPLOYMENT.local.md

@@ -1,0 +1,254 @@
+# Generated from native-target pip resolution. Do not edit hashes by hand.
+# Each package is exact and every admitted archive is named and hashed.
+
+# group: rnaseq-overlay
+# archive: anndata-0.12.7-py3-none-any.whl
+anndata==0.12.7 --hash=sha256:bd7c18bdc2ed24b9089fd1494b52b787566dea175dde4689d4144693d0949581
+
+# group: rnaseq-overlay
+# archive: array_api_compat-1.13.0-py3-none-any.whl
+array-api-compat==1.13.0 --hash=sha256:c15026a0ddec42815383f07da285472e1b1ff2e632eb7afbcfe9b08fcbad9bf1
+
+# group: runtime
+# archive: asteval-1.0.7-py3-none-any.whl
+asteval==1.0.7 --hash=sha256:d78df08681dfff59031ca624ba7030f9dc576a7a16e2f7a5137c6e7ef3ee60c4
+
+# group: runtime
+# archive: autograd-1.9.1-py3-none-any.whl
+autograd==1.9.1 --hash=sha256:b788bae3fa010cbffb4cfb7b8ba2a3f0daa6072a8506da6164c779fe9cf3e05a
+
+# group: runtime
+# archive: autograd_gamma-0.4.2-py3-none-any.whl
+autograd-gamma==0.4.2 --hash=sha256:6bf89881ccb5c320ec10927410d6da816bc628b17183f4dee674e6d757ab5552
+
+# group: runtime
+# archive: certifi-2026.7.22-py3-none-any.whl
+certifi==2026.7.22 --hash=sha256:62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775
+
+# group: runtime
+# archive: charset_normalizer-3.4.9-cp312-cp312-macosx_10_13_universal2.whl
+charset-normalizer==3.4.9 --hash=sha256:45b0cc4e3556cd875e09102988d1ab8356c998b596c9fced84547c8138b487a0
+
+# group: runtime
+# archive: contourpy-1.3.3-cp312-cp312-macosx_10_13_x86_64.whl
+contourpy==1.3.3 --hash=sha256:b08a32ea2f8e42cf1d4be3169a98dd4be32bafe4f22b6c4cb4ba810fa9e5d2cb
+
+# group: runtime
+# archive: cycler-0.12.1-py3-none-any.whl
+cycler==0.12.1 --hash=sha256:85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30
+
+# group: runtime
+# archive: dill-0.4.0-py3-none-any.whl
+dill==0.4.0 --hash=sha256:44f54bf6412c2c8464c14e8243eb163690a9800dbe2c367330883b19c7561049
+
+# group: rnaseq-overlay
+# archive: donfig-0.8.1.post1-py3-none-any.whl
+donfig==0.8.1.post1 --hash=sha256:2a3175ce74a06109ff9307d90a230f81215cbac9a751f4d1c6194644b8204f9d
+
+# group: runtime
+# archive: duckdb-1.1.3-cp312-cp312-macosx_12_0_x86_64.whl
+duckdb==1.1.3 --hash=sha256:5d57776539211e79b11e94f2f6d63de77885f23f14982e0fac066f2885fcf3ff
+
+# group: runtime
+# archive: fonttools-4.63.0-cp312-cp312-macosx_10_13_x86_64.whl
+fonttools==4.63.0 --hash=sha256:a9faff9e0c1f76f9fd55899d2ce785832efebab37eb8ae13995853aef178bef0
+
+# group: runtime
+# archive: formulaic-1.2.1-py3-none-any.whl
+formulaic==1.2.1 --hash=sha256:661d6d2467aa961b9afb3a1e2a187494239793c63eb729e422d1307afa98b43b
+
+# group: rnaseq-overlay
+# archive: formulaic_contrasts-1.0.0-py3-none-any.whl
+formulaic-contrasts==1.0.0 --hash=sha256:e1220d315cf446bdec9385375ca4da43896e4ba68114ebea1b2a37efa5d097f5
+
+# group: rnaseq-overlay
+# archive: google_crc32c-1.8.0-cp312-cp312-macosx_12_0_x86_64.whl
+google-crc32c==1.8.0 --hash=sha256:2a3dc3318507de089c5384cc74d54318401410f82aa65b2d9cdde9d297aca7cb
+
+# group: intel-source
+# archive: gseapy-1.1.11.tar.gz
+gseapy==1.1.11 --hash=sha256:d36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd
+
+# group: rnaseq-overlay
+# archive: h5py-3.15.1-cp312-cp312-macosx_10_13_x86_64.whl
+h5py==3.15.1 --hash=sha256:316dd0f119734f324ca7ed10b5627a2de4ea42cc4dfbcedbee026aaa361c238c
+
+# group: runtime
+# archive: idna-3.18-py3-none-any.whl
+idna==3.18 --hash=sha256:7f952cbe720b688055e3f87de14f5c3e5fdaa8bc3928985c4077ca689de849a2
+
+# group: runtime
+# archive: iniconfig-2.3.0-py3-none-any.whl
+iniconfig==2.3.0 --hash=sha256:f631c04d2c48c52b84d0d0549c99ff3859c98df65b3101406327ecc7d53fbf12
+
+# group: runtime
+# archive: interface_meta-1.3.0-py3-none-any.whl
+interface-meta==1.3.0 --hash=sha256:de35dc5241431886e709e20a14d6597ed07c9f1e8b4bfcffde2190ca5b700ee8
+
+# group: runtime
+# archive: joblib-1.5.3-py3-none-any.whl
+joblib==1.5.3 --hash=sha256:5fc3c5039fc5ca8c0276333a188bbd59d6b7ab37fe6632daa76bc7f9ec18e713
+
+# group: runtime
+# archive: kaleido-0.2.1-py2.py3-none-macosx_10_11_x86_64.whl
+kaleido==0.2.1 --hash=sha256:ca6f73e7ff00aaebf2843f73f1d3bacde1930ef5041093fe76b83a15785049a7
+
+# group: runtime
+# archive: kiwisolver-1.5.0-cp312-cp312-macosx_10_13_x86_64.whl
+kiwisolver==1.5.0 --hash=sha256:72ec46b7eba5b395e0a7b63025490d3214c11013f4aacb4f5e8d6c3041829588
+
+# group: runtime
+# archive: lifelines-0.30.0-py3-none-any.whl
+lifelines==0.30.0 --hash=sha256:ac7c602c8aceced9770d3977817c9d99c250ed8cd86f2567fa0d23e4e8014bf9
+
+# group: runtime
+# archive: lmfit-1.3.4-py3-none-any.whl
+lmfit==1.3.4 --hash=sha256:afce1593b42324d37ae2908249b0c55445e2f4c1a0474ff706a8e2f7b5d949fa
+
+# group: runtime
+# archive: matplotlib-3.10.7-cp312-cp312-macosx_10_13_x86_64.whl
+matplotlib==3.10.7 --hash=sha256:7a0edb7209e21840e8361e91ea84ea676658aa93edd5f8762793dec77a4a6748
+
+# group: runtime
+# archive: narwhals-2.12.0-py3-none-any.whl
+narwhals==2.12.0 --hash=sha256:baeba5d448a30b04c299a696bd9ee5ff73e4742143e06c49ca316b46539a7cbb
+
+# group: rnaseq-overlay
+# archive: natsort-8.4.0-py3-none-any.whl
+natsort==8.4.0 --hash=sha256:4732914fb471f56b5cce04d7bae6f164a592c7712e1c85f9ef585e197299521c
+
+# group: rnaseq-overlay
+# archive: numcodecs-0.16.5-cp312-cp312-macosx_10_13_x86_64.whl
+numcodecs==0.16.5 --hash=sha256:24e675dc8d1550cd976a99479b87d872cb142632c75cc402fea04c08c4898523
+
+# group: runtime
+# archive: numpy-1.26.4-cp312-cp312-macosx_10_9_x86_64.whl
+numpy==1.26.4 --hash=sha256:b3ce300f3644fb06443ee2222c2201dd3a89ea6040541412b8fa189341847218
+
+# group: runtime
+# archive: packaging-26.0-py3-none-any.whl
+packaging==26.0 --hash=sha256:b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529
+
+# group: runtime
+# archive: pandas-2.3.3-cp312-cp312-macosx_10_13_x86_64.whl
+pandas==2.3.3 --hash=sha256:6d21f6d74eb1725c2efaa71a2bfc661a0689579b58e9c0ca58a739ff0b002b53
+
+# group: runtime
+# archive: patsy-1.0.2-py2.py3-none-any.whl
+patsy==1.0.2 --hash=sha256:37bfddbc58fcf0362febb5f54f10743f8b21dd2aa73dec7e7ef59d1b02ae668a
+
+# group: runtime
+# archive: pillow-12.3.0-cp312-cp312-macosx_10_13_x86_64.whl
+pillow==12.3.0 --hash=sha256:ba09209fbe443b4acccebe845d8a138b89a8f4fbaeedd44953490b5315d5e965
+
+# group: runtime
+# archive: plotly-5.24.1-py3-none-any.whl
+plotly==5.24.1 --hash=sha256:f67073a1e637eb0dc3e46324d9d51e2fe76e9727c892dde64ddf1e1b51f29089
+
+# group: runtime
+# archive: pluggy-1.6.0-py3-none-any.whl
+pluggy==1.6.0 --hash=sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746
+
+# group: runtime
+# archive: polars-1.20.0-cp39-abi3-macosx_10_12_x86_64.whl
+polars==1.20.0 --hash=sha256:9a313e10ea80b99a0d32bfb942b2260b9658155287b0c2ac5876323acaff4f2c
+
+# group: rnaseq-overlay
+# archive: pydeseq2-0.5.3-py3-none-any.whl
+pydeseq2==0.5.3 --hash=sha256:113842dedaeffdeac0873ed498af2408c58b99fb646a89013f0c7710ae796608
+
+# group: runtime
+# archive: pygments-2.20.0-py3-none-any.whl
+pygments==2.20.0 --hash=sha256:81a9e26dd42fd28a23a2d169d86d7ac03b46e2f8b59ed4698fb4785f946d0176
+
+# group: runtime
+# archive: pyparsing-3.3.2-py3-none-any.whl
+pyparsing==3.3.2 --hash=sha256:850ba148bd908d7e2411587e247a1e4f0327839c40e2e5e6d05a007ecc69911d
+
+# group: runtime
+# archive: pytest-9.0.1-py3-none-any.whl
+pytest==9.0.1 --hash=sha256:67be0030d194df2dfa7b556f2e56fb3c3315bd5c8822c6951162b92b32ce7dad
+
+# group: runtime
+# archive: python_dateutil-2.9.0.post0-py2.py3-none-any.whl
+python-dateutil==2.9.0.post0 --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
+
+# group: runtime
+# archive: pytz-2026.3.post1-py2.py3-none-any.whl
+pytz==2026.3.post1 --hash=sha256:dd95840dd199baea12d9cc096a1d452caa6596a1c1e4b5f3dbd1541855d5e815
+
+# group: rnaseq-overlay
+# archive: pyyaml-6.0.3-cp312-cp312-macosx_10_13_x86_64.whl
+pyyaml==6.0.3 --hash=sha256:7f047e29dcae44602496db43be01ad42fc6f1cc0d8cd6c83d342306c32270196
+
+# group: runtime
+# archive: requests-2.34.2-py3-none-any.whl
+requests==2.34.2 --hash=sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0
+
+# group: runtime
+# archive: scikit_learn-1.7.2-cp312-cp312-macosx_10_13_x86_64.whl
+scikit-learn==1.7.2 --hash=sha256:8d91a97fa2b706943822398ab943cde71858a50245e31bc71dba62aab1d60a96
+
+# group: runtime
+# archive: scikit_posthocs-0.11.4-py3-none-any.whl
+scikit-posthocs==0.11.4 --hash=sha256:9c8447c2983c36cb943d6798ba0aab03fe76c16b36d966bd8c14f2e5b29d90cc
+
+# group: runtime
+# archive: scipy-1.14.1-cp312-cp312-macosx_14_0_x86_64.whl
+scipy==1.14.1 --hash=sha256:eb58ca0abd96911932f688528977858681a59d61a7ce908ffd355957f7025cfc
+
+# group: runtime
+# archive: seaborn-0.13.2-py3-none-any.whl
+seaborn==0.13.2 --hash=sha256:636f8336facf092165e27924f223d3c62ca560b1f2bb5dff7ab7fad265361987
+
+# group: rnaseq-overlay
+# archive: session_info-1.0.1-py3-none-any.whl
+session-info==1.0.1 --hash=sha256:451d191e51816070b9f21a6ff3f6eb5d6015ae2738e8db63ac4e6398260a5838
+
+# group: runtime
+# archive: six-1.17.0-py2.py3-none-any.whl
+six==1.17.0 --hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274
+
+# group: runtime
+# archive: statsmodels-0.14.4-cp312-cp312-macosx_10_13_x86_64.whl
+statsmodels==0.14.4 --hash=sha256:5221dba7424cf4f2561b22e9081de85f5bb871228581124a0d1b572708545199
+
+# group: rnaseq-overlay
+# archive: stdlib_list-0.12.0-py3-none-any.whl
+stdlib-list==0.12.0 --hash=sha256:df2d11e97f53812a1756fb5510393a11e3b389ebd9239dc831c7f349957f62f2
+
+# group: runtime
+# archive: tenacity-9.1.4-py3-none-any.whl
+tenacity==9.1.4 --hash=sha256:6095a360c919085f28c6527de529e76a06ad89b23659fa881ae0649b867a9d55
+
+# group: runtime
+# archive: threadpoolctl-3.6.0-py3-none-any.whl
+threadpoolctl==3.6.0 --hash=sha256:43a0b8fd5a2928500110039e43a5eed8480b918967083ea48dc3ab9f13c4a7fb
+
+# group: runtime
+# archive: truststore-0.10.4-py3-none-any.whl
+truststore==0.10.4 --hash=sha256:adaeaecf1cbb5f4de3b1959b42d41f6fab57b2b1666adb59e89cb0b53361d981
+
+# group: runtime
+# archive: typing_extensions-4.15.0-py3-none-any.whl
+typing-extensions==4.15.0 --hash=sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548
+
+# group: runtime
+# archive: tzdata-2026.3-py2.py3-none-any.whl
+tzdata==2026.3 --hash=sha256:dc096730c87af6cab1b171c9d532be840741ff5d459015e7f6947bd7d7e54931
+
+# group: runtime
+# archive: uncertainties-3.2.3-py3-none-any.whl
+uncertainties==3.2.3 --hash=sha256:313353900d8f88b283c9bad81e7d2b2d3d4bcc330cbace35403faaed7e78890a
+
+# group: runtime
+# archive: urllib3-2.7.0-py3-none-any.whl
+urllib3==2.7.0 --hash=sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897
+
+# group: runtime
+# archive: wrapt-2.0.1-cp312-cp312-macosx_10_13_x86_64.whl
+wrapt==2.0.1 --hash=sha256:3d32794fe940b7000f0519904e247f902f0149edbe6316c710a8562fb6738841
+
+# group: rnaseq-overlay
+# archive: zarr-3.1.5-py3-none-any.whl
+zarr==3.1.5 --hash=sha256:29cd905afb6235b94c09decda4258c888fcb79bb6c862ef7c0b8fe009b5c8563
