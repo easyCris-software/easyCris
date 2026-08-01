@@ -804,14 +804,24 @@ class ManifestCheckpointAndCacheTests(unittest.TestCase):
                 ),
                 patch.object(
                     bootstrap_python_macos,
-                    "_git_state",
-                    return_value=("head", True, 0),
+                    "capture_git_state",
+                    return_value={
+                        "head": "head",
+                        "clean_tree": True,
+                        "dirty_entry_count": 0,
+                        "state_sha256": "a" * 64,
+                    },
                 ),
                 patch.object(bootstrap_python_macos, "_ensure_ignored"),
                 patch.object(
                     bootstrap_python_macos,
                     "compute_content_fingerprint",
                     return_value=fingerprint,
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_requirements_hashes",
+                    return_value={"requirements-macos.txt": "b" * 64},
                 ),
                 patch.object(
                     bootstrap_python_macos,
@@ -915,6 +925,104 @@ class ManifestCheckpointAndCacheTests(unittest.TestCase):
                 bootstrap_python_macos.runtime_relative_path(runtime, interpreter),
                 "bin/python3.12",
             )
+
+    def test_final_inventory_rejects_duplicate_normalized_distribution_metadata(self):
+        # Mutation caught: collecting or comparing distributions through a
+        # dictionary, which collapses two metadata rows for the same package.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            runtime = root / "runtime"
+            venv.EnvBuilder(with_pip=False).create(runtime)
+            version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+            site_packages = runtime / "lib" / version / "site-packages"
+            for directory in ("numpy-1.26.4.dist-info", "numpy-copy-1.26.4.dist-info"):
+                metadata = site_packages / directory / "METADATA"
+                metadata.parent.mkdir()
+                metadata.write_text(
+                    "Metadata-Version: 2.1\nName: numpy\nVersion: 1.26.4\n",
+                    encoding="utf-8",
+                )
+            logger = bootstrap_python_macos.ProvisionLogger(root / "provision.log")
+            entries = (
+                bootstrap_python_macos.LockEntry(
+                    "numpy", "1.26.4", "runtime", ("numpy.whl",), ("a" * 64,)
+                ),
+            )
+
+            with self.assertRaisesRegex(RuntimeError, "duplicate.*numpy"):
+                bootstrap_python_macos.final_runtime_distribution_inventory(
+                    runtime, entries, root, logger
+                )
+
+    def test_prunes_cpython_development_payloads(self):
+        # Mutation caught: pruning installers but retaining headers, build
+        # configuration, static archives, and compiler object files.
+        with tempfile.TemporaryDirectory() as temporary:
+            runtime = Path(temporary) / "runtime"
+            (runtime / "bin").mkdir(parents=True)
+            site_packages = runtime / "lib" / "python3.12" / "site-packages"
+            site_packages.mkdir(parents=True)
+            build_files = (
+                runtime / "include" / "python3.12" / "Python.h",
+                runtime / "lib" / "pkgconfig" / "python-3.12.pc",
+                runtime / "lib" / "python3.12" / "config-3.12-darwin" / "Makefile",
+                runtime / "lib" / "libpython-fixture.a",
+                site_packages / "numpy" / "core" / "include" / "numpy" / "arrayobject.h",
+                site_packages / "numpy" / "core" / "lib" / "libnpymath.a",
+                runtime / "lib" / "python3.12" / "config-3.12-darwin" / "python.o",
+            )
+            for path in build_files:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"build-only")
+
+            bootstrap_python_macos.prune_provisioning_artifacts(runtime)
+
+            self.assertFalse((runtime / "include").exists())
+            self.assertFalse((runtime / "lib" / "pkgconfig").exists())
+            self.assertFalse(
+                (runtime / "lib" / "python3.12" / "config-3.12-darwin").exists()
+            )
+            self.assertFalse(any(path.is_dir() for path in runtime.rglob("include")))
+            self.assertFalse(any(runtime.rglob("*.a")))
+            self.assertFalse(any(runtime.rglob("*.o")))
+
+    def test_final_validation_rejects_each_development_payload_class(self):
+        # Mutation caught: relying only on pruning and allowing a build-only
+        # artifact reintroduced before manifest publication.
+        relative_paths = (
+            "include/python3.12/Python.h",
+            "lib/pkgconfig/python-3.12.pc",
+            "lib/python3.12/config-3.12-darwin/Makefile",
+            "lib/python3.12/site-packages/numpy/core/include/numpy/arrayobject.h",
+            "lib/libpython-fixture.a",
+            "lib/python3.12/config-3.12-darwin/python.o",
+        )
+        for relative in relative_paths:
+            with self.subTest(relative=relative), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                runtime = root / "runtime"
+                (runtime / "bin").mkdir(parents=True)
+                (runtime / "lib" / "python3.12" / "site-packages").mkdir(parents=True)
+                artifact = runtime / relative
+                artifact.parent.mkdir(parents=True, exist_ok=True)
+                artifact.write_bytes(b"build-only")
+                logger = bootstrap_python_macos.ProvisionLogger(root / "provision.log")
+
+                pip_absent = subprocess.CompletedProcess(
+                    [str(runtime / "bin" / "python3.12"), "-m", "pip"],
+                    1,
+                    stdout="",
+                    stderr="No module named pip",
+                )
+                with (
+                    patch.object(
+                        bootstrap_python_macos.subprocess,
+                        "run",
+                        return_value=pip_absent,
+                    ),
+                    self.assertRaisesRegex(RuntimeError, "provisioning-only"),
+                ):
+                    bootstrap_python_macos.validate_pruned_runtime(runtime, root, logger)
 
     def test_prunes_pip_launchers_ensurepip_and_bytecode_before_final_validation(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -1061,6 +1169,143 @@ class ProvisionOrchestrationBoundaryTests(unittest.TestCase):
             bootstrap_python_macos.atomic_materialize_runtime(source, runtime)
             self.assertEqual((runtime / "bin" / "python3.12").read_text(), "new")
             self.assertFalse((runtime / "old-marker").exists())
+
+    def test_provision_rejects_complete_input_state_drift_before_publication(self):
+        # Mutation caught: sampling HEAD/tree/fingerprint/inventories only at
+        # startup, then publishing an old-head passed checkpoint after drift.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "repo"
+            initial_git = {
+                "head": "a" * 40,
+                "clean_tree": True,
+                "dirty_entry_count": 0,
+                "state_sha256": "1" * 64,
+            }
+            changed_git = {**initial_git, "state_sha256": "2" * 64}
+            initial_requirements = {"requirements-macos.txt": "3" * 64}
+            changed_requirements = {"requirements-macos.txt": "4" * 64}
+            initial_sources = {"files": ["stats.py"], "sha256": "5" * 64}
+            changed_sources = {"files": ["stats.py"], "sha256": "6" * 64}
+            probe_results = {
+                name: {"success": True}
+                for name in ("stats", "rnaseq", "plot", "pdf", "tiff")
+            }
+
+            def materialize(_source, runtime):
+                (runtime / "lib" / "python3.12" / "site-packages").mkdir(
+                    parents=True
+                )
+
+            def write_manifest(**kwargs):
+                path = kwargs["runtime"] / "easycris_runtime_manifest.json"
+                bootstrap_python_macos.atomic_write_json(path, {})
+                return path
+
+            capture_git = patch.object(
+                bootstrap_python_macos,
+                "capture_git_state",
+                side_effect=(initial_git, changed_git),
+                create=True,
+            )
+            fingerprint = patch.object(
+                bootstrap_python_macos,
+                "compute_content_fingerprint",
+                side_effect=("7" * 64, "8" * 64),
+            )
+            requirements = patch.object(
+                bootstrap_python_macos,
+                "_requirements_hashes",
+                side_effect=(initial_requirements, changed_requirements),
+            )
+            sources = patch.object(
+                bootstrap_python_macos,
+                "backend_source_inventory",
+                side_effect=(initial_sources, changed_sources),
+            )
+            patchers = [
+                patch.object(bootstrap_python_macos, "validate_host", return_value="x86_64"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "select_archive_pin",
+                    return_value={
+                        "filename": "cpython.tar.gz",
+                        "sha256": "9" * 64,
+                        "python_version": "3.12.13",
+                    },
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_git_state",
+                    return_value=("a" * 40, True, 0),
+                ),
+                capture_git,
+                patch.object(bootstrap_python_macos, "_ensure_ignored"),
+                fingerprint,
+                requirements,
+                sources,
+                patch.object(bootstrap_python_macos, "parse_hashed_lock", return_value=()),
+                patch.object(bootstrap_python_macos, "validate_lock_matches_requirements"),
+                patch.object(bootstrap_python_macos, "_download_archive"),
+                patch.object(bootstrap_python_macos, "verify_and_extract_archive"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "atomic_materialize_runtime",
+                    side_effect=materialize,
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_verify_relocated_interpreter",
+                    return_value={"path": "bin/python3.12"},
+                ),
+                patch.object(bootstrap_python_macos, "_ensure_builder", return_value=Path("/builder")),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_download_locked_groups",
+                    return_value=(root / "wheelhouse", {}),
+                ),
+                patch.object(bootstrap_python_macos, "_install_locked_dependencies"),
+                patch.object(bootstrap_python_macos, "_apply_and_validate_overlay"),
+                patch.object(bootstrap_python_macos, "prune_provisioning_artifacts"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "stage_backend_sources",
+                    return_value=initial_sources,
+                ),
+                patch.object(bootstrap_python_macos, "validate_pruned_runtime"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "final_runtime_distribution_inventory",
+                    return_value=[{"name": "fixture", "version": "1.0"}],
+                ),
+                patch.object(bootstrap_python_macos, "thin_universal_machos", return_value=[]),
+                patch.object(bootstrap_python_macos, "_verify_required_imports"),
+                patch.object(bootstrap_python_macos, "_run_real_probes", return_value=probe_results),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_verify_macho_inventory",
+                    return_value={"count": 1, "files": []},
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_write_runtime_manifest",
+                    side_effect=write_manifest,
+                ),
+                patch.object(bootstrap_python_macos, "_populate_artifact_cache"),
+            ]
+            with ExitStack() as stack:
+                mocks = [stack.enter_context(patcher) for patcher in patchers]
+                with self.assertRaisesRegex(RuntimeError, "changed during provisioning"):
+                    bootstrap_python_macos.provision(root=root, environment={})
+
+            self.assertEqual(mocks[2].call_count, 0)
+            self.assertEqual(mocks[3].call_count, 2)
+            self.assertEqual(mocks[5].call_count, 2)
+            self.assertEqual(mocks[6].call_count, 2)
+            self.assertEqual(mocks[7].call_count, 2)
+            checkpoint = json.loads(
+                (root / "_tmp" / "python-runtime" / ("a" * 40) / "x86_64" / "checkpoint.json").read_text()
+            )
+            self.assertEqual(checkpoint["status"], "failed")
 
     def test_output_and_cache_cleanup_reject_symlinked_managed_roots(self):
         with tempfile.TemporaryDirectory() as temporary:

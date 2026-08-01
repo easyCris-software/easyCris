@@ -844,8 +844,18 @@ def _validate_managed_path(root: Path, path: Path, managed_name: str) -> None:
 
 
 def _git_state(root: Path) -> tuple[str, bool, int]:
+    state = capture_git_state(root)
+    return state["head"], state["clean_tree"], state["dirty_entry_count"]
+
+
+def capture_git_state(root: Path) -> dict[str, object]:
+    """Capture HEAD plus exact tracked and untracked worktree content state."""
     head = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, check=True
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=True,
     ).stdout.strip()
     dirty_lines = subprocess.run(
         ["git", "status", "--porcelain", "--untracked-files=normal"],
@@ -854,7 +864,45 @@ def _git_state(root: Path) -> tuple[str, bool, int]:
         text=True,
         check=True,
     ).stdout.splitlines()
-    return head, not dirty_lines, len(dirty_lines)
+    tracked_diff = subprocess.run(
+        ["git", "diff", "--binary", "HEAD", "--"],
+        cwd=root,
+        capture_output=True,
+        check=True,
+    ).stdout
+    untracked_output = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard", "-z"],
+        cwd=root,
+        capture_output=True,
+        check=True,
+    ).stdout
+    digest = hashlib.sha256()
+    digest.update("\n".join(dirty_lines).encode("utf-8", errors="surrogateescape"))
+    digest.update(b"\0tracked-diff\0")
+    digest.update(tracked_diff)
+    for encoded in sorted(value for value in untracked_output.split(b"\0") if value):
+        relative = Path(os.fsdecode(encoded))
+        path = root / relative
+        metadata = path.lstat()
+        digest.update(b"\0untracked\0")
+        digest.update(encoded)
+        digest.update(b"\0")
+        digest.update(f"{stat.S_IMODE(metadata.st_mode):04o}".encode("ascii"))
+        digest.update(b"\0")
+        if path.is_symlink():
+            digest.update(b"symlink\0")
+            digest.update(os.fsencode(os.readlink(path)))
+        elif path.is_file():
+            digest.update(b"file\0")
+            digest.update(sha256(path).encode("ascii"))
+        else:
+            raise RuntimeError(f"Unsupported untracked git entry: {path}")
+    return {
+        "head": head,
+        "clean_tree": not dirty_lines,
+        "dirty_entry_count": len(dirty_lines),
+        "state_sha256": digest.hexdigest(),
+    }
 
 
 def _download_archive(
@@ -1186,7 +1234,7 @@ def _apply_and_validate_overlay(
 
 
 def prune_provisioning_artifacts(runtime: Path) -> None:
-    """Remove installer metadata, launchers, pip/ensurepip, and bytecode."""
+    """Remove installer metadata, build payloads, launchers, and bytecode."""
     python_lib = runtime / "lib" / "python3.12"
     site_packages = python_lib / "site-packages"
     targets = [site_packages / "pip", python_lib / "ensurepip"]
@@ -1217,6 +1265,24 @@ def prune_provisioning_artifacts(runtime: Path) -> None:
             cache.unlink()
     for bytecode in runtime.rglob("*.pyc"):
         bytecode.unlink()
+    development_directories = {
+        path
+        for pattern in ("include", "pkgconfig", "config-*-darwin")
+        for path in runtime.rglob(pattern)
+    }
+    for target in sorted(
+        development_directories, key=lambda path: len(path.parts), reverse=True
+    ):
+        if target.is_symlink() or target.is_file():
+            target.unlink()
+        elif target.is_dir():
+            shutil.rmtree(target)
+    for pattern in ("*.a", "*.o"):
+        for target in runtime.rglob(pattern):
+            if target.is_dir() and not target.is_symlink():
+                shutil.rmtree(target)
+            else:
+                target.unlink()
 
 
 def _file_contains_any(path: Path, needles: tuple[bytes, ...]) -> bool:
@@ -1284,6 +1350,10 @@ def validate_pruned_runtime(
     )
     if (python_lib / "ensurepip").exists():
         forbidden.append(python_lib / "ensurepip")
+    for pattern in ("include", "pkgconfig", "config-*-darwin"):
+        forbidden.extend(runtime.rglob(pattern))
+    forbidden.extend(runtime.rglob("*.a"))
+    forbidden.extend(runtime.rglob("*.o"))
     forbidden.extend(runtime.rglob("*.whl"))
     forbidden.extend(runtime.rglob("__pycache__"))
     forbidden.extend(runtime.rglob("*.pyc"))
@@ -1528,6 +1598,30 @@ def _requirements_hashes(source_root: Path) -> dict[str, str]:
     }
 
 
+def capture_provision_input_state(root: Path, arch: str) -> dict[str, object]:
+    """Capture every checkout input that must remain stable until publication."""
+    return {
+        "git": capture_git_state(root),
+        "content_fingerprint": compute_content_fingerprint(root, arch),
+        "requirements_sha256": _requirements_hashes(root / "python_embedded"),
+        "backend_sources": backend_source_inventory(root / "python_embedded"),
+    }
+
+
+def require_provision_input_state_unchanged(
+    root: Path, arch: str, expected: dict[str, object]
+) -> None:
+    """Fail closed when any checkout input changes during provisioning."""
+    current = capture_provision_input_state(root, arch)
+    changed = sorted(
+        name for name in expected.keys() | current.keys() if expected.get(name) != current.get(name)
+    )
+    if changed:
+        raise RuntimeError(
+            "Provision inputs changed during provisioning: " + ", ".join(changed)
+        )
+
+
 def runtime_relative_path(runtime: Path, path: Path) -> str:
     try:
         return path.resolve().relative_to(runtime.resolve()).as_posix()
@@ -1563,13 +1657,13 @@ def runtime_tree_sha256(runtime: Path) -> str:
     return digest.hexdigest()
 
 
-def _installed_distribution_versions(
+def _installed_distribution_rows(
     interpreter: Path, root: Path, logger: ProvisionLogger
-) -> dict[str, str]:
+) -> list[dict[str, str]]:
     script = (
         "import importlib.metadata,json;"
-        "print(json.dumps({d.metadata['Name']:d.version for d in importlib.metadata.distributions() "
-        "if d.metadata.get('Name')},sort_keys=True))"
+        "print(json.dumps([{'name':d.metadata['Name'],'version':d.version} "
+        "for d in importlib.metadata.distributions() if d.metadata.get('Name')],sort_keys=True))"
     )
     output = run_captured(
         [str(interpreter), "-I", "-B", "-c", script],
@@ -1578,20 +1672,52 @@ def _installed_distribution_versions(
         env=_clean_python_environment(),
     )
     parsed = json.loads(output)
-    if not isinstance(parsed, dict) or not parsed:
+    if not isinstance(parsed, list) or not parsed:
         raise RuntimeError("Bundled interpreter distribution inventory is empty")
-    return {str(name): str(version) for name, version in parsed.items()}
+    rows: list[dict[str, str]] = []
+    for row in parsed:
+        if (
+            not isinstance(row, dict)
+            or not isinstance(row.get("name"), str)
+            or not isinstance(row.get("version"), str)
+        ):
+            raise RuntimeError("Bundled interpreter distribution inventory is malformed")
+        rows.append({"name": row["name"], "version": row["version"]})
+    return rows
 
 
 def validate_final_distribution_inventory(
-    installed_versions: dict[str, str], entries: Iterable[LockEntry]
+    installed_distributions: Iterable[dict[str, str]] | dict[str, str],
+    entries: Iterable[LockEntry],
 ) -> list[dict[str, str]]:
-    installed = {
-        name.lower().replace("_", "-").replace(".", "-"): str(version)
-        for name, version in installed_versions.items()
-    }
+    if isinstance(installed_distributions, dict):
+        rows = [
+            {"name": str(name), "version": str(version)}
+            for name, version in installed_distributions.items()
+        ]
+    else:
+        rows = list(installed_distributions)
+    installed: dict[str, str] = {}
+    duplicates: list[str] = []
+    for row in rows:
+        if (
+            not isinstance(row, dict)
+            or not isinstance(row.get("name"), str)
+            or not isinstance(row.get("version"), str)
+        ):
+            raise RuntimeError("Malformed final runtime distribution metadata")
+        name = row["name"].lower().replace("_", "-").replace(".", "-")
+        if name in installed:
+            duplicates.append(name)
+        else:
+            installed[name] = row["version"]
+    if duplicates:
+        raise RuntimeError(
+            "duplicate final runtime distribution metadata: "
+            + ", ".join(sorted(set(duplicates)))
+        )
     expected = {entry.name: entry.version for entry in entries}
-    if installed != expected:
+    if len(rows) != len(expected) or installed != expected:
         missing = sorted(f"{name}=={version}" for name, version in expected.items() if name not in installed)
         extra = sorted(f"{name}=={version}" for name, version in installed.items() if name not in expected)
         drifted = sorted(
@@ -1609,7 +1735,7 @@ def validate_final_distribution_inventory(
 def final_runtime_distribution_inventory(
     runtime: Path, entries: Iterable[LockEntry], root: Path, logger: ProvisionLogger
 ) -> list[dict[str, str]]:
-    installed = _installed_distribution_versions(
+    installed = _installed_distribution_rows(
         runtime / "bin" / "python3.12", root, logger
     )
     return validate_final_distribution_inventory(installed, entries)
@@ -1648,6 +1774,7 @@ def _write_runtime_manifest(
     source_provenance: dict | None,
     source_inventory: dict,
     runtime_distributions: list[dict[str, str]],
+    requirements_hashes: dict[str, str],
     macho_thinning: list[dict[str, object]],
     macho_inventory: dict,
     probe_results: dict[str, dict],
@@ -1667,7 +1794,7 @@ def _write_runtime_manifest(
         "support_floor": "14.0",
         "archive": pin,
         "interpreter": interpreter,
-        "requirements_sha256": _requirements_hashes(root / "python_embedded"),
+        "requirements_sha256": requirements_hashes,
         "wheel_archive_sha256": wheel_hashes,
         "intel_gseapy_source_build": source_provenance,
         "backend_sources": source_inventory,
@@ -1733,7 +1860,12 @@ def provision(
     validate_dev_cache_request(reuse_dev_cache, environment)
     arch = validate_host()
     pin = select_archive_pin("Darwin", arch)
-    head, clean_tree, dirty_count = _git_state(root)
+    input_state = capture_provision_input_state(root, arch)
+    git_state = input_state["git"]
+    assert isinstance(git_state, dict)
+    head = str(git_state["head"])
+    clean_tree = bool(git_state["clean_tree"])
+    dirty_count = int(git_state["dirty_entry_count"])
     output = root / "_tmp" / "python-runtime" / head / arch
     _ensure_ignored(root, output / "provision.log")
     _safe_recreate_output(root, output, arch)
@@ -1741,12 +1873,15 @@ def provision(
     checkpoint = output / "checkpoint.json"
     atomic_write_json(checkpoint, {"status": "running", "head_sha": head, "architecture": arch})
     runtime = root / "python_embedded" / "runtime"
-    fingerprint = compute_content_fingerprint(root, arch)
+    fingerprint = str(input_state["content_fingerprint"])
+    requirements_hashes = input_state["requirements_sha256"]
+    assert isinstance(requirements_hashes, dict)
     cache_artifacts = (
         root / "_tmp" / "python-runtime-cache" / fingerprint / arch / "artifacts"
     )
     _validate_managed_path(root, cache_artifacts, "python-runtime-cache")
-    source_inventory = backend_source_inventory(root / "python_embedded")
+    source_inventory = input_state["backend_sources"]
+    assert isinstance(source_inventory, dict)
     lock_path = root / "python_embedded" / f"requirements-macos-{arch}.lock"
     entries = parse_hashed_lock(lock_path)
     validate_lock_matches_requirements(
@@ -1817,18 +1952,22 @@ def provision(
         probe_results = _run_real_probes(runtime, output)
         logger.phase("validate-macho-inventory")
         macho_inventory = _verify_macho_inventory(runtime, arch, root, logger)
+        logger.phase("revalidate-provision-inputs")
+        require_provision_input_state_unchanged(root, arch, input_state)
         logger.phase("write-manifest-and-checkpoint")
         manifest_path = _write_runtime_manifest(
             root=root, runtime=runtime, output=output, arch=arch, head=head,
             clean_tree=clean_tree, dirty_count=dirty_count, pin=pin, interpreter=interpreter,
             wheel_hashes=wheel_hashes, source_provenance=source_provenance,
             source_inventory=source_inventory, runtime_distributions=runtime_distributions,
+            requirements_hashes=requirements_hashes,
             macho_thinning=macho_thinning,
             macho_inventory=macho_inventory,
             probe_results=probe_results, development_reuse=development_reuse,
             fingerprint=fingerprint, logger=logger,
         )
         manifest_hash = sha256(manifest_path)
+        require_provision_input_state_unchanged(root, arch, input_state)
         mark_checkpoint_passed(checkpoint, manifest_hash, probe_results)
         _populate_artifact_cache(
             root=root,
