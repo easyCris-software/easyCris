@@ -8,12 +8,14 @@ import io
 import json
 import os
 import platform as host_platform
+import subprocess
 import sys
 import tarfile
 import tempfile
 import unittest
 import venv
 import zipfile
+from contextlib import ExitStack, redirect_stderr
 from pathlib import Path
 from unittest.mock import patch
 
@@ -331,8 +333,9 @@ class BackendSourceStagingTests(unittest.TestCase):
 
 
 class MachOValidationTests(unittest.TestCase):
-    def test_macho_must_contain_the_native_arch_and_not_exceed_macos_14(self):
-        # Mutation caught: accepting an opposite-architecture wheel or raising the support floor.
+    def test_macho_architecture_set_must_equal_the_single_native_target(self):
+        # Mutation caught: accepting a universal payload merely because it
+        # contains the requested slice.
         with tempfile.TemporaryDirectory() as temporary:
             binary = Path(temporary) / "native.so"
             binary.write_bytes(b"fixture")
@@ -341,7 +344,9 @@ class MachOValidationTests(unittest.TestCase):
             def valid_runner(command, **_kwargs):
                 commands.append(command)
                 if command[0] == "/usr/bin/file":
-                    return "Mach-O universal binary with 2 architectures: x86_64 arm64"
+                    return "Mach-O 64-bit bundle x86_64"
+                if command[0] == "/usr/bin/lipo":
+                    return "x86_64"
                 return "cmd LC_BUILD_VERSION\n minos 10.13\ncmd LC_BUILD_VERSION\n minos 14.0\n"
 
             record = bootstrap_python_macos.validate_macho_file(
@@ -349,13 +354,30 @@ class MachOValidationTests(unittest.TestCase):
             )
             self.assertEqual(record["minimum_macos_versions"], ["10.13", "14.0"])
             self.assertEqual(commands[0][:2], ["/usr/bin/file", "-b"])
-            self.assertEqual(commands[1][:2], ["/usr/bin/otool", "-l"])
+            self.assertEqual(commands[1][:2], ["/usr/bin/lipo", "-archs"])
+            self.assertEqual(commands[2][:2], ["/usr/bin/otool", "-l"])
+            for native_arch in ("x86_64", "arm64"):
+                with self.subTest(native_arch=native_arch):
+                    with self.assertRaisesRegex(RuntimeError, "exact native architecture"):
+                        bootstrap_python_macos.validate_macho_file(
+                            binary,
+                            native_arch,
+                            lambda command, **_kwargs: (
+                                "Mach-O universal binary with 2 architectures: x86_64 arm64"
+                                if command[0] == "/usr/bin/file"
+                                else "x86_64 arm64"
+                                if command[0] == "/usr/bin/lipo"
+                                else "cmd LC_BUILD_VERSION\n minos 10.15\n"
+                            ),
+                        )
             unrelated_versions = bootstrap_python_macos.validate_macho_file(
                 binary,
                 "x86_64",
                 lambda command, **_kwargs: (
                     "Mach-O x86_64"
                     if command[0] == "/usr/bin/file"
+                    else "x86_64"
+                    if command[0] == "/usr/bin/lipo"
                     else "cmd LC_BUILD_VERSION\n minos 10.15\n sdk 22.1\n"
                     "cmd LC_LOAD_DYLIB\n current version 3502.1.255\n compatibility version 150.0.0\n"
                 ),
@@ -368,14 +390,137 @@ class MachOValidationTests(unittest.TestCase):
                 bootstrap_python_macos.validate_macho_file(
                     arch_named,
                     "x86_64",
-                    lambda command, **_kwargs: "Mach-O arm64" if command[0] == "/usr/bin/file" else "minos 13.0",
+                    lambda command, **_kwargs: (
+                        "Mach-O arm64"
+                        if command[0] == "/usr/bin/file"
+                        else "arm64"
+                        if command[0] == "/usr/bin/lipo"
+                        else "cmd LC_BUILD_VERSION\n minos 13.0"
+                    ),
                 )
             with self.assertRaisesRegex(RuntimeError, "14.0"):
                 bootstrap_python_macos.validate_macho_file(
                     binary,
                     "x86_64",
-                    lambda command, **_kwargs: "Mach-O x86_64" if command[0] == "/usr/bin/file" else "cmd LC_BUILD_VERSION\n minos 14.1",
+                    lambda command, **_kwargs: (
+                        "Mach-O x86_64"
+                        if command[0] == "/usr/bin/file"
+                        else "x86_64"
+                        if command[0] == "/usr/bin/lipo"
+                        else "cmd LC_BUILD_VERSION\n minos 14.1"
+                    ),
                 )
+
+    def test_universal_machos_are_atomically_thinned_with_hash_provenance(self):
+        # Mutation caught: leaving either universal2 slice in the final runtime
+        # or recording hashes that do not describe the before/after bytes.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "fixture.c"
+            source.write_text("int easycris_fixture(void) { return 42; }\n", encoding="utf-8")
+            slices = {}
+            for arch in ("x86_64", "arm64"):
+                output = root / f"fixture-{arch}.dylib"
+                subprocess.run(
+                    [
+                        "/usr/bin/xcrun",
+                        "clang",
+                        "-arch",
+                        arch,
+                        "-mmacosx-version-min=10.15",
+                        "-dynamiclib",
+                        str(source),
+                        "-o",
+                        str(output),
+                    ],
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                )
+                slices[arch] = output
+            universal = root / "universal.dylib"
+            subprocess.run(
+                [
+                    "/usr/bin/lipo",
+                    "-create",
+                    str(slices["x86_64"]),
+                    str(slices["arm64"]),
+                    "-output",
+                    str(universal),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            for arch in ("x86_64", "arm64"):
+                with self.subTest(arch=arch):
+                    runtime = root / f"runtime-{arch}"
+                    runtime.mkdir()
+                    candidate = runtime / "fixture.dylib"
+                    candidate.write_bytes(universal.read_bytes())
+                    source_hash = bootstrap_python_macos.sha256(candidate)
+                    logger = bootstrap_python_macos.ProvisionLogger(
+                        root / f"provision-{arch}.log"
+                    )
+
+                    records = bootstrap_python_macos.thin_universal_machos(
+                        runtime, arch, root, logger
+                    )
+
+                    self.assertEqual(
+                        subprocess.run(
+                            ["/usr/bin/lipo", "-archs", str(candidate)],
+                            check=True,
+                            capture_output=True,
+                            text=True,
+                        ).stdout.strip(),
+                        arch,
+                    )
+                    self.assertEqual(
+                        records,
+                        [
+                            {
+                                "path": "fixture.dylib",
+                                "source_architectures": ["x86_64", "arm64"],
+                                "source_sha256": source_hash,
+                                "result_architectures": [arch],
+                                "result_sha256": bootstrap_python_macos.sha256(candidate),
+                            }
+                        ],
+                    )
+                    self.assertNotEqual(source_hash, records[0]["result_sha256"])
+
+    def test_thinning_provenance_must_match_the_final_macho_inventory(self):
+        # Mutation caught: publishing a before/after thinning record whose
+        # result bytes are not the bytes independently inventoried at the end.
+        thinning = [
+            {
+                "path": "lib/native.dylib",
+                "source_architectures": ["x86_64", "arm64"],
+                "source_sha256": "1" * 64,
+                "result_architectures": ["x86_64"],
+                "result_sha256": "2" * 64,
+            }
+        ]
+        inventory = {
+            "files": [
+                {
+                    "path": "lib/native.dylib",
+                    "architectures": ["x86_64"],
+                    "minimum_macos_versions": ["10.15"],
+                    "sha256": "3" * 64,
+                }
+            ]
+        }
+
+        with self.assertRaisesRegex(RuntimeError, "final Mach-O inventory"):
+            bootstrap_python_macos.validate_macho_thinning_provenance(
+                thinning, inventory
+            )
+
+        inventory["files"][0]["sha256"] = "2" * 64
+        bootstrap_python_macos.validate_macho_thinning_provenance(thinning, inventory)
 
 
 class ManifestCheckpointAndCacheTests(unittest.TestCase):
@@ -440,29 +585,308 @@ class ManifestCheckpointAndCacheTests(unittest.TestCase):
                 bootstrap_python_macos.validate_dev_cache_request(True, {"CI": "true"})
             bootstrap_python_macos.validate_dev_cache_request(True, {})
 
-    def test_cache_snapshot_authenticates_every_runtime_file(self):
+    def test_artifact_cache_rejects_tampered_archive_and_wheel_bytes(self):
+        # Mutation caught: trusting cache-owned metadata or filenames instead
+        # of re-hashing immutable CPython and lock archive pins.
         with tempfile.TemporaryDirectory() as temporary:
-            cache = Path(temporary) / "runtime-snapshot"
-            (cache / "bin").mkdir(parents=True)
-            (cache / "bin" / "python3.12").write_bytes(b"python")
-            (cache / "lib").mkdir()
-            payload = cache / "lib" / "payload.so"
-            payload.write_bytes(b"trusted")
-            manifest = {
-                "architecture": "x86_64",
-                "content_fingerprint": "f" * 64,
-                "runtime_tree_sha256": bootstrap_python_macos.runtime_tree_sha256(cache),
-            }
-            bootstrap_python_macos.atomic_write_json(
-                cache / "easycris_runtime_manifest.json", manifest
-            )
-            self.assertTrue(
-                bootstrap_python_macos._valid_cache_snapshot(cache, "x86_64", "f" * 64)
-            )
-            payload.write_bytes(b"tampered")
+            root = Path(temporary)
+            cache_archive = root / "cache" / "cpython.tar.gz"
+            destination_archive = root / "output" / "cpython.tar.gz"
+            cache_archive.parent.mkdir(parents=True)
+            cache_archive.write_bytes(b"tampered")
+            expected_archive = root / "expected-cpython.tar.gz"
+            expected_archive.write_bytes(b"pinned-cpython")
             self.assertFalse(
-                bootstrap_python_macos._valid_cache_snapshot(cache, "x86_64", "f" * 64)
+                bootstrap_python_macos._copy_hash_verified_file(
+                    cache_archive,
+                    destination_archive,
+                    bootstrap_python_macos.sha256(expected_archive),
+                )
             )
+            self.assertFalse(destination_archive.exists())
+
+            wheel_cache = root / "cache" / "wheelhouse"
+            wheel_cache.mkdir()
+            wheel = wheel_cache / "fixture-1.0-py3-none-any.whl"
+            wheel.write_bytes(b"tampered-wheel")
+            locked_wheel = root / "locked.whl"
+            locked_wheel.write_bytes(b"locked-wheel")
+            entries = (
+                bootstrap_python_macos.LockEntry(
+                    "fixture",
+                    "1.0",
+                    "runtime",
+                    (wheel.name,),
+                    (bootstrap_python_macos.sha256(locked_wheel),),
+                ),
+            )
+            destination_wheelhouse = root / "output" / "wheelhouse"
+            self.assertIsNone(
+                bootstrap_python_macos._reuse_cached_wheelhouse(
+                    wheel_cache, destination_wheelhouse, entries
+                )
+            )
+            self.assertFalse(destination_wheelhouse.exists())
+
+            cache_archive.write_bytes(expected_archive.read_bytes())
+            wheel.write_bytes(locked_wheel.read_bytes())
+            self.assertTrue(
+                bootstrap_python_macos._copy_hash_verified_file(
+                    cache_archive,
+                    destination_archive,
+                    bootstrap_python_macos.sha256(expected_archive),
+                )
+            )
+            self.assertEqual(destination_archive.read_bytes(), b"pinned-cpython")
+            self.assertEqual(
+                bootstrap_python_macos._reuse_cached_wheelhouse(
+                    wheel_cache, destination_wheelhouse, entries
+                ),
+                {wheel.name: bootstrap_python_macos.sha256(locked_wheel)},
+            )
+            self.assertEqual(
+                (destination_wheelhouse / wheel.name).read_bytes(), b"locked-wheel"
+            )
+
+    def test_cached_wheelhouse_rejects_extra_files_and_cross_paired_hashes(self):
+        # Mutation caught: copying an unrecognized regular file or accepting
+        # archive A under archive B's hash from the same package entry.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            cache = root / "cache"
+            cache.mkdir()
+            archive_a = "fixture-1.0-a.whl"
+            archive_b = "fixture-1.0-b.whl"
+            payload_a = b"archive-a"
+            payload_b = b"archive-b"
+            expected_a = root / archive_a
+            expected_b = root / archive_b
+            expected_a.write_bytes(payload_a)
+            expected_b.write_bytes(payload_b)
+            entries = (
+                bootstrap_python_macos.LockEntry(
+                    "fixture",
+                    "1.0",
+                    "runtime",
+                    (archive_a, archive_b),
+                    (
+                        bootstrap_python_macos.sha256(expected_a),
+                        bootstrap_python_macos.sha256(expected_b),
+                    ),
+                ),
+            )
+
+            (cache / archive_a).write_bytes(payload_a)
+            (cache / "unverified.payload").write_bytes(b"not-in-lock")
+            self.assertIsNone(
+                bootstrap_python_macos._reuse_cached_wheelhouse(
+                    cache, root / "extra-output", entries
+                )
+            )
+            self.assertFalse((root / "extra-output").exists())
+
+            (cache / "unverified.payload").unlink()
+            (cache / archive_a).write_bytes(payload_b)
+            self.assertIsNone(
+                bootstrap_python_macos._reuse_cached_wheelhouse(
+                    cache, root / "cross-paired-output", entries
+                )
+            )
+            self.assertFalse((root / "cross-paired-output").exists())
+
+    def test_reuse_flag_ignores_forged_runtime_snapshot_and_stages_current_sources(self):
+        # Mutation caught: copying a self-asserted cached runtime/manifest and
+        # representing stale backend bytes as the current checkout.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source_root = root / "python_embedded"
+            source_root.mkdir()
+            for name in bootstrap_python_macos.BACKEND_SOURCE_FILES:
+                (source_root / name).write_text(f"current-{name}\n", encoding="utf-8")
+            for name in bootstrap_python_macos.BACKEND_SOURCE_DIRECTORIES:
+                directory = source_root / name
+                directory.mkdir()
+                (directory / "__init__.py").write_text(
+                    f"current-{name}\n", encoding="utf-8"
+                )
+
+            fingerprint = "f" * 64
+            snapshot = (
+                root
+                / "_tmp"
+                / "python-runtime-cache"
+                / fingerprint
+                / "x86_64"
+                / "runtime-snapshot"
+            )
+            (snapshot / "bin").mkdir(parents=True)
+            (snapshot / "bin" / "python3.12").write_bytes(b"stale-python")
+            stale_site = snapshot / "lib" / "python3.12" / "site-packages"
+            stale_site.mkdir(parents=True)
+            (stale_site / "stats.py").write_text("stale-source\n", encoding="utf-8")
+            (snapshot / "stale-runtime-marker").write_text("stale\n", encoding="utf-8")
+            bootstrap_python_macos.atomic_write_json(
+                snapshot / "easycris_runtime_manifest.json",
+                {
+                    "architecture": "x86_64",
+                    "content_fingerprint": fingerprint,
+                    "runtime_tree_sha256": bootstrap_python_macos.runtime_tree_sha256(
+                        snapshot
+                    ),
+                    "wheel_archive_sha256": {"forged.whl": "a" * 64},
+                },
+            )
+            artifact_root = snapshot.parent / "artifacts"
+            cached_archive = artifact_root / "cpython" / "cpython.tar.gz"
+            cached_archive.parent.mkdir(parents=True)
+            cached_archive.write_bytes(b"hash-verified-cpython")
+            cached_wheelhouse = artifact_root / "wheelhouse"
+            cached_wheelhouse.mkdir()
+            cached_payloads = {
+                "fixture-1.0-py3-none-any.whl": b"runtime-wheel",
+                "overlay-1.0-py3-none-any.whl": b"overlay-wheel",
+                "source-1.0.tar.gz": b"source-archive",
+            }
+            for name, payload in cached_payloads.items():
+                (cached_wheelhouse / name).write_bytes(payload)
+
+            probe_results = {
+                name: {"success": True}
+                for name in ("stats", "rnaseq", "plot", "pdf", "tiff")
+            }
+
+            def fake_extract(_archive, extracted, **_kwargs):
+                runtime_source = extracted / "python"
+                (runtime_source / "bin").mkdir(parents=True)
+                (runtime_source / "bin" / "python3.12").write_bytes(b"fresh-python")
+                (runtime_source / "lib" / "python3.12" / "site-packages").mkdir(
+                    parents=True
+                )
+                (runtime_source / "fresh-runtime-marker").write_text(
+                    "fresh\n", encoding="utf-8"
+                )
+
+            def fake_manifest(**kwargs):
+                path = kwargs["runtime"] / "easycris_runtime_manifest.json"
+                bootstrap_python_macos.atomic_write_json(
+                    path,
+                    {
+                        "development_reuse": kwargs["development_reuse"],
+                        "backend_sources": kwargs["source_inventory"],
+                    },
+                )
+                return path
+
+            entries = tuple(
+                bootstrap_python_macos.LockEntry(
+                    name.split("-")[0],
+                    "1.0",
+                    group,
+                    (name,),
+                    (bootstrap_python_macos.sha256(cached_wheelhouse / name),),
+                )
+                for name, group in (
+                    ("fixture-1.0-py3-none-any.whl", "runtime"),
+                    ("overlay-1.0-py3-none-any.whl", "rnaseq-overlay"),
+                    ("source-1.0.tar.gz", "intel-source"),
+                )
+            )
+            patchers = [
+                patch.object(bootstrap_python_macos, "validate_host", return_value="x86_64"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "select_archive_pin",
+                    return_value={
+                        "filename": "cpython.tar.gz",
+                        "sha256": bootstrap_python_macos.sha256(cached_archive),
+                        "python_version": "3.12.13",
+                    },
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_git_state",
+                    return_value=("head", True, 0),
+                ),
+                patch.object(bootstrap_python_macos, "_ensure_ignored"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "compute_content_fingerprint",
+                    return_value=fingerprint,
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "parse_hashed_lock",
+                    return_value=entries,
+                ),
+                patch.object(bootstrap_python_macos, "validate_lock_matches_requirements"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_download_archive",
+                    side_effect=AssertionError("valid cached CPython was not reused"),
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "verify_and_extract_archive",
+                    side_effect=fake_extract,
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_verify_relocated_interpreter",
+                    return_value={"path": "bin/python3.12"},
+                ),
+                patch.object(bootstrap_python_macos, "_ensure_builder", return_value=Path("/builder")),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_download_locked_groups",
+                    side_effect=AssertionError("valid cached lock artifacts were not reused"),
+                ),
+                patch.object(bootstrap_python_macos, "_install_locked_dependencies"),
+                patch.object(bootstrap_python_macos, "_apply_and_validate_overlay"),
+                patch.object(bootstrap_python_macos, "validate_pruned_runtime"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "final_runtime_distribution_inventory",
+                    return_value=[{"name": "fixture", "version": "1.0"}],
+                ),
+                patch.object(bootstrap_python_macos, "_verify_required_imports"),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_run_real_probes",
+                    return_value=probe_results,
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_verify_macho_inventory",
+                    return_value={"count": 1},
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_write_runtime_manifest",
+                    side_effect=fake_manifest,
+                ),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_populate_artifact_cache",
+                    create=True,
+                ),
+            ]
+            with ExitStack() as stack:
+                for patcher in patchers:
+                    stack.enter_context(patcher)
+                runtime = bootstrap_python_macos.provision(
+                    root=root, reuse_dev_cache=True, environment={}
+                )
+
+            self.assertEqual((runtime / "fresh-runtime-marker").read_text(), "fresh\n")
+            self.assertFalse((runtime / "stale-runtime-marker").exists())
+            self.assertEqual(
+                (runtime / "lib" / "python3.12" / "site-packages" / "stats.py").read_text(),
+                "current-stats.py\n",
+            )
+            manifest = json.loads(
+                (runtime / "easycris_runtime_manifest.json").read_text(encoding="utf-8")
+            )
+            self.assertTrue(manifest["development_reuse"])
 
     def test_manifest_inventory_uses_final_exact_distributions_and_relative_paths(self):
         entries = (
@@ -678,12 +1102,106 @@ class ProvisionOrchestrationBoundaryTests(unittest.TestCase):
     def test_failure_output_is_limited_to_the_final_80_log_lines(self):
         # Mutation caught: dumping an unbounded provisioning log to the agent transcript.
         with tempfile.TemporaryDirectory() as temporary:
-            log = Path(temporary) / "provision.log"
+            root = Path(temporary)
+            head = "a" * 40
+            log = root / "_tmp" / "python-runtime" / head / "x86_64" / "provision.log"
+            log.parent.mkdir(parents=True)
             log.write_text("".join(f"line-{index}\n" for index in range(120)), encoding="utf-8")
-            tail = bootstrap_python_macos.failure_log_tail(log)
+            tail = bootstrap_python_macos.managed_failure_log_tail(
+                root, head, "x86_64"
+            )
             self.assertEqual(len(tail.splitlines()), 80)
             self.assertTrue(tail.startswith("line-40\n"))
             self.assertTrue(tail.endswith("line-119"))
+
+    def test_failure_path_rejection_never_opens_external_symlink_content(self):
+        # Mutation caught: reconstructing provision.log after a failure and
+        # following either the log or a managed-root symlink to external data.
+        for link_kind in ("log", "managed-root"):
+            with self.subTest(link_kind=link_kind), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary) / "repo"
+                external = Path(temporary) / "external"
+                head = "b" * 40
+                arch = "x86_64"
+                output = root / "_tmp" / "python-runtime" / head / arch
+                external_output = external / head / arch
+                external_output.mkdir(parents=True)
+                secret = external_output / "provision.log"
+                secret.write_text("DO-NOT-DISCLOSE-EXTERNAL-CONTENT\n", encoding="utf-8")
+                if link_kind == "log":
+                    output.mkdir(parents=True)
+                    (output / "provision.log").symlink_to(secret)
+                else:
+                    (root / "_tmp").mkdir(parents=True)
+                    (root / "_tmp" / "python-runtime").symlink_to(
+                        external, target_is_directory=True
+                    )
+
+                original_open = Path.open
+
+                def reject_external_open(path, *args, **kwargs):
+                    if path.resolve(strict=False) == secret.resolve():
+                        raise AssertionError("external provision log was opened")
+                    return original_open(path, *args, **kwargs)
+
+                stderr = io.StringIO()
+                git_result = subprocess.CompletedProcess(
+                    ["git", "rev-parse", "HEAD"], 0, stdout=head + "\n", stderr=""
+                )
+                with (
+                    patch.object(bootstrap_python_macos, "ROOT", root),
+                    patch.object(
+                        bootstrap_python_macos,
+                        "provision",
+                        side_effect=RuntimeError("fixture provision failure"),
+                    ),
+                    patch.object(bootstrap_python_macos.platform, "machine", return_value=arch),
+                    patch.object(bootstrap_python_macos.subprocess, "run", return_value=git_result),
+                    patch.object(Path, "open", reject_external_open),
+                    redirect_stderr(stderr),
+                ):
+                    self.assertEqual(bootstrap_python_macos.main([]), 1)
+
+                diagnostic = stderr.getvalue()
+                self.assertIn("provision-log-rejected", diagnostic)
+                self.assertIn("macos-python-runtime-failed", diagnostic)
+                self.assertNotIn("DO-NOT-DISCLOSE", diagnostic)
+
+    def test_failure_tail_rejects_parent_directory_symlink_swap_after_validation(self):
+        # Mutation caught: relying on final-component O_NOFOLLOW after releasing
+        # path validation, allowing a verified parent to be swapped to a symlink.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "repo"
+            head = "c" * 40
+            arch = "x86_64"
+            output = root / "_tmp" / "python-runtime" / head / arch
+            output.mkdir(parents=True)
+            (output / "provision.log").write_text("SAFE\n", encoding="utf-8")
+            external = Path(temporary) / "external"
+            external.mkdir()
+            (external / "provision.log").write_text(
+                "SECRET-FROM-SWAPPED-PARENT\n", encoding="utf-8"
+            )
+            backup = output.with_name("x86_64-before-swap")
+            original_validate = bootstrap_python_macos._validate_managed_path
+            swapped = False
+
+            def validate_then_swap(validate_root, path, managed_name):
+                nonlocal swapped
+                original_validate(validate_root, path, managed_name)
+                if path.name == "provision.log" and not swapped:
+                    output.rename(backup)
+                    output.symlink_to(external, target_is_directory=True)
+                    swapped = True
+
+            with patch.object(
+                bootstrap_python_macos,
+                "_validate_managed_path",
+                side_effect=validate_then_swap,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "safe|symlink|directory"):
+                    bootstrap_python_macos.managed_failure_log_tail(root, head, arch)
+            self.assertTrue(swapped)
 
     def test_archive_download_uses_system_https_trust_and_the_exact_pinned_url(self):
         # Mutation caught: falling back to an unconfigured Python CA path or weakening HTTPS.

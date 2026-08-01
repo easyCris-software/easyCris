@@ -184,26 +184,35 @@ def validate_download_set(
 ) -> dict[str, str]:
     """Reject every filename or digest that is not admitted by the selected lock."""
     selected = tuple(entry for entry in entries if groups is None or entry.group in groups)
-    by_archive = {
-        archive: entry for entry in selected for archive in entry.archives
-    }
-    actual = tuple(
-        path
-        for path in sorted(directory.iterdir())
-        if path.is_file() and path.name.endswith((".whl", ".tar.gz", ".zip"))
-    )
-    for path in actual:
-        entry = by_archive.get(path.name)
-        if entry is None:
+    by_archive: dict[str, tuple[LockEntry, str]] = {}
+    for entry in selected:
+        if len(entry.archives) != len(entry.hashes):
+            raise RuntimeError(
+                f"Lock archive/hash pairing is invalid: {entry.name}=={entry.version}"
+            )
+        for archive, expected_hash in zip(entry.archives, entry.hashes, strict=True):
+            if archive in by_archive:
+                raise RuntimeError(f"Duplicate locked archive filename: {archive}")
+            by_archive[archive] = (entry, expected_hash)
+
+    actual_hashes: dict[str, str] = {}
+    for path in sorted(directory.iterdir()):
+        if path.is_symlink() or not path.is_file():
+            raise RuntimeError(f"Downloaded set contains a non-file entry: {path.name}")
+        locked = by_archive.get(path.name)
+        if locked is None:
             raise RuntimeError(f"Downloaded unlocked archive: {path.name}")
+        _, expected_hash = locked
         actual_hash = sha256(path)
-        if actual_hash not in entry.hashes:
+        if actual_hash != expected_hash:
             raise RuntimeError(f"Downloaded archive hash mismatch: {path.name}")
-    actual_names = {path.name for path in actual}
+        actual_hashes[path.name] = actual_hash
+
+    actual_names = set(actual_hashes)
     for entry in selected:
         if not actual_names.intersection(entry.archives):
             raise RuntimeError(f"Missing locked archive for {entry.name}=={entry.version}")
-    return {path.name: sha256(path) for path in actual}
+    return actual_hashes
 
 
 def _backend_source_files(source_root: Path) -> tuple[tuple[str, Path], ...]:
@@ -290,12 +299,17 @@ def validate_macho_file(
     arch: str,
     runner: Callable[..., str] | None = None,
 ) -> dict:
-    """Require the target architecture and a deployment floor no newer than 14.0."""
+    """Require exactly the native architecture and a floor no newer than 14.0."""
     runner = runner or run_checked
     inspected = _run(runner, ["/usr/bin/file", "-b", str(path)], ROOT)
-    architectures = set(re.findall(r"(?<![A-Za-z0-9_])(x86_64|arm64)(?![A-Za-z0-9_])", inspected))
-    if "Mach-O" not in inspected or arch not in architectures:
+    if "Mach-O" not in inspected:
         raise RuntimeError(f"Mach-O does not contain native {arch}: {path}: {inspected.strip()}")
+    architectures = _macho_architectures(path, runner, ROOT)
+    if architectures != {arch}:
+        raise RuntimeError(
+            f"Mach-O must contain the exact native architecture {arch}: "
+            f"{path}: {sorted(architectures)}"
+        )
     load_commands = _run(runner, ["/usr/bin/otool", "-l", str(path)], ROOT)
     versions: list[str] = []
     active_command: str | None = None
@@ -319,9 +333,21 @@ def validate_macho_file(
         raise RuntimeError(f"Mach-O minimum macOS version is newer than 14.0: {path}: {versions}")
     return {
         "path": str(path),
-        "architectures": [candidate for candidate in ("x86_64", "arm64") if candidate in architectures],
+        "architectures": [arch],
         "minimum_macos_versions": versions,
     }
+
+
+def _macho_architectures(
+    path: Path,
+    runner: Callable[..., str],
+    root: Path,
+) -> set[str]:
+    output = _run(runner, ["/usr/bin/lipo", "-archs", str(path)], root).strip()
+    architectures = set(output.split())
+    if not architectures or not architectures <= {"x86_64", "arm64"}:
+        raise RuntimeError(f"Unexpected Mach-O architecture output for {path}: {output}")
+    return architectures
 
 
 def atomic_write_json(path: Path, value: dict) -> None:
@@ -623,10 +649,94 @@ def write_filtered_lock(
 
 
 def failure_log_tail(path: Path, limit: int = 80) -> str:
-    if not path.is_file():
+    try:
+        metadata = path.lstat()
+    except FileNotFoundError:
         return ""
-    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    if not stat.S_ISREG(metadata.st_mode):
+        raise RuntimeError(f"Provision log must be a regular non-symlink file: {path}")
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+    except OSError as exc:
+        raise RuntimeError(f"Provision log could not be opened safely: {path}") from exc
+    try:
+        if not stat.S_ISREG(os.fstat(descriptor).st_mode):
+            raise RuntimeError(f"Provision log changed to a non-regular file: {path}")
+        with os.fdopen(descriptor, "r", encoding="utf-8", errors="replace") as handle:
+            descriptor = -1
+            lines = handle.read().splitlines()
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
     return "\n".join(lines[-limit:])
+
+
+def managed_failure_log_tail(
+    root: Path, head: str, arch: str, limit: int = 80
+) -> str:
+    """Read only the validated regular log for one accepted provision output."""
+    if not re.fullmatch(r"[0-9a-f]{40}", head):
+        raise RuntimeError(f"Unsafe provision log head: {head}")
+    if arch not in {"x86_64", "arm64"}:
+        raise RuntimeError(f"Unsafe provision log architecture: {arch}")
+    output = root / "_tmp" / "python-runtime" / head / arch
+    _validate_managed_path(root, output, "python-runtime")
+    try:
+        output_metadata = output.lstat()
+    except FileNotFoundError:
+        return ""
+    if not stat.S_ISDIR(output_metadata.st_mode):
+        raise RuntimeError(f"Provision output must be a regular directory: {output}")
+    log = output / "provision.log"
+    _validate_managed_path(root, log, "python-runtime")
+
+    directory_flags = (
+        os.O_RDONLY
+        | getattr(os, "O_DIRECTORY", 0)
+        | getattr(os, "O_NOFOLLOW", 0)
+    )
+    file_flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    directory_descriptors: list[int] = []
+    log_descriptor = -1
+    try:
+        current_descriptor = os.open(root.absolute(), directory_flags)
+        directory_descriptors.append(current_descriptor)
+        if not stat.S_ISDIR(os.fstat(current_descriptor).st_mode):
+            raise RuntimeError(f"Provision log root is not a directory: {root}")
+        for component in ("_tmp", "python-runtime", head, arch):
+            current_descriptor = os.open(
+                component,
+                directory_flags,
+                dir_fd=current_descriptor,
+            )
+            directory_descriptors.append(current_descriptor)
+            if not stat.S_ISDIR(os.fstat(current_descriptor).st_mode):
+                raise RuntimeError(
+                    f"Provision log path component is not a directory: {component}"
+                )
+        log_descriptor = os.open(
+            "provision.log",
+            file_flags,
+            dir_fd=current_descriptor,
+        )
+        if not stat.S_ISREG(os.fstat(log_descriptor).st_mode):
+            raise RuntimeError("Provision log changed to a non-regular file")
+        with os.fdopen(
+            log_descriptor, "r", encoding="utf-8", errors="replace"
+        ) as handle:
+            log_descriptor = -1
+            lines = handle.read().splitlines()
+        return "\n".join(lines[-limit:])
+    except FileNotFoundError:
+        return ""
+    except OSError as exc:
+        raise RuntimeError(f"Provision log could not be opened safely: {log}") from exc
+    finally:
+        if log_descriptor >= 0:
+            os.close(log_descriptor)
+        for descriptor in reversed(directory_descriptors):
+            os.close(descriptor)
 
 
 def _run(runner: Callable[..., str], command: Iterable[str], root: Path, **kwargs) -> str:
@@ -852,6 +962,80 @@ def _download_locked_groups(
                 shutil.copy2(quarantine / name, destination)
             all_hashes[name] = value
     return wheelhouse, dict(sorted(all_hashes.items()))
+
+
+def _write_locked_group_inputs(
+    entries: tuple[LockEntry, ...], output: Path, arch: str
+) -> None:
+    groups = ["runtime", "rnaseq-overlay"] + (["intel-source"] if arch == "x86_64" else [])
+    for group in groups:
+        write_filtered_lock(entries, output / "lock-inputs" / f"{group}.txt", {group})
+
+
+def _copy_hash_verified_file(
+    source: Path, destination: Path, expected_sha256: str
+) -> bool:
+    """Copy one immutable cached artifact only when its bytes match the pin."""
+    if source.is_symlink() or not source.is_file():
+        return False
+    try:
+        if sha256(source) != expected_sha256:
+            return False
+    except OSError:
+        return False
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_name(f".{destination.name}.cache-candidate")
+    if temporary.exists() or temporary.is_symlink():
+        if temporary.is_dir() and not temporary.is_symlink():
+            shutil.rmtree(temporary)
+        else:
+            temporary.unlink()
+    try:
+        shutil.copy2(source, temporary, follow_symlinks=False)
+        if sha256(temporary) != expected_sha256:
+            return False
+        os.replace(temporary, destination)
+        return True
+    finally:
+        if temporary.exists() or temporary.is_symlink():
+            temporary.unlink()
+
+
+def _reuse_cached_wheelhouse(
+    cache_wheelhouse: Path,
+    destination: Path,
+    entries: tuple[LockEntry, ...],
+) -> dict[str, str] | None:
+    """Materialize only an exact, fully re-hashed lock archive set."""
+    if cache_wheelhouse.is_symlink() or not cache_wheelhouse.is_dir():
+        return None
+    if any(path.is_symlink() or not path.is_file() for path in cache_wheelhouse.iterdir()):
+        return None
+    try:
+        admitted = validate_download_set(entries, cache_wheelhouse)
+    except (OSError, RuntimeError):
+        return None
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    candidate = destination.with_name(f".{destination.name}.cache-candidate")
+    if candidate.exists() or candidate.is_symlink():
+        if candidate.is_dir() and not candidate.is_symlink():
+            shutil.rmtree(candidate)
+        else:
+            candidate.unlink()
+    try:
+        shutil.copytree(cache_wheelhouse, candidate, symlinks=False)
+        if validate_download_set(entries, candidate) != admitted:
+            return None
+        os.replace(candidate, destination)
+        return dict(sorted(admitted.items()))
+    except (OSError, RuntimeError):
+        return None
+    finally:
+        if candidate.exists() or candidate.is_symlink():
+            if candidate.is_dir() and not candidate.is_symlink():
+                shutil.rmtree(candidate)
+            else:
+                candidate.unlink()
 
 
 def _validate_built_gseapy_wheel(
@@ -1213,6 +1397,73 @@ def _macho_candidates(runtime: Path) -> list[Path]:
     return sorted(candidates)
 
 
+def thin_universal_machos(
+    runtime: Path,
+    arch: str,
+    root: Path,
+    logger: ProvisionLogger,
+) -> list[dict[str, object]]:
+    """Atomically reduce every universal Mach-O to the one native slice."""
+    capture = lambda command, **_kwargs: run_captured(command, root=root, logger=logger)
+    records: list[dict[str, object]] = []
+    for path in _macho_candidates(runtime):
+        source_architectures = _macho_architectures(path, capture, root)
+        if len(source_architectures) == 1:
+            continue
+        if arch not in source_architectures:
+            raise RuntimeError(
+                f"Universal Mach-O does not contain native {arch}: "
+                f"{path}: {sorted(source_architectures)}"
+            )
+        source_hash = sha256(path)
+        source_mode = stat.S_IMODE(path.stat().st_mode)
+        descriptor, temporary_name = tempfile.mkstemp(
+            prefix=f".{path.name}.", suffix=f".{arch}.thin", dir=path.parent
+        )
+        os.close(descriptor)
+        temporary = Path(temporary_name)
+        temporary.unlink()
+        try:
+            run_logged(
+                [
+                    "/usr/bin/lipo",
+                    "-thin",
+                    arch,
+                    str(path),
+                    "-output",
+                    str(temporary),
+                ],
+                root=root,
+                logger=logger,
+            )
+            result_architectures = _macho_architectures(temporary, capture, root)
+            if result_architectures != {arch}:
+                raise RuntimeError(
+                    f"Thinned Mach-O is not exact native {arch}: "
+                    f"{path}: {sorted(result_architectures)}"
+                )
+            os.chmod(temporary, source_mode)
+            result_hash = sha256(temporary)
+            os.replace(temporary, path)
+        finally:
+            if temporary.exists():
+                temporary.unlink()
+        records.append(
+            {
+                "path": path.relative_to(runtime).as_posix(),
+                "source_architectures": [
+                    candidate
+                    for candidate in ("x86_64", "arm64")
+                    if candidate in source_architectures
+                ],
+                "source_sha256": source_hash,
+                "result_architectures": [arch],
+                "result_sha256": result_hash,
+            }
+        )
+    return records
+
+
 def _verify_macho_inventory(
     runtime: Path, arch: str, root: Path, logger: ProvisionLogger
 ) -> dict:
@@ -1229,7 +1480,40 @@ def _verify_macho_inventory(
     kaleido = [record["path"] for record in records if "/kaleido/executable/" in f"/{record['path']}"]
     if not kaleido:
         raise RuntimeError("Bundled Kaleido payload contains no Mach-O helper")
-    return {"count": len(records), "sha256": hashlib.sha256(encoded).hexdigest(), "kaleido_helpers": kaleido}
+    return {
+        "count": len(records),
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+        "kaleido_helpers": kaleido,
+        "files": records,
+    }
+
+
+def validate_macho_thinning_provenance(
+    thinning: list[dict[str, object]], inventory: dict
+) -> None:
+    """Bind each thinning result to the independently inventoried final file."""
+    inventory_records = inventory.get("files")
+    if not isinstance(inventory_records, list):
+        raise RuntimeError("Final Mach-O inventory has no file records")
+    by_path: dict[str, dict] = {}
+    for record in inventory_records:
+        if not isinstance(record, dict) or not isinstance(record.get("path"), str):
+            raise RuntimeError("Final Mach-O inventory contains an invalid file record")
+        path = record["path"]
+        if path in by_path:
+            raise RuntimeError(f"Final Mach-O inventory repeats a path: {path}")
+        by_path[path] = record
+    for record in thinning:
+        path = record.get("path")
+        final_record = by_path.get(path) if isinstance(path, str) else None
+        if (
+            final_record is None
+            or final_record.get("sha256") != record.get("result_sha256")
+            or final_record.get("architectures") != record.get("result_architectures")
+        ):
+            raise RuntimeError(
+                f"Thinning result does not match final Mach-O inventory: {path}"
+            )
 
 
 def _requirements_hashes(source_root: Path) -> dict[str, str]:
@@ -1364,12 +1648,14 @@ def _write_runtime_manifest(
     source_provenance: dict | None,
     source_inventory: dict,
     runtime_distributions: list[dict[str, str]],
+    macho_thinning: list[dict[str, object]],
     macho_inventory: dict,
     probe_results: dict[str, dict],
     development_reuse: bool,
     fingerprint: str,
     logger: ProvisionLogger,
 ) -> Path:
+    validate_macho_thinning_provenance(macho_thinning, macho_inventory)
     manifest = {
         "schema_version": BOOTSTRAP_SCHEMA_VERSION,
         "head_sha": head,
@@ -1386,6 +1672,7 @@ def _write_runtime_manifest(
         "intel_gseapy_source_build": source_provenance,
         "backend_sources": source_inventory,
         "runtime_distributions": runtime_distributions,
+        "universal_macho_thinning": macho_thinning,
         "macho_inventory": macho_inventory,
         "probe_results": probe_results,
         "runtime_tree_sha256": runtime_tree_sha256(runtime),
@@ -1397,38 +1684,46 @@ def _write_runtime_manifest(
     return path
 
 
-def _valid_cache_snapshot(cache_runtime: Path, arch: str, fingerprint: str) -> bool:
-    manifest_path = cache_runtime / "easycris_runtime_manifest.json"
-    if not (cache_runtime / "bin" / "python3.12").is_file() or not manifest_path.is_file():
-        return False
+def _populate_artifact_cache(
+    *,
+    root: Path,
+    cache_artifacts: Path,
+    archive_path: Path,
+    wheelhouse: Path,
+    pin: dict[str, str],
+    entries: tuple[LockEntry, ...],
+) -> None:
+    """Atomically cache only immutable CPython and exact lock artifacts."""
+    _validate_managed_path(root, cache_artifacts, "python-runtime-cache")
+    if sha256(archive_path) != pin["sha256"]:
+        raise RuntimeError("Cannot cache CPython archive with a mismatched pin hash")
+    admitted = validate_download_set(entries, wheelhouse)
+    cache_artifacts.parent.mkdir(parents=True, exist_ok=True)
+    candidate = cache_artifacts.with_name("artifacts.candidate")
+    _validate_managed_path(root, candidate, "python-runtime-cache")
+    if candidate.exists() or candidate.is_symlink():
+        if candidate.is_dir() and not candidate.is_symlink():
+            shutil.rmtree(candidate)
+        else:
+            candidate.unlink()
     try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return False
-    expected_tree = manifest.get("runtime_tree_sha256")
-    if not isinstance(expected_tree, str) or not re.fullmatch(r"[0-9a-f]{64}", expected_tree):
-        return False
-    try:
-        actual_tree = runtime_tree_sha256(cache_runtime)
-    except (OSError, RuntimeError):
-        return False
-    return (
-        manifest.get("architecture") == arch
-        and manifest.get("content_fingerprint") == fingerprint
-        and actual_tree == expected_tree
-    )
-
-
-def _populate_dev_cache(root: Path, runtime: Path, cache_runtime: Path) -> None:
-    _validate_managed_path(root, cache_runtime, "python-runtime-cache")
-    cache_runtime.parent.mkdir(parents=True, exist_ok=True)
-    temporary = cache_runtime.with_name("runtime-snapshot.candidate")
-    if temporary.exists():
-        shutil.rmtree(temporary)
-    shutil.copytree(runtime, temporary, symlinks=True)
-    if cache_runtime.exists():
-        shutil.rmtree(cache_runtime)
-    os.replace(temporary, cache_runtime)
+        cached_archive = candidate / "cpython" / pin["filename"]
+        cached_archive.parent.mkdir(parents=True)
+        shutil.copy2(archive_path, cached_archive, follow_symlinks=False)
+        shutil.copytree(wheelhouse, candidate / "wheelhouse", symlinks=False)
+        if sha256(cached_archive) != pin["sha256"]:
+            raise RuntimeError("Cached CPython archive changed during population")
+        if validate_download_set(entries, candidate / "wheelhouse") != admitted:
+            raise RuntimeError("Cached wheelhouse changed during population")
+        if cache_artifacts.exists():
+            shutil.rmtree(cache_artifacts)
+        os.replace(candidate, cache_artifacts)
+    finally:
+        if candidate.exists() or candidate.is_symlink():
+            if candidate.is_dir() and not candidate.is_symlink():
+                shutil.rmtree(candidate)
+            else:
+                candidate.unlink()
 
 
 def provision(
@@ -1447,8 +1742,10 @@ def provision(
     atomic_write_json(checkpoint, {"status": "running", "head_sha": head, "architecture": arch})
     runtime = root / "python_embedded" / "runtime"
     fingerprint = compute_content_fingerprint(root, arch)
-    cache_runtime = root / "_tmp" / "python-runtime-cache" / fingerprint / arch / "runtime-snapshot"
-    _validate_managed_path(root, cache_runtime, "python-runtime-cache")
+    cache_artifacts = (
+        root / "_tmp" / "python-runtime-cache" / fingerprint / arch / "artifacts"
+    )
+    _validate_managed_path(root, cache_artifacts, "python-runtime-cache")
     source_inventory = backend_source_inventory(root / "python_embedded")
     lock_path = root / "python_embedded" / f"requirements-macos-{arch}.lock"
     entries = parse_hashed_lock(lock_path)
@@ -1457,72 +1754,90 @@ def provision(
         root / "python_embedded" / "requirements-macos.txt",
         root / "python_embedded" / "requirements-rnaseq.txt",
     )
-    development_reuse = reuse_dev_cache and _valid_cache_snapshot(cache_runtime, arch, fingerprint)
+    development_reuse = False
     try:
         source_provenance = None
         wheel_hashes: dict[str, str] = {}
-        if development_reuse:
-            logger.phase("reuse-validated-development-cache")
-            atomic_materialize_runtime(cache_runtime, runtime)
+        archive_path = output / "archive" / pin["filename"]
+        cached_archive = cache_artifacts / "cpython" / pin["filename"]
+        if reuse_dev_cache and _copy_hash_verified_file(
+            cached_archive, archive_path, pin["sha256"]
+        ):
+            logger.phase("reuse-hash-verified-cpython-archive")
+            development_reuse = True
         else:
             logger.phase("download-pinned-cpython")
-            archive_path = output / "archive" / pin["filename"]
             _download_archive(pin, archive_path, logger)
-            logger.phase("verify-and-extract-cpython")
-            extracted = output / "extracted"
-            verify_and_extract_archive(archive_path, extracted, expected_sha256=pin["sha256"])
-            atomic_materialize_runtime(extracted / "python", runtime)
+        logger.phase("verify-and-extract-cpython")
+        extracted = output / "extracted"
+        verify_and_extract_archive(archive_path, extracted, expected_sha256=pin["sha256"])
+        atomic_materialize_runtime(extracted / "python", runtime)
         logger.phase("verify-relocated-interpreter")
         interpreter = _verify_relocated_interpreter(runtime / "bin" / "python3.12", arch, root, logger)
-        if not development_reuse:
-            logger.phase("prepare-build-environment")
-            builder = _ensure_builder(root, logger)
+        logger.phase("prepare-build-environment")
+        builder = _ensure_builder(root, logger)
+        wheelhouse = output / "wheelhouse"
+        cached_wheel_hashes = None
+        if reuse_dev_cache:
+            cached_wheel_hashes = _reuse_cached_wheelhouse(
+                cache_artifacts / "wheelhouse", wheelhouse, entries
+            )
+        if cached_wheel_hashes is not None:
+            logger.phase("reuse-hash-verified-lock-artifacts")
+            _write_locked_group_inputs(entries, output, arch)
+            wheel_hashes = cached_wheel_hashes
+            development_reuse = True
+        else:
             logger.phase("download-hash-locked-dependencies")
             wheelhouse, wheel_hashes = _download_locked_groups(
                 root=root, output=output, builder=builder, entries=entries, arch=arch, logger=logger
             )
-            logger.phase("install-hash-locked-dependencies")
-            source_provenance = _install_locked_dependencies(
-                root=root, output=output, runtime=runtime, builder=builder, entries=entries,
-                wheelhouse=wheelhouse, arch=arch, logger=logger,
-            )
-            logger.phase("apply-and-validate-rnaseq-overlay")
-            _apply_and_validate_overlay(root=root, runtime=runtime, logger=logger)
+        logger.phase("install-hash-locked-dependencies")
+        source_provenance = _install_locked_dependencies(
+            root=root, output=output, runtime=runtime, builder=builder, entries=entries,
+            wheelhouse=wheelhouse, arch=arch, logger=logger,
+        )
+        logger.phase("apply-and-validate-rnaseq-overlay")
+        _apply_and_validate_overlay(root=root, runtime=runtime, logger=logger)
         logger.phase("prune-provisioning-artifacts")
         prune_provisioning_artifacts(runtime)
-        if not development_reuse:
-            logger.phase("stage-backend-sources")
-            site_packages = runtime / "lib" / "python3.12" / "site-packages"
-            source_inventory = stage_backend_sources(root / "python_embedded", site_packages)
+        logger.phase("stage-backend-sources")
+        site_packages = runtime / "lib" / "python3.12" / "site-packages"
+        source_inventory = stage_backend_sources(root / "python_embedded", site_packages)
         logger.phase("validate-final-runtime-inventory")
         validate_pruned_runtime(runtime, root, logger)
         runtime_distributions = final_runtime_distribution_inventory(
             runtime, entries, root, logger
         )
+        logger.phase("thin-universal-macho-files")
+        macho_thinning = thin_universal_machos(runtime, arch, root, logger)
         logger.phase("validate-final-runtime-imports")
         _verify_required_imports(root=root, runtime=runtime, logger=logger)
         logger.phase("run-protocol-and-export-probes")
         probe_results = _run_real_probes(runtime, output)
         logger.phase("validate-macho-inventory")
         macho_inventory = _verify_macho_inventory(runtime, arch, root, logger)
-        if development_reuse:
-            cached_manifest = json.loads((runtime / "easycris_runtime_manifest.json").read_text(encoding="utf-8"))
-            wheel_hashes = cached_manifest.get("wheel_archive_sha256", {})
-            source_provenance = cached_manifest.get("intel_gseapy_source_build")
         logger.phase("write-manifest-and-checkpoint")
         manifest_path = _write_runtime_manifest(
             root=root, runtime=runtime, output=output, arch=arch, head=head,
             clean_tree=clean_tree, dirty_count=dirty_count, pin=pin, interpreter=interpreter,
             wheel_hashes=wheel_hashes, source_provenance=source_provenance,
             source_inventory=source_inventory, runtime_distributions=runtime_distributions,
+            macho_thinning=macho_thinning,
             macho_inventory=macho_inventory,
             probe_results=probe_results, development_reuse=development_reuse,
             fingerprint=fingerprint, logger=logger,
         )
         manifest_hash = sha256(manifest_path)
         mark_checkpoint_passed(checkpoint, manifest_hash, probe_results)
-        if not development_reuse:
-            _populate_dev_cache(root, runtime, cache_runtime)
+        _populate_artifact_cache(
+            root=root,
+            cache_artifacts=cache_artifacts,
+            archive_path=archive_path,
+            wheelhouse=wheelhouse,
+            pin=pin,
+            entries=entries,
+        )
         logger.phase("complete")
         return runtime
     except Exception as exc:
@@ -1550,10 +1865,11 @@ def main(argv: list[str] | None = None) -> int:
                 ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
             ).stdout.strip()
             arch = platform.machine()
-            log = ROOT / "_tmp" / "python-runtime" / head / arch / "provision.log"
-            tail = failure_log_tail(log)
+            tail = managed_failure_log_tail(ROOT, head, arch)
             if tail:
                 print(tail, file=sys.stderr)
+        except Exception as log_error:
+            print(f"provision-log-rejected: {log_error}", file=sys.stderr)
         finally:
             print(f"macos-python-runtime-failed: {exc}", file=sys.stderr)
         return 1
