@@ -115,14 +115,19 @@ jobs:
             APP="src-tauri/target/release/bundle/macos/easyCris.app"
           fi
           test -d "$APP"
+          # Same-step consumers need a real shell/process env; GITHUB_ENV only applies to later steps.
+          export APP_PATH="$APP"
           echo "APP_PATH=$APP" >> "$GITHUB_ENV"
 
           # Enumerate nested Mach-O payloads under the app and sign deepest paths first.
-          python3 - <<'PY'
-          import os, subprocess, sys
+          # Pass the path as argv so the quoted heredoc cannot depend on delayed GITHUB_ENV.
+          python3 - "$APP_PATH" <<'PY'
+          import subprocess, sys
           from pathlib import Path
 
-          app = Path(os.environ["APP_PATH"])
+          app = Path(sys.argv[1])
+          if not app.is_dir():
+              raise SystemExit(f"app bundle missing: {app}")
           roots = [
               app / "Contents" / "Resources",
               app / "Contents" / "MacOS",

@@ -33,6 +33,24 @@ test('protected validation provisions, stages, builds, signs, and validates', ()
   assert.doesNotMatch(workflow, /@tauri-apps\/cli@2/)
 })
 
+test('sign step exports APP_PATH for same-step consumers and later steps', () => {
+  const signStart = workflow.indexOf('Sign nested runtime inside-out')
+  assert.notEqual(signStart, -1)
+  const validateStart = workflow.indexOf('Validate installed backends and exports')
+  assert.notEqual(validateStart, -1)
+  assert.ok(validateStart > signStart)
+  const signStep = workflow.slice(signStart, validateStart)
+
+  // GITHUB_ENV alone is not visible in the same step; same-step signing needs export.
+  assert.match(signStep, /export APP_PATH="\$APP"/)
+  assert.match(signStep, /echo "APP_PATH=\$APP" >> "\$GITHUB_ENV"/)
+  // Prefer argv over delayed GITHUB_ENV for the quoted python heredoc.
+  assert.match(signStep, /python3 - "\$APP_PATH"/)
+  assert.match(signStep, /Path\(sys\.argv\[1\]\)/)
+  assert.doesNotMatch(signStep, /os\.environ\["APP_PATH"\]/)
+  assert.match(signStep, /codesign --verify --deep --strict --verbose=2 "\$APP_PATH"/)
+})
+
 test('protected validation never mutates public releases or private E2E', () => {
   for (const forbidden of [
     'softprops/action-gh-release',
