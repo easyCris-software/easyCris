@@ -6,6 +6,8 @@
 ![Version](https://img.shields.io/badge/version-latest-brightgreen)
 ![License](https://img.shields.io/badge/license-Apache--2.0-blue)
 
+> **macOS support is coming soon for both Apple Silicon and Intel Macs.**
+
 <table>
   <tr>
     <td><img src="assets/screenshots/anova_bar_tukey.png" alt="One-Way ANOVA with Tukey post-hoc brackets" width="420"/></td>
