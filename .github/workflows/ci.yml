@@ -89,7 +89,7 @@ jobs:
           - runner: macos-15-intel
             rust_target: x86_64-apple-darwin
             suffix: x86_64
-          - runner: macos-14
+          - runner: macos-15
             rust_target: aarch64-apple-darwin
             suffix: aarch64
     runs-on: ${{ matrix.runner }}
@@ -135,6 +135,9 @@ jobs:
       - name: Runtime naming tests
         run: npm run -s test:runtime-platform
 
+      - name: Darwin provisioner unit tests
+        run: npm run -s test:python-runtime:macos
+
       - name: Compiler helper tests
         run: npm run -s test:compile-python
 
@@ -154,6 +157,9 @@ jobs:
           cargo test --manifest-path src-tauri/Cargo.toml compiled_backend_names_follow_platform
           cargo test --manifest-path src-tauri/Cargo.toml venv_python_paths_follow_platform
           cargo test --manifest-path src-tauri/Cargo.toml macos_bundle_python_base_dir_candidate_uses_updater_resources
+          cargo test --manifest-path src-tauri/Cargo.toml bundled_runtime
+          cargo test --manifest-path src-tauri/Cargo.toml backend_mode
+          cargo test --manifest-path src-tauri/Cargo.toml choose_backend_mode
 
       - name: Rust check
         run: cargo check --manifest-path src-tauri/Cargo.toml

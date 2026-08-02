@@ -22,10 +22,15 @@ test('preserves Windows and adds native Intel and Apple Silicon macOS lanes', ()
   const macosJob = macosQualityJob(workflow)
   assert.notEqual(macosJob, undefined)
   assert.match(macosJob, /name:\s*macos-community-quality-gates/)
-  assert.match(macosJob, /runner:\s*macos-15-intel/)
-  assert.match(macosJob, /rust_target:\s*x86_64-apple-darwin/)
-  assert.match(macosJob, /runner:\s*macos-14/)
-  assert.match(macosJob, /rust_target:\s*aarch64-apple-darwin/)
+  assert.match(
+    macosJob,
+    /- runner:\s*macos-15-intel\s+rust_target:\s*x86_64-apple-darwin\s+suffix:\s*x86_64/
+  )
+  assert.match(
+    macosJob,
+    /- runner:\s*macos-15\s+rust_target:\s*aarch64-apple-darwin\s+suffix:\s*aarch64/
+  )
+  assert.doesNotMatch(macosJob, /runner:\s*macos-14/)
 })
 
 test('macOS PR quality lane excludes private E2E and expensive release work', () => {
@@ -39,6 +44,11 @@ test('macOS PR quality lane excludes private E2E and expensive release work', ()
     'compile-python:macos',
     'tauri:build:macos',
     '_tmp/nuitka',
+    'provision-python:macos',
+    'softprops/action-gh-release',
+    'latest.json',
+    'APPLE_CERTIFICATE',
+    'TAURI_SIGNING_PRIVATE_KEY',
   ]) {
     assert.equal(macosJob.includes(forbidden), false, forbidden)
   }
@@ -61,4 +71,13 @@ test('macOS fast job boundary excludes protected sibling contents', () => {
   const macosJob = macosQualityJob(workflowWithProtectedSibling)
   assert.notEqual(macosJob, undefined)
   assert.equal(macosJob.includes('compile-python:macos'), false)
+})
+
+test('macOS fast lane runs provisioner mocks and bundled-mode Rust tests', () => {
+  const macosJob = macosQualityJob(workflow)
+  assert.notEqual(macosJob, undefined)
+  assert.match(macosJob, /test:python-runtime:macos/)
+  assert.match(macosJob, /bundled_runtime/)
+  assert.match(macosJob, /backend_mode/)
+  assert.match(macosJob, /choose_backend_mode/)
 })
