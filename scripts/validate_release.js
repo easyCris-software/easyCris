@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { spawnSync } from 'node:child_process'
+import crypto from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -12,11 +13,17 @@ import {
 } from './python-runtime-constants.mjs'
 import {
   inspectDarwinBinary,
+  minimumMacOSVersions,
   validateDarwinBinaryDescription,
   validateDarwinTree,
 } from './darwin-artifact-validation.mjs'
 import { assertPlotExportArtifact } from './plot-export-signatures.mjs'
-import { cleanTransientKaleidoLogs } from './stage_python_runtime.mjs'
+import {
+  cleanTransientKaleidoLogs,
+  runtimeManifestContext,
+  runtimeTreeSha256,
+  validateDarwinRuntimeManifest,
+} from './stage_python_runtime.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -43,7 +50,6 @@ const shippedFontDirPath = path.join(rootDir, 'public', 'fonts')
 const requireFrontendDist = process.argv.includes('--require-frontend-dist')
 const checkInstalledUpdater = process.argv.includes('--check-installed-updater')
 const communityMode = process.argv.includes('--community')
-const requireScriptCompiledPlotParity = process.argv.includes('--require-script-compiled-plot-parity')
 const probeOutputDir = path.join(rootDir, '_tmp')
 
 const allowedPythonFiles = new Set()
@@ -239,7 +245,7 @@ export function resolveInstalledDarwinDist(appPath) {
     '_up_',
     'bundle_resources',
     'python_embedded',
-    'dist'
+    'runtime'
   )
 }
 
@@ -372,13 +378,13 @@ function runDarwinProbe({ executable, args = [], payload, label, outputFormat, r
 }
 
 function validateDarwinMachO(targetPath, label, expectedArchitecture, inspectMachO, localErrors) {
-  if (!fs.existsSync(targetPath)) return
+  if (!fs.existsSync(targetPath)) return null
   let description
   try {
     description = String(inspectMachO(targetPath))
   } catch (error) {
     localErrors.push(`Failed to inspect ${label} architecture: ${targetPath} (${error.message})`)
-    return
+    return null
   }
   const architectures = description.match(/\b(?:x86_64|arm64)\b/g) || []
   if (!description.includes('Mach-O') || !architectures.includes(expectedArchitecture)) {
@@ -390,6 +396,7 @@ function validateDarwinMachO(targetPath, label, expectedArchitecture, inspectMac
     label,
     targetPath,
   }).filter(error => !error.includes('architecture mismatch')))
+  return description
 }
 
 function validateDarwinRnaSeqCaches(backendDistDir, label, localErrors) {
@@ -509,9 +516,21 @@ function walkPathsRecursive(targetDir) {
   return result
 }
 
-export function validateMacBundleResources(resourceRoot) {
+function isConfinedTask5ActivatePs1(runtimeRoot, candidate) {
+  if (!runtimeRoot) return false
+  try {
+    if (!fs.lstatSync(candidate).isFile()) return false
+    const runtime = fs.realpathSync(runtimeRoot)
+    return fs.realpathSync(candidate) === path.join(runtime, 'lib', 'python3.12', 'venv', 'scripts', 'common', 'Activate.ps1')
+  } catch {
+    return false
+  }
+}
+
+export function validateMacBundleResources(resourceRoot, { runtimeRoot } = {}) {
   const forbiddenMacSuffixes = ['.exe', '.dll', '.pyd', '.ps1']
   const forbiddenMacNames = ['pywin32', 'win32com', 'msedgedriver']
+  const forbiddenLegacyRuntimeNames = new Set(['dist', 'builder', 'build', 'wheelhouse', 'archive', 'archives', 'pip-cache', 'pip_cache', '_tmp'])
   const localErrors = []
   if (!fs.existsSync(resourceRoot)) return localErrors
   const paths = walkPathsRecursive(resourceRoot)
@@ -519,7 +538,7 @@ export function validateMacBundleResources(resourceRoot) {
     const parts = path.relative(resourceRoot, candidate).split(path.sep).filter(Boolean)
     const name = path.basename(candidate).toLowerCase()
     if (
-      forbiddenMacSuffixes.some(suffix => name.endsWith(suffix)) ||
+      (forbiddenMacSuffixes.some(suffix => name.endsWith(suffix)) && !isConfinedTask5ActivatePs1(runtimeRoot, candidate)) ||
       parts.some(part => {
         const normalized = part.toLowerCase()
         return forbiddenMacNames.includes(normalized) || normalized.startsWith('pywin32')
@@ -527,11 +546,17 @@ export function validateMacBundleResources(resourceRoot) {
     ) {
       localErrors.push(`Windows-only payload found in macOS resources: ${candidate}`)
     }
+    if (path.basename(path.dirname(candidate)).toLowerCase() === 'python_embedded') {
+      const normalized = name.toLowerCase()
+      if (normalized.endsWith('.dist') || forbiddenLegacyRuntimeNames.has(normalized)) {
+        localErrors.push(`Legacy Python runtime or build payload found in macOS resources: ${candidate}`)
+      }
+    }
   }
   return localErrors
 }
 
-export function validateDarwinRuntime({
+function validateLegacyDarwinRuntime({
   paths,
   requireScriptCompiledPlotParity: requireParity = false,
   installedApp,
@@ -628,6 +653,214 @@ export function validateDarwinRuntime({
     }
   }
 
+  return { errors: localErrors }
+}
+
+function bundledBackendPayload(backend, format, outputPath) {
+  if (backend === 'stats') {
+    return { test: 'independent_ttest', data: { group1: [1, 2, 3, 4], group2: [5, 6, 7, 8] }, parameters: { equal_var: true } }
+  }
+  if (backend === 'rnaseq') {
+    return { test: 'rnaseq_validate', data: { counts: { GeneA: { S1: 20, S2: 25 } }, metadata: { S1: { condition: 'A' }, S2: { condition: 'B' } } }, parameters: {} }
+  }
+  if (format) {
+    return {
+      action: 'export_plot',
+      plotly_json: PLOT_EXPORT_PROBE_FIGURE,
+      output_path: outputPath,
+      options: { format, width: 80, height: 80, dpi: 96 },
+    }
+  }
+  return { action: 'trendline', x: [1, 2, 3, 4], y: [2, 4, 6, 8], type: 'linear' }
+}
+
+function isMachOFile(targetPath) {
+  try {
+    const header = fs.readFileSync(targetPath).subarray(0, 4).toString('hex')
+    return new Set(['feedface', 'cefaedfe', 'feedfacf', 'cffaedfe', 'cafebabe', 'bebafeca', 'cafebabf', 'bfbafeca']).has(header)
+  } catch {
+    return false
+  }
+}
+
+function walkValidatedRuntimeFiles(runtime) {
+  const result = []
+  const stack = [runtime]
+  while (stack.length > 0) {
+    const current = stack.pop()
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const targetPath = path.join(current, entry.name)
+      if (entry.isDirectory()) {
+        stack.push(targetPath)
+      } else if (entry.isFile()) {
+        result.push(targetPath)
+      } else if (entry.isSymbolicLink()) {
+        try {
+          if (fs.statSync(targetPath).isFile()) result.push(targetPath)
+        } catch {}
+      }
+    }
+  }
+  return result
+}
+
+function validateBundledMachO(runtime, manifest, expectedArchitecture, inspectMachO, localErrors) {
+  const expected = new Map((manifest?.macho_inventory?.files || []).map(entry => [entry.path, entry]))
+  const found = walkValidatedRuntimeFiles(runtime).filter(isMachOFile)
+  for (const targetPath of found) {
+    const relative = path.relative(runtime, targetPath).split(path.sep).join('/')
+    const record = expected.get(relative)
+    if (!record) {
+      localErrors.push(`Mach-O missing from runtime manifest inventory: ${relative}`)
+      continue
+    }
+    if (record.sha256 !== crypto.createHash('sha256').update(fs.readFileSync(targetPath)).digest('hex')) {
+      localErrors.push(`Mach-O hash differs from runtime manifest: ${relative}`)
+    }
+    const description = validateDarwinMachO(targetPath, `runtime Mach-O ${relative}`, expectedArchitecture, inspectMachO, localErrors)
+    if (!description || !record) continue
+    const architectures = [...new Set(description.match(/\b(?:x86_64|arm64)\b/g) || [])].sort()
+    if (JSON.stringify(architectures) !== JSON.stringify([expectedArchitecture])) {
+      localErrors.push(`runtime Mach-O ${relative} is not an exact native slice: ${architectures.join(', ') || 'none'}`)
+    }
+    const versions = minimumMacOSVersions(description)
+    if (JSON.stringify(record.architectures) !== JSON.stringify([expectedArchitecture]) || JSON.stringify(record.minimum_macos_versions) !== JSON.stringify(versions)) {
+      localErrors.push(`Runtime manifest Mach-O metadata is stale: ${relative}`)
+    }
+  }
+  for (const relative of expected.keys()) {
+    if (!found.some(targetPath => path.relative(runtime, targetPath).split(path.sep).join('/') === relative)) {
+      localErrors.push(`Runtime manifest Mach-O is missing: ${relative}`)
+    }
+  }
+}
+
+function validateRuntimeSysPath(runtime, interpreter, runner, localErrors) {
+  const result = runner({
+    command: interpreter,
+    args: ['-I', '-B', '-c', 'import json,sys; print(json.dumps(sys.path))'],
+    input: '',
+    cwd: runtime,
+  })
+  if (result?.status !== 0) {
+    localErrors.push(`Bundled interpreter sys.path probe failed: ${runtime}`)
+    return
+  }
+  let entries
+  try { entries = JSON.parse(String(result.stdout).trim()) } catch { entries = null }
+  if (!Array.isArray(entries)) {
+    localErrors.push(`Bundled interpreter returned invalid sys.path data: ${runtime}`)
+    return
+  }
+  const resolved = fs.realpathSync(runtime)
+  for (const entry of entries) {
+    if (typeof entry !== 'string' || entry.length === 0) {
+      localErrors.push(`Bundled interpreter returned invalid sys.path entry: ${String(entry)}`)
+      continue
+    }
+    const candidate = path.isAbsolute(entry) ? path.resolve(entry) : path.resolve(runtime, entry)
+    const canonical = fs.existsSync(candidate) ? fs.realpathSync(candidate) : candidate
+    const relative = path.relative(resolved, canonical)
+    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+      localErrors.push(`Bundled interpreter sys.path escapes runtime: ${entry}`)
+    }
+  }
+}
+
+function validateBundledInterpreterVersion(runtime, interpreter, version, runner, localErrors) {
+  const result = runner({ command: interpreter, args: ['--version'], input: '', cwd: runtime })
+  if (result?.status !== 0 || result?.error) {
+    localErrors.push(`Bundled interpreter version probe failed: ${runtime}`)
+    return
+  }
+  const expected = `Python ${version}`
+  if (String(result.stdout).trim() !== expected) {
+    localErrors.push(`Bundled interpreter version differs from pinned CPython: expected ${expected}, got ${String(result.stdout).trim() || '(empty)'}`)
+  }
+}
+
+function runtimeManifestSha256(runtime) {
+  return crypto.createHash('sha256').update(fs.readFileSync(path.join(runtime, 'easycris_runtime_manifest.json'))).digest('hex')
+}
+
+function runBundledBackendProbe({ runtime, backend, runner, outputDir, localErrors }) {
+  const interpreter = path.join(runtime, 'bin', 'python3.12')
+  const run = (format) => {
+    const outputPath = format
+      ? path.join(outputDir, `${path.basename(runtime)}-${backend}-${format}-${Date.now()}-${Math.random().toString(16).slice(2)}.${format}`)
+      : null
+    if (outputPath) fs.mkdirSync(outputDir, { recursive: true })
+    const result = runner({
+      command: interpreter,
+      args: ['-I', '-B', '-m', backend],
+      input: JSON.stringify(bundledBackendPayload(backend, format, outputPath)),
+      cwd: runtime,
+    })
+    const parsed = parseProbeResult(result, `${path.basename(runtime)}:${backend}${format ? `:${format}` : ''}`, localErrors)
+    if (parsed?.success !== true) localErrors.push(`Bundled ${backend} protocol did not report success=true: ${runtime}`)
+    if (outputPath) {
+      if (!fs.existsSync(outputPath) || fs.statSync(outputPath).size === 0) {
+        localErrors.push(`Bundled plot did not create ${format.toUpperCase()} output: ${runtime}`)
+      } else {
+        try { assertPlotExportArtifact(outputPath, format) } catch (error) { localErrors.push(error.message) }
+      }
+      if (fs.existsSync(outputPath)) fs.rmSync(outputPath, { force: true })
+    }
+  }
+  run()
+  if (backend === 'plot') {
+    run('pdf')
+    run('tiff')
+  }
+}
+
+export function validateDarwinRuntime({
+  paths,
+  installedApp,
+  runner = defaultDarwinRunner,
+  inspectMachO = defaultMachOInspector,
+  expectedArchitecture = os.arch(),
+  probeOutputDir: outputDir = probeOutputDir,
+  manifestContext,
+} = {}) {
+  const localErrors = []
+  const normalizedArchitecture = normalizeDarwinArchitecture(expectedArchitecture)
+  const trees = [
+    { runtime: paths?.sourceRuntime, label: 'source' },
+    { runtime: paths?.stagedRuntime, label: 'staged' },
+  ]
+  if (installedApp) trees.push({ runtime: resolveInstalledDarwinDist(installedApp), label: 'installed' })
+  for (const tree of trees) {
+    if (!tree.runtime) {
+      localErrors.push(`Missing ${tree.label} bundled runtime directory`)
+      continue
+    }
+    const context = manifestContext
+      ? { ...manifestContext, architecture: normalizedArchitecture }
+      : runtimeManifestContext(paths?.root ?? rootDir, { architecture: normalizedArchitecture })
+    const manifestErrors = validateDarwinRuntimeManifest(tree.runtime, { root: paths?.root, manifestContext: context })
+    localErrors.push(...manifestErrors.map(error => `${tree.label} ${error}`))
+    if (manifestErrors.length > 0) continue
+    const manifest = JSON.parse(fs.readFileSync(path.join(tree.runtime, 'easycris_runtime_manifest.json'), 'utf8'))
+    const before = runtimeTreeSha256(tree.runtime)
+    const manifestBefore = runtimeManifestSha256(tree.runtime)
+    const interpreter = path.join(tree.runtime, 'bin', 'python3.12')
+    validateBundledMachO(tree.runtime, manifest, normalizedArchitecture, inspectMachO, localErrors)
+    validateBundledInterpreterVersion(tree.runtime, interpreter, manifest.interpreter.version, runner, localErrors)
+    validateRuntimeSysPath(tree.runtime, interpreter, runner, localErrors)
+    for (const backend of REQUIRED_BACKENDS) {
+      runBundledBackendProbe({ runtime: tree.runtime, backend, runner, outputDir, localErrors })
+    }
+    if (runtimeTreeSha256(tree.runtime) !== before) localErrors.push(`Bundled runtime mutated during validation: ${tree.runtime}`)
+    if (runtimeManifestSha256(tree.runtime) !== manifestBefore) localErrors.push(`Bundled runtime manifest mutated during validation: ${tree.runtime}`)
+  }
+  if (paths?.stagedRuntime) {
+    localErrors.push(...validateMacBundleResources(path.dirname(path.dirname(paths.stagedRuntime)), { runtimeRoot: paths.stagedRuntime }))
+  }
+  if (installedApp) {
+    const installedRuntime = resolveInstalledDarwinDist(installedApp)
+    localErrors.push(...validateMacBundleResources(path.join(installedApp, 'Contents', 'Resources'), { runtimeRoot: installedRuntime }))
+  }
   return { errors: localErrors }
 }
 
@@ -1189,15 +1422,19 @@ function assertAnyExists(baseDir, candidates, messagePrefix) {
   }
 }
 
-function validateNoUnexpectedPyFiles() {
-  const stagedFiles = walkFilesRecursive(stagedRoot)
+export function validateNoUnexpectedPyFiles({ resourceRoot = stagedRoot, platform = process.platform, localErrors = errors } = {}) {
+  const stagedFiles = walkFilesRecursive(resourceRoot)
   const disallowed = stagedFiles.filter(filePath => {
     if (!filePath.toLowerCase().endsWith('.py')) {
       return false
     }
-    const relativePath = path.relative(stagedRoot, filePath).replace(/\\/g, '/')
-    // Nuitka runtime payloads legitimately include Python files inside *.dist folders.
-    if (/(^|\/)[^/]+\.dist\//.test(relativePath)) {
+    const relativePath = path.relative(resourceRoot, filePath).replace(/\\/g, '/')
+    // Only the Windows Nuitka layout legitimately includes Python files inside *.dist folders.
+    if (platform !== 'darwin' && /(^|\/)[^/]+\.dist\//.test(relativePath)) {
+      return false
+    }
+    // The Darwin runtime intentionally contains CPython's stdlib and backend modules.
+    if (platform === 'darwin' && relativePath.startsWith('runtime/')) {
       return false
     }
     return !allowedPythonFiles.has(relativePath)
@@ -1205,7 +1442,7 @@ function validateNoUnexpectedPyFiles() {
 
   if (disallowed.length > 0) {
     for (const filePath of disallowed) {
-      errors.push(`Disallowed Python source found in staged runtime: ${filePath}`)
+      localErrors.push(`Disallowed Python source found in staged runtime: ${filePath}`)
     }
   }
 }
@@ -1438,8 +1675,8 @@ function validateWindowsRuntime() {
   }
 }
 
-function validatePortableRelease() {
-  validateNoUnexpectedPyFiles()
+function validatePortableRelease(targetPlatform) {
+  validateNoUnexpectedPyFiles({ platform: targetPlatform })
   validateNoNuitkaInStagedRuntime()
   validateNoE2EArtifactsInReleaseDist()
   validateNoSourceMaps()
@@ -1456,17 +1693,16 @@ function main(argv = process.argv.slice(2)) {
   } else {
     const darwinResult = validateDarwinRuntime({
       paths: {
-        sourceDist,
-        stagedDist,
-        scriptPython: 'python3.12',
-        scriptPlot: scriptPlotBackendPath,
+        root: rootDir,
+        sourceRuntime: path.join(rootDir, 'python_embedded', 'runtime'),
+        stagedRuntime: path.join(stagedRoot, 'runtime'),
       },
-      requireScriptCompiledPlotParity,
       installedApp: readInstalledApp(argv),
+      manifestContext: runtimeManifestContext(rootDir),
     })
     errors.push(...darwinResult.errors)
   }
-  validatePortableRelease()
+  validatePortableRelease(targetPlatform)
   if (targetPlatform === 'win32') {
     validateNsisReleaseConfig()
     validateNsisArtifactSignatures()
