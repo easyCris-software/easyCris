@@ -25,9 +25,12 @@ test('protected validation provisions, stages, builds, signs, and validates', ()
   assert.match(workflow, /stage_python_runtime\.mjs/)
   assert.match(workflow, /validate_release\.js/)
   assert.match(workflow, /--bundles app/)
+  assert.match(workflow, /tauri\.validation\.macos\.conf\.json/)
   assert.match(workflow, /codesign/)
   assert.match(workflow, /--installed-app/)
   assert.match(workflow, /bundled_runtime/)
+  assert.match(workflow, /gseapy-dependency-smoke\.mjs/)
+  assert.doesNotMatch(workflow, /@tauri-apps\/cli@2/)
 })
 
 test('protected validation never mutates public releases or private E2E', () => {

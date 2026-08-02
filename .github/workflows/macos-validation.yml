@@ -89,13 +89,23 @@ jobs:
           node scripts/stage_python_runtime.mjs --platform darwin
           node scripts/validate_release.js --platform darwin --community
 
+      - name: Public GSEApy dependency smoke (staged runtime)
+        run: |
+          set -euo pipefail
+          node scripts/gseapy-dependency-smoke.mjs \
+            --python python_embedded/runtime/bin/python3.12
+
       - name: Build ad-hoc macOS app bundle
         env:
           CI: "true"
         run: |
           set -euo pipefail
           npm run -s build
-          npx --yes @tauri-apps/cli@2 build --bundles app --target "${{ matrix.rust_target }}"
+          # Validation overlay disables updater artifacts and Windows-only .ps1 resources.
+          npm exec -- tauri build \
+            --bundles app \
+            --target "${{ matrix.rust_target }}" \
+            --config src-tauri/tauri.validation.macos.conf.json
 
       - name: Sign nested runtime inside-out (ad-hoc hardened)
         run: |
@@ -168,6 +178,12 @@ jobs:
             --platform darwin \
             --community \
             --installed-app "$APP_PATH"
+          INSTALLED_PYTHON="$APP_PATH/Contents/Resources/_up_/bundle_resources/python_embedded/runtime/bin/python3.12"
+          if [[ ! -x "$INSTALLED_PYTHON" ]]; then
+            INSTALLED_PYTHON="$APP_PATH/Contents/Resources/python_embedded/runtime/bin/python3.12"
+          fi
+          test -x "$INSTALLED_PYTHON"
+          node scripts/gseapy-dependency-smoke.mjs --python "$INSTALLED_PYTHON"
 
       - name: Upload sanitized validation summary
         if: always()
