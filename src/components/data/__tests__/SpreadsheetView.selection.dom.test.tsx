@@ -213,6 +213,10 @@ describe('SpreadsheetView ctrl+a selection contract', () => {
       await Promise.resolve()
       await Promise.resolve()
     })
+    await waitFor(() => {
+      expect(storeHarness.state.setSelectedRows).toHaveBeenCalled()
+      expect(storeHarness.state.setSelectedColumns).toHaveBeenCalled()
+    })
     storeHarness.state.setSelectedRows.mockClear()
     storeHarness.state.setSelectedColumns.mockClear()
 
@@ -294,6 +298,10 @@ describe('SpreadsheetView ctrl+a selection contract', () => {
     await act(async () => {
       await Promise.resolve()
       await Promise.resolve()
+    })
+    await waitFor(() => {
+      expect(storeHarness.state.setSelectedRows).toHaveBeenCalled()
+      expect(storeHarness.state.setSelectedColumns).toHaveBeenCalled()
     })
     storeHarness.state.setSelectedRows.mockClear()
     storeHarness.state.setSelectedColumns.mockClear()
@@ -417,6 +425,16 @@ describe('SpreadsheetView ctrl+a selection contract', () => {
       expect(cacheHarness.getAllColumnStats).toHaveBeenCalledWith('dataset-1')
       expect(cacheHarness.getPersistedColumnIds).toHaveBeenCalledWith('dataset-1')
     })
+    await act(async () => {
+      await Promise.resolve()
+      await Promise.resolve()
+    })
+    await waitFor(() => {
+      expect(storeHarness.state.setSelectedRows).toHaveBeenCalled()
+      expect(storeHarness.state.setSelectedColumns).toHaveBeenCalled()
+    })
+    storeHarness.state.setSelectedRows.mockClear()
+    storeHarness.state.setSelectedColumns.mockClear()
 
     const handled = await act(async () => {
       return await keyboardHarness.handlers.onSelectAll?.()
