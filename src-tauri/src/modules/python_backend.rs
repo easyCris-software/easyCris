@@ -1,7 +1,7 @@
 // Python backend spawner module
 //
 // Handles:
-// - Spawning python.exe stats.py (or compiled .exe)
+// - Spawning a platform Python interpreter with stats.py (or a compiled backend)
 // - Writing JSON payload to stdin
 // - Reading JSON result from stdout
 // - Timeout handling (5 minutes max)
@@ -44,6 +44,52 @@ fn path_points_to_command_name(path: &Path) -> bool {
     path.parent().is_none() && path.components().count() == 1
 }
 
+#[derive(Clone, Copy)]
+#[allow(dead_code)] // Both supported target variants are retained for platform path contracts.
+enum TargetPlatform {
+    Windows,
+    MacOS,
+}
+
+fn host_platform() -> TargetPlatform {
+    #[cfg(windows)]
+    {
+        TargetPlatform::Windows
+    }
+    #[cfg(target_os = "macos")]
+    {
+        TargetPlatform::MacOS
+    }
+}
+
+fn venv_python_rel(platform: TargetPlatform) -> PathBuf {
+    match platform {
+        TargetPlatform::Windows => PathBuf::from(".venv-public/Scripts/python.exe"),
+        TargetPlatform::MacOS => PathBuf::from(".venv-public/bin/python"),
+    }
+}
+
+fn backend_executable_name(backend: &str, platform: TargetPlatform) -> String {
+    match platform {
+        TargetPlatform::Windows => format!("{backend}.exe"),
+        TargetPlatform::MacOS => backend.to_string(),
+    }
+}
+
+fn compiled_backend_rel(backend: &str) -> PathBuf {
+    PathBuf::from("python_embedded")
+        .join("dist")
+        .join(format!("{backend}.dist"))
+        .join(backend_executable_name(backend, host_platform()))
+}
+
+fn embedded_python_rel() -> Option<PathBuf> {
+    match host_platform() {
+        TargetPlatform::Windows => Some(PathBuf::from("python_embedded").join("python.exe")),
+        TargetPlatform::MacOS => None,
+    }
+}
+
 fn resolve_python_script_command(base_dir: &Path) -> PathBuf {
     if let Some(explicit_python) = std::env::var_os("EASYCRIS_PYTHON_EXE") {
         let explicit = PathBuf::from(explicit_python);
@@ -56,39 +102,32 @@ fn resolve_python_script_command(base_dir: &Path) -> PathBuf {
         );
     }
 
-    let embedded_python = base_dir.join(python_backend_script_rel());
-    if embedded_python.exists() {
-        return embedded_python;
+    if let Some(embedded_python_rel) = embedded_python_rel() {
+        let embedded_python = base_dir.join(embedded_python_rel);
+        if embedded_python.exists() {
+            return embedded_python;
+        }
     }
 
-    let venv_python = base_dir
-        .join(".venv-public")
-        .join("Scripts")
-        .join("python.exe");
+    let venv_python = base_dir.join(venv_python_rel(host_platform()));
     if venv_python.exists() {
         return venv_python;
     }
 
-    PathBuf::from("python")
+    match host_platform() {
+        TargetPlatform::Windows => PathBuf::from("python"),
+        TargetPlatform::MacOS => PathBuf::from("python3"),
+    }
 }
 
 /// Relative paths from executable directory
-const PYTHON_BACKEND_SCRIPT: &str = "python_embedded/python.exe";
 const PYTHON_BACKEND_ARG: &str = "python_embedded/stats.py";
-const PYTHON_BACKEND_EXE: &str = "python_embedded/dist/stats.dist/stats.exe";
 
 // Plot backend paths
 const PLOT_BACKEND_ARG: &str = "python_embedded/plot.py";
-const PLOT_BACKEND_EXE: &str = "python_embedded/dist/plot.dist/plot.exe";
 
 // RNA-seq backend paths
 const RNASEQ_BACKEND_ARG: &str = "python_embedded/rnaseq.py";
-const RNASEQ_BACKEND_EXE: &str = "python_embedded/dist/rnaseq.dist/rnaseq.exe";
-
-#[inline(always)]
-fn python_backend_script_rel() -> String {
-    PYTHON_BACKEND_SCRIPT.to_string()
-}
 
 #[inline(always)]
 fn stats_script_rel() -> String {
@@ -96,8 +135,8 @@ fn stats_script_rel() -> String {
 }
 
 #[inline(always)]
-fn stats_exe_rel() -> String {
-    PYTHON_BACKEND_EXE.to_string()
+fn stats_exe_rel() -> PathBuf {
+    compiled_backend_rel("stats")
 }
 
 #[inline(always)]
@@ -106,8 +145,8 @@ fn plot_script_rel() -> String {
 }
 
 #[inline(always)]
-fn plot_exe_rel() -> String {
-    PLOT_BACKEND_EXE.to_string()
+fn plot_exe_rel() -> PathBuf {
+    compiled_backend_rel("plot")
 }
 
 #[inline(always)]
@@ -116,8 +155,8 @@ fn rnaseq_script_rel() -> String {
 }
 
 #[inline(always)]
-fn rnaseq_exe_rel() -> String {
-    RNASEQ_BACKEND_EXE.to_string()
+fn rnaseq_exe_rel() -> PathBuf {
+    compiled_backend_rel("rnaseq")
 }
 
 #[inline(always)]
@@ -160,6 +199,18 @@ pub(crate) fn get_python_base_dir() -> PathBuf {
             if python_dir.exists() {
                 log::debug!("Found python_embedded at exe dir: {:?}", exe_dir);
                 return exe_dir.to_path_buf();
+            }
+
+            #[cfg(target_os = "macos")]
+            if let Some(bundle_resources_dir) = macos_bundle_python_base_dir_candidate(exe_dir) {
+                let python_dir = bundle_resources_dir.join("python_embedded");
+                if python_dir.exists() {
+                    log::debug!(
+                        "Found python_embedded in macOS updater bundle resources: {:?}",
+                        bundle_resources_dir
+                    );
+                    return bundle_resources_dir;
+                }
             }
 
             // Development mode: check parent directories
@@ -228,6 +279,24 @@ fn installed_python_base_dir_candidate(local_data_dir: &Path, app_dir: &str) -> 
         .join("bundle_resources")
 }
 
+fn macos_bundle_python_base_dir_candidate(exe_dir: &Path) -> Option<PathBuf> {
+    if exe_dir.file_name().and_then(|name| name.to_str()) != Some("MacOS") {
+        return None;
+    }
+
+    let contents_dir = exe_dir.parent()?;
+    if contents_dir.file_name().and_then(|name| name.to_str()) != Some("Contents") {
+        return None;
+    }
+
+    Some(
+        contents_dir
+            .join("Resources")
+            .join("_up_")
+            .join("bundle_resources"),
+    )
+}
+
 /// Maximum execution time (5 minutes)
 const TIMEOUT_SECS: u64 = 300;
 
@@ -252,7 +321,8 @@ fn redacted_backend_target(cmd: &PathBuf) -> String {
 
 fn backend_process_cwd(mode: BackendMode, cmd: &PathBuf, fallback: &PathBuf) -> PathBuf {
     match mode {
-        BackendMode::Script => fallback.clone(),
+        // Script and BundledRequired use a writable temp dir so signed/runtime trees stay read-only.
+        BackendMode::Script | BackendMode::BundledRequired => fallback.clone(),
         BackendMode::Compiled | BackendMode::CompiledRequired => cmd
             .parent()
             .map(PathBuf::from)
@@ -267,11 +337,30 @@ fn apply_backend_spawn_flags(command: &mut Command, mode: BackendMode) {
             command.creation_flags(CREATE_NO_WINDOW);
         }
     }
+    #[cfg(not(windows))]
+    {
+        let _ = (command, mode);
+    }
 }
 
-fn apply_backend_environment(command: &mut Command) {
+fn bundled_python_environment() -> [(&'static str, &'static str); 1] {
+    [("PYTHONDONTWRITEBYTECODE", "1")]
+}
+
+fn apply_backend_environment(command: &mut Command, mode: BackendMode) {
     // Enforce strict offline backend execution: no outbound network paths.
     command.env("EASYCRIS_OFFLINE", "1");
+    // Bundled macOS launches match bootstrap_python_macos.run_backend_protocol isolation.
+    if matches!(mode, BackendMode::BundledRequired) {
+        for (key, _) in std::env::vars_os() {
+            if key.to_string_lossy().to_ascii_uppercase().starts_with("PYTHON") {
+                command.env_remove(key);
+            }
+        }
+        // `-B` protects the direct backend process. The environment variable
+        // propagates the same rule to Python child processes used by analyses.
+        command.envs(bundled_python_environment());
+    }
 }
 
 fn rnaseq_analysis_error(detail: impl Into<String>, failure_kind: &str) -> AppErrorEnvelope {
@@ -394,12 +483,160 @@ fn stats_failure_code(error_type: &str) -> &'static str {
 /// Backend mode (development vs production)
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum BackendMode {
-    /// Development: python.exe stats.py
+    /// Development: platform Python interpreter with stats.py
     Script,
-    /// Production: compiled stats.exe
+    /// Production: compiled stats backend
     Compiled,
     /// Hardened release: compiled backend is required and script fallback is forbidden.
     CompiledRequired,
+    /// macOS hardened release: absolute bundled CPython + `-I -B -m <module>`. No fallback.
+    BundledRequired,
+}
+
+fn bundled_python_base_dir_for_executable(exe_path: &Path) -> Result<PathBuf, String> {
+    let exe_dir = exe_path
+        .parent()
+        .ok_or_else(|| "current executable has no parent directory".to_string())?;
+    let bundle_resources_dir =
+        macos_bundle_python_base_dir_candidate(exe_dir).ok_or_else(|| {
+            "current executable is not inside a macOS app Contents/MacOS directory".to_string()
+        })?;
+
+    if !bundle_resources_dir.join("python_embedded").is_dir() {
+        return Err(format!(
+            "bundled resources missing at {}",
+            bundle_resources_dir.display()
+        ));
+    }
+
+    Ok(bundle_resources_dir)
+}
+
+fn resolve_python_base_dir_for_mode<F>(
+    mode: BackendMode,
+    executable: Option<&Path>,
+    fallback: F,
+) -> Result<PathBuf, String>
+where
+    F: FnOnce() -> PathBuf,
+{
+    match mode {
+        BackendMode::BundledRequired => bundled_python_base_dir_for_executable(
+            executable.ok_or_else(|| "could not determine current executable path".to_string())?,
+        ),
+        _ => Ok(fallback()),
+    }
+}
+
+fn resolve_python_base_dir(mode: BackendMode) -> Result<PathBuf, String> {
+    let executable = if matches!(mode, BackendMode::BundledRequired) {
+        std::env::current_exe().ok()
+    } else {
+        None
+    };
+    resolve_python_base_dir_for_mode(mode, executable.as_deref(), get_python_base_dir)
+}
+
+/// Relative path helpers for the Task 6 Darwin bundled runtime (JS parity).
+fn bundled_runtime_rel() -> PathBuf {
+    PathBuf::from("python_embedded").join("runtime")
+}
+
+fn bundled_interpreter_rel() -> PathBuf {
+    bundled_runtime_rel().join("bin").join("python3.12")
+}
+
+fn bundled_manifest_rel() -> PathBuf {
+    bundled_runtime_rel().join("easycris_runtime_manifest.json")
+}
+
+fn bundled_module_name(backend: &str) -> Result<&'static str, String> {
+    match backend {
+        "stats" => Ok("stats"),
+        "rnaseq" => Ok("rnaseq"),
+        "plot" => Ok("plot"),
+        other => Err(format!("Unknown backend module: {other}")),
+    }
+}
+
+fn bundled_module_rel(module: &str) -> Result<PathBuf, String> {
+    let name = bundled_module_name(module)?;
+    Ok(bundled_runtime_rel()
+        .join("lib")
+        .join("python3.12")
+        .join("site-packages")
+        .join(format!("{name}.py")))
+}
+
+fn bundled_launch_args(module: &str) -> Result<Vec<PathBuf>, String> {
+    let name = bundled_module_name(module)?;
+    Ok(vec![
+        PathBuf::from("-I"),
+        PathBuf::from("-B"),
+        PathBuf::from("-m"),
+        PathBuf::from(name),
+    ])
+}
+
+/// Minimum pre-spawn contract: interpreter + manifest schema + module file.
+/// Full tree hash / Mach-O inventory remain Task 6 stage/validate responsibilities.
+fn verify_bundled_runtime_contract(base_dir: &Path, module: &str) -> Result<(), String> {
+    let module_name = bundled_module_name(module)?;
+    let interpreter = base_dir.join(bundled_interpreter_rel());
+    if !interpreter.is_file() {
+        return Err(format!(
+            "bundled interpreter missing at {}",
+            bundled_interpreter_rel().display()
+        ));
+    }
+
+    let manifest_path = base_dir.join(bundled_manifest_rel());
+    if !manifest_path.is_file() {
+        return Err(format!(
+            "runtime manifest missing at {}",
+            bundled_manifest_rel().display()
+        ));
+    }
+    let manifest_raw = std::fs::read_to_string(&manifest_path)
+        .map_err(|e| format!("failed to read runtime manifest: {e}"))?;
+    let manifest: Value = serde_json::from_str(&manifest_raw)
+        .map_err(|e| format!("runtime manifest is not valid JSON: {e}"))?;
+    let schema_version = manifest
+        .get("schema_version")
+        .and_then(|v| v.as_u64())
+        .ok_or_else(|| "runtime manifest missing schema_version".to_string())?;
+    if schema_version != 1 {
+        return Err(format!(
+            "runtime manifest schema_version must be 1, found {schema_version}"
+        ));
+    }
+
+    let module_path = base_dir.join(bundled_module_rel(module_name)?);
+    if !module_path.is_file() {
+        return Err(format!(
+            "bundled backend module missing at {}",
+            bundled_module_rel(module_name)?.display()
+        ));
+    }
+
+    Ok(())
+}
+
+fn resolve_bundled_command(
+    base_dir: &Path,
+    module: &str,
+) -> Result<(PathBuf, Vec<PathBuf>), String> {
+    verify_bundled_runtime_contract(base_dir, module)?;
+    let cmd = base_dir.join(bundled_interpreter_rel());
+    let args = bundled_launch_args(module)?;
+    Ok((cmd, args))
+}
+
+fn bundled_required_detail(backend_label: &str, reason: &str) -> String {
+    format!(
+        "Hardened macOS release requires bundled {backend_label} runtime ({reason}). Script and system Python fallback are disabled for build profile '{}'.",
+        effective_build_profile()
+    )
 }
 
 fn effective_build_profile() -> &'static str {
@@ -414,29 +651,44 @@ fn is_open_profile(profile: &str) -> bool {
     profile.eq_ignore_ascii_case("dev") || profile.eq_ignore_ascii_case("e2e")
 }
 
-fn choose_backend_mode(build_profile: &str, compiled_exists: bool) -> BackendMode {
+fn choose_backend_mode(
+    build_profile: &str,
+    platform: TargetPlatform,
+    compiled_exists: bool,
+) -> BackendMode {
     if is_open_profile(build_profile) {
         // Keep dev/e2e deterministic and fully open even if stale compiled artifacts exist.
         return BackendMode::Script;
     }
 
-    if compiled_exists {
-        BackendMode::Compiled
-    } else {
-        BackendMode::CompiledRequired
+    match platform {
+        // macOS hardened builds always use the Task 6 bundled runtime, never Nuitka leftovers.
+        TargetPlatform::MacOS => BackendMode::BundledRequired,
+        TargetPlatform::Windows => {
+            if compiled_exists {
+                BackendMode::Compiled
+            } else {
+                BackendMode::CompiledRequired
+            }
+        }
     }
 }
 
 fn detect_backend_mode_for(
-    compiled_rel_path: String,
+    compiled_rel_path: PathBuf,
     script_log_label: &str,
     compiled_log_label: &str,
     required_log_label: &str,
 ) -> BackendMode {
-    let base_dir = get_python_base_dir();
-    let compiled_path = base_dir.join(compiled_rel_path);
     let build_profile = effective_build_profile();
-    let mode = choose_backend_mode(build_profile, compiled_path.exists());
+    let platform = host_platform();
+    let compiled_path =
+        if matches!(platform, TargetPlatform::MacOS) && !is_open_profile(build_profile) {
+            compiled_rel_path
+        } else {
+            get_python_base_dir().join(compiled_rel_path)
+        };
+    let mode = choose_backend_mode(build_profile, platform, compiled_path.exists());
 
     if matches!(mode, BackendMode::Script) {
         log::info!(
@@ -452,6 +704,12 @@ fn detect_backend_mode_for(
             compiled_log_label,
             compiled_path,
             build_profile
+        );
+    } else if matches!(mode, BackendMode::BundledRequired) {
+        log::info!(
+            "Using bundled {} runtime (profile={}) resolved from the current executable",
+            required_log_label,
+            build_profile,
         );
     } else {
         log::info!(
@@ -500,7 +758,18 @@ pub async fn spawn_python_backend(
     app: Option<&tauri::AppHandle>,
 ) -> CommandResult<Value> {
     // Get base directory for Python paths
-    let base_dir = get_python_base_dir();
+    let base_dir = match resolve_python_base_dir(mode) {
+        Ok(base_dir) => base_dir,
+        Err(reason) => {
+            return Err(
+                AppErrorEnvelope::new("STATS_PY_325", "Analysis backend unavailable")
+                    .with_detail(bundled_required_detail("stats", &reason))
+                    .with_retryable(false)
+                    .with_context("runtime_issue", serde_json::json!(true))
+                    .with_context("mode", serde_json::json!(format!("{:?}", mode))),
+            );
+        }
+    };
     let python_cwd = get_python_working_dir();
     log::debug!("Spawning Python backend with cwd: {:?}", python_cwd);
 
@@ -521,6 +790,24 @@ pub async fn spawn_python_backend(
             log::info!("Using compiled backend: {:?}", exe_path);
             (exe_path, vec![])
         }
+        BackendMode::BundledRequired => match resolve_bundled_command(&base_dir, "stats") {
+            Ok(resolved) => {
+                log::info!(
+                    "Using bundled stats runtime: {:?} {:?}",
+                    resolved.0,
+                    resolved.1
+                );
+                resolved
+            }
+            Err(reason) => {
+                return Err(
+                    AppErrorEnvelope::new("STATS_PY_325", "Analysis backend unavailable")
+                        .with_detail(bundled_required_detail("stats", &reason))
+                        .with_retryable(false)
+                        .with_context("mode", serde_json::json!(format!("{:?}", mode))),
+                );
+            }
+        },
     };
 
     // Verify executable exists
@@ -533,6 +820,9 @@ pub async fn spawn_python_backend(
                 hardened_required_suffix_profile(),
                 effective_build_profile()
             ),
+            BackendMode::BundledRequired => {
+                bundled_required_detail("stats", "interpreter path missing after contract check")
+            }
             _ => format!(
                 "Python backend not found at: {:?}\nBase dir: {:?}\nCWD: {:?}",
                 cmd,
@@ -553,7 +843,7 @@ pub async fn spawn_python_backend(
     // Spawn process
     let mut process_cmd = Command::new(&cmd);
     apply_backend_spawn_flags(&mut process_cmd, mode);
-    apply_backend_environment(&mut process_cmd);
+    apply_backend_environment(&mut process_cmd, mode);
     let mut child = process_cmd
         .current_dir(&process_cwd)
         .args(args.iter().map(|p| p.as_os_str()))
@@ -768,7 +1058,18 @@ pub async fn spawn_rnaseq(
     mode: BackendMode,
     app: &tauri::AppHandle,
 ) -> CommandResult<Value> {
-    let base_dir = get_python_base_dir();
+    let base_dir = match resolve_python_base_dir(mode) {
+        Ok(base_dir) => base_dir,
+        Err(reason) => {
+            return Err(
+                AppErrorEnvelope::new("RNASEQ_405", "RNA-seq backend unavailable")
+                    .with_detail(bundled_required_detail("RNA-seq", &reason))
+                    .with_retryable(false)
+                    .with_context("runtime_issue", serde_json::json!(true))
+                    .with_context("mode", serde_json::json!(format!("{:?}", mode))),
+            );
+        }
+    };
     let python_cwd = get_python_working_dir();
     log::debug!("Spawning RNA-seq backend with cwd: {:?}", python_cwd);
 
@@ -788,6 +1089,25 @@ pub async fn spawn_rnaseq(
             log::info!("Using compiled RNA-seq backend: {:?}", exe_path);
             (exe_path, vec![])
         }
+        BackendMode::BundledRequired => match resolve_bundled_command(&base_dir, "rnaseq") {
+            Ok(resolved) => {
+                log::info!(
+                    "Using bundled RNA-seq runtime: {:?} {:?}",
+                    resolved.0,
+                    resolved.1
+                );
+                resolved
+            }
+            Err(reason) => {
+                return Err(
+                    AppErrorEnvelope::new("RNASEQ_405", "RNA-seq backend unavailable")
+                        .with_detail(bundled_required_detail("RNA-seq", &reason))
+                        .with_retryable(false)
+                        .with_context("runtime_issue", serde_json::json!(true))
+                        .with_context("mode", serde_json::json!(format!("{:?}", mode))),
+                );
+            }
+        },
     };
 
     if !cmd.exists() && !path_points_to_command_name(&cmd) {
@@ -799,6 +1119,9 @@ pub async fn spawn_rnaseq(
                 hardened_required_suffix_profile(),
                 effective_build_profile()
             ),
+            BackendMode::BundledRequired => {
+                bundled_required_detail("RNA-seq", "interpreter path missing after contract check")
+            }
             _ => format!(
                 "RNA-seq backend not found at: {:?}\nBase dir: {:?}\nCWD: {:?}",
                 cmd,
@@ -819,7 +1142,7 @@ pub async fn spawn_rnaseq(
 
     let mut process_cmd = Command::new(&cmd);
     apply_backend_spawn_flags(&mut process_cmd, mode);
-    apply_backend_environment(&mut process_cmd);
+    apply_backend_environment(&mut process_cmd, mode);
     let mut child = process_cmd
         .current_dir(&process_cwd)
         .args(args.iter().map(|p| p.as_os_str()))
@@ -1027,7 +1350,15 @@ fn persistent_plot_export_worker() -> &'static Mutex<Option<PersistentPlotExport
 fn resolve_plot_command(
     mode: BackendMode,
 ) -> CommandResult<(PathBuf, Vec<PathBuf>, PathBuf, PathBuf)> {
-    let base_dir = get_python_base_dir();
+    let base_dir = match resolve_python_base_dir(mode) {
+        Ok(base_dir) => base_dir,
+        Err(reason) => {
+            return Err(AppErrorEnvelope::new("PLOT_603", "Plot creation failed")
+                .with_detail(bundled_required_detail("plot", &reason))
+                .with_retryable(false)
+                .with_context("mode", serde_json::json!(format!("{:?}", mode))));
+        }
+    };
     let python_cwd = get_python_working_dir();
 
     let (cmd, args): (PathBuf, Vec<PathBuf>) = match mode {
@@ -1042,6 +1373,22 @@ fn resolve_plot_command(
             log::info!("Using compiled plot backend: {:?}", exe_path);
             (exe_path, vec![])
         }
+        BackendMode::BundledRequired => match resolve_bundled_command(&base_dir, "plot") {
+            Ok(resolved) => {
+                log::info!(
+                    "Using bundled plot runtime: {:?} {:?}",
+                    resolved.0,
+                    resolved.1
+                );
+                resolved
+            }
+            Err(reason) => {
+                return Err(AppErrorEnvelope::new("PLOT_603", "Plot creation failed")
+                    .with_detail(bundled_required_detail("plot", &reason))
+                    .with_retryable(false)
+                    .with_context("mode", serde_json::json!(format!("{:?}", mode))));
+            }
+        },
     };
 
     if !cmd.exists() && !path_points_to_command_name(&cmd) {
@@ -1053,6 +1400,9 @@ fn resolve_plot_command(
                 hardened_required_suffix_profile(),
                 effective_build_profile()
             ),
+            BackendMode::BundledRequired => {
+                bundled_required_detail("plot", "interpreter path missing after contract check")
+            }
             _ => format!(
                 "Plot backend not found at: {:?}\nBase dir: {:?}\nCWD: {:?}",
                 cmd,
@@ -1077,7 +1427,7 @@ async fn spawn_persistent_plot_export_worker(
 
     let mut process_cmd = Command::new(&cmd);
     apply_backend_spawn_flags(&mut process_cmd, mode);
-    apply_backend_environment(&mut process_cmd);
+    apply_backend_environment(&mut process_cmd, mode);
     let mut child = process_cmd
         .env("EASYCRIS_PLOT_BACKEND_PERSISTENT", "1")
         .current_dir(&process_cwd)
@@ -1253,7 +1603,7 @@ pub async fn spawn_plot(payload: Value, mode: BackendMode) -> CommandResult<Valu
     // Spawn process
     let mut process_cmd = Command::new(&cmd);
     apply_backend_spawn_flags(&mut process_cmd, mode);
-    apply_backend_environment(&mut process_cmd);
+    apply_backend_environment(&mut process_cmd, mode);
     let mut child = process_cmd
         .current_dir(&process_cwd)
         .args(args.iter().map(|p| p.as_os_str()))
@@ -1390,51 +1740,305 @@ mod tests {
     use serde_json::json;
 
     #[test]
+    fn compiled_backend_names_follow_platform() {
+        assert_eq!(
+            backend_executable_name("stats", TargetPlatform::Windows),
+            "stats.exe"
+        );
+        assert_eq!(
+            backend_executable_name("stats", TargetPlatform::MacOS),
+            "stats"
+        );
+    }
+
+    #[test]
+    fn venv_python_paths_follow_platform() {
+        assert_eq!(
+            venv_python_rel(TargetPlatform::Windows),
+            PathBuf::from(".venv-public/Scripts/python.exe")
+        );
+        assert_eq!(
+            venv_python_rel(TargetPlatform::MacOS),
+            PathBuf::from(".venv-public/bin/python")
+        );
+    }
+
+    #[test]
     fn test_choose_backend_mode_for_open_profiles() {
-        assert!(matches!(
-            choose_backend_mode("dev", false),
-            BackendMode::Script
-        ));
-        assert!(matches!(
-            choose_backend_mode("dev", true),
-            BackendMode::Script
-        ));
-        assert!(matches!(
-            choose_backend_mode("e2e", false),
-            BackendMode::Script
-        ));
-        assert!(matches!(
-            choose_backend_mode("e2e", true),
-            BackendMode::Script
-        ));
-        assert!(matches!(
-            choose_backend_mode("DEV", false),
-            BackendMode::Script
-        ));
-        assert!(matches!(
-            choose_backend_mode("E2E", true),
-            BackendMode::Script
-        ));
-        assert!(matches!(
-            choose_backend_mode("Dev", false),
-            BackendMode::Script
-        ));
+        for platform in [TargetPlatform::Windows, TargetPlatform::MacOS] {
+            assert!(matches!(
+                choose_backend_mode("dev", platform, false),
+                BackendMode::Script
+            ));
+            assert!(matches!(
+                choose_backend_mode("dev", platform, true),
+                BackendMode::Script
+            ));
+            assert!(matches!(
+                choose_backend_mode("e2e", platform, false),
+                BackendMode::Script
+            ));
+            assert!(matches!(
+                choose_backend_mode("e2e", platform, true),
+                BackendMode::Script
+            ));
+            assert!(matches!(
+                choose_backend_mode("DEV", platform, false),
+                BackendMode::Script
+            ));
+            assert!(matches!(
+                choose_backend_mode("E2E", platform, true),
+                BackendMode::Script
+            ));
+            assert!(matches!(
+                choose_backend_mode("Dev", platform, false),
+                BackendMode::Script
+            ));
+        }
     }
 
     #[test]
     fn test_choose_backend_mode_for_hardened_profiles() {
         assert!(matches!(
-            choose_backend_mode("release", true),
+            choose_backend_mode("release", TargetPlatform::Windows, true),
             BackendMode::Compiled
         ));
         assert!(matches!(
-            choose_backend_mode("release", false),
+            choose_backend_mode("release", TargetPlatform::Windows, false),
             BackendMode::CompiledRequired
         ));
-        // Unknown profiles default to hardened behavior.
+        // Unknown profiles default to hardened behavior on Windows.
         assert!(matches!(
-            choose_backend_mode("prod", false),
+            choose_backend_mode("prod", TargetPlatform::Windows, false),
             BackendMode::CompiledRequired
+        ));
+    }
+
+    #[test]
+    fn choose_backend_mode_macos_release_is_bundled_required() {
+        assert!(matches!(
+            choose_backend_mode("release", TargetPlatform::MacOS, false),
+            BackendMode::BundledRequired
+        ));
+        assert!(matches!(
+            choose_backend_mode("prod", TargetPlatform::MacOS, false),
+            BackendMode::BundledRequired
+        ));
+    }
+
+    #[test]
+    fn choose_backend_mode_macos_release_ignores_compiled_artifacts() {
+        assert!(matches!(
+            choose_backend_mode("release", TargetPlatform::MacOS, true),
+            BackendMode::BundledRequired
+        ));
+    }
+
+    #[test]
+    fn choose_backend_mode_open_profiles_still_script_on_macos() {
+        assert!(matches!(
+            choose_backend_mode("e2e", TargetPlatform::MacOS, true),
+            BackendMode::Script
+        ));
+    }
+
+    #[test]
+    fn choose_backend_mode_windows_release_still_compiled_or_required() {
+        assert_eq!(
+            choose_backend_mode("release", TargetPlatform::Windows, true),
+            BackendMode::Compiled
+        );
+        assert_eq!(
+            choose_backend_mode("release", TargetPlatform::Windows, false),
+            BackendMode::CompiledRequired
+        );
+    }
+
+    #[test]
+    fn bundled_runtime_paths_match_js_layout() {
+        assert_eq!(
+            bundled_interpreter_rel(),
+            PathBuf::from("python_embedded/runtime/bin/python3.12")
+        );
+        assert_eq!(
+            bundled_manifest_rel(),
+            PathBuf::from("python_embedded/runtime/easycris_runtime_manifest.json")
+        );
+        assert_eq!(
+            bundled_module_rel("stats").expect("stats"),
+            PathBuf::from("python_embedded/runtime/lib/python3.12/site-packages/stats.py")
+        );
+        assert_eq!(
+            bundled_module_rel("rnaseq").expect("rnaseq"),
+            PathBuf::from("python_embedded/runtime/lib/python3.12/site-packages/rnaseq.py")
+        );
+        assert_eq!(
+            bundled_module_rel("plot").expect("plot"),
+            PathBuf::from("python_embedded/runtime/lib/python3.12/site-packages/plot.py")
+        );
+        assert!(bundled_module_rel("unknown").is_err());
+    }
+
+    #[test]
+    fn bundled_launch_args_are_exactly_isolated_module_flags() {
+        assert_eq!(
+            bundled_launch_args("stats").expect("stats"),
+            vec![
+                PathBuf::from("-I"),
+                PathBuf::from("-B"),
+                PathBuf::from("-m"),
+                PathBuf::from("stats"),
+            ]
+        );
+        assert_eq!(
+            bundled_launch_args("plot").expect("plot"),
+            vec![
+                PathBuf::from("-I"),
+                PathBuf::from("-B"),
+                PathBuf::from("-m"),
+                PathBuf::from("plot"),
+            ]
+        );
+    }
+
+    #[test]
+    fn backend_mode_bundled_environment_prevents_child_process_bytecode_writes() {
+        assert_eq!(
+            bundled_python_environment(),
+            [("PYTHONDONTWRITEBYTECODE", "1")]
+        );
+    }
+
+    #[test]
+    fn backend_process_cwd_bundled_uses_writable_fallback() {
+        let cmd = PathBuf::from("/Applications/easyCris.app/Contents/MacOS/python3.12");
+        let fallback = PathBuf::from("/tmp/easyCris-python_backend");
+        assert_eq!(
+            backend_process_cwd(BackendMode::BundledRequired, &cmd, &fallback),
+            fallback
+        );
+        assert_eq!(
+            backend_process_cwd(BackendMode::Compiled, &cmd, &fallback),
+            PathBuf::from("/Applications/easyCris.app/Contents/MacOS")
+        );
+    }
+
+    fn write_minimal_bundled_runtime(root: &Path) {
+        let runtime = root.join("python_embedded").join("runtime");
+        let bin = runtime.join("bin");
+        let site = runtime
+            .join("lib")
+            .join("python3.12")
+            .join("site-packages");
+        std::fs::create_dir_all(&bin).expect("bin");
+        std::fs::create_dir_all(&site).expect("site");
+        std::fs::write(bin.join("python3.12"), b"fake-python").expect("interpreter");
+        std::fs::write(
+            runtime.join("easycris_runtime_manifest.json"),
+            r#"{"schema_version":1}"#,
+        )
+        .expect("manifest");
+        for module in ["stats", "rnaseq", "plot"] {
+            std::fs::write(site.join(format!("{module}.py")), b"# module\n").expect("module");
+        }
+    }
+
+    #[test]
+    fn verify_bundled_runtime_contract_ok_with_minimal_fixture() {
+        let dir = std::env::temp_dir().join(format!(
+            "easycris-bundled-ok-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("tmpdir");
+        write_minimal_bundled_runtime(&dir);
+        assert!(verify_bundled_runtime_contract(&dir, "stats").is_ok());
+        assert!(verify_bundled_runtime_contract(&dir, "rnaseq").is_ok());
+        assert!(verify_bundled_runtime_contract(&dir, "plot").is_ok());
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn verify_bundled_runtime_contract_fails_without_interpreter() {
+        let dir = std::env::temp_dir().join(format!(
+            "easycris-bundled-no-interp-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("tmpdir");
+        write_minimal_bundled_runtime(&dir);
+        std::fs::remove_file(dir.join(bundled_interpreter_rel())).expect("rm interp");
+        let err = verify_bundled_runtime_contract(&dir, "stats").expect_err("must fail");
+        assert!(err.contains("interpreter missing"), "{err}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn verify_bundled_runtime_contract_fails_without_manifest() {
+        let dir = std::env::temp_dir().join(format!(
+            "easycris-bundled-no-manifest-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("tmpdir");
+        write_minimal_bundled_runtime(&dir);
+        std::fs::remove_file(dir.join(bundled_manifest_rel())).expect("rm manifest");
+        let err = verify_bundled_runtime_contract(&dir, "stats").expect_err("must fail");
+        assert!(err.contains("manifest missing"), "{err}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn verify_bundled_runtime_contract_fails_without_module() {
+        let dir = std::env::temp_dir().join(format!(
+            "easycris-bundled-no-module-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("tmpdir");
+        write_minimal_bundled_runtime(&dir);
+        std::fs::remove_file(dir.join(bundled_module_rel("plot").unwrap())).expect("rm module");
+        let err = verify_bundled_runtime_contract(&dir, "plot").expect_err("must fail");
+        assert!(err.contains("module missing"), "{err}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn verify_bundled_runtime_contract_fails_on_bad_schema() {
+        let dir = std::env::temp_dir().join(format!(
+            "easycris-bundled-bad-schema-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("tmpdir");
+        write_minimal_bundled_runtime(&dir);
+        std::fs::write(
+            dir.join(bundled_manifest_rel()),
+            r#"{"schema_version":2}"#,
+        )
+        .expect("bad schema");
+        let err = verify_bundled_runtime_contract(&dir, "stats").expect_err("must fail");
+        assert!(err.contains("schema_version"), "{err}");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn rnaseq_script_fallback_excludes_bundled_required() {
+        // Mirrors rnaseq_commands.rs: only Compiled* may opt into Script fallback.
+        fn should_try_rnaseq_script_fallback(mode: BackendMode, enabled: bool, code: &str) -> bool {
+            enabled
+                && matches!(mode, BackendMode::Compiled | BackendMode::CompiledRequired)
+                && code == "RNASEQ_402"
+        }
+        assert!(!should_try_rnaseq_script_fallback(
+            BackendMode::BundledRequired,
+            true,
+            "RNASEQ_402"
+        ));
+        assert!(should_try_rnaseq_script_fallback(
+            BackendMode::CompiledRequired,
+            true,
+            "RNASEQ_402"
         ));
     }
 
@@ -1447,6 +2051,57 @@ mod tests {
             ),
             Path::new(r"C:\Users\me\AppData\Local\easycris\_up_\bundle_resources").to_path_buf()
         );
+    }
+
+    #[test]
+    fn macos_bundle_python_base_dir_candidate_uses_updater_resources() {
+        let exe_path = Path::new("/Applications/easyCris.app/Contents/MacOS/easycris");
+        let exe_dir = exe_path.parent().expect("executable path has a parent");
+
+        assert_eq!(
+            macos_bundle_python_base_dir_candidate(exe_dir),
+            Some(PathBuf::from(
+                "/Applications/easyCris.app/Contents/Resources/_up_/bundle_resources"
+            ))
+        );
+    }
+
+    #[test]
+    fn macos_bundle_python_base_dir_candidate_rejects_macos_outside_app_contents() {
+        let exe_path = Path::new("/tmp/not-an-app/MacOS/easycris");
+        let exe_dir = exe_path.parent().expect("executable path has a parent");
+
+        assert_eq!(macos_bundle_python_base_dir_candidate(exe_dir), None);
+    }
+
+    #[test]
+    fn bundled_required_resolver_rejects_missing_app_resources_without_development_fallback() {
+        let root = std::env::temp_dir().join(format!(
+            "easycris-bundled-resolution-missing-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&root);
+        let app_exe = root
+            .join("easyCris.app")
+            .join("Contents")
+            .join("MacOS")
+            .join("easyCris");
+        std::fs::create_dir_all(app_exe.parent().expect("app executable parent")).expect("app");
+        std::fs::create_dir_all(root.join("development/python_embedded")).expect("development");
+
+        let fallback_was_used = std::cell::Cell::new(false);
+        let result =
+            resolve_python_base_dir_for_mode(BackendMode::BundledRequired, Some(&app_exe), || {
+                fallback_was_used.set(true);
+                root.join("development")
+            });
+
+        assert!(result.is_err(), "missing app resources must fail closed");
+        assert!(
+            !fallback_was_used.get(),
+            "must not consult development fallback"
+        );
+        let _ = std::fs::remove_dir_all(&root);
     }
 
     #[test]

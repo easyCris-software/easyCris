@@ -21,6 +21,10 @@ import os
 import importlib
 from pathlib import Path
 
+from platform_trust import configure_platform_trust
+
+configure_platform_trust()
+
 format_number = None
 set_context_metadata = None
 sanitize_for_json = None

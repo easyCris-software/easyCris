@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 /**
  * generate-license-summary-index.mjs
  *
@@ -14,7 +14,7 @@
  *   legal/THIRD_PARTY_LICENSES.txt
  */
 
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 
 const SOURCE_OF_TRUTH_PATH = resolve('legal/source-of-truth.json')
@@ -36,11 +36,6 @@ const NPM_ARTIFACT_PATH = resolve(SOURCE_OF_TRUTH?.artifacts?.npm || 'runtime-li
 const RUST_ARTIFACT_PATH = resolve(SOURCE_OF_TRUTH?.artifacts?.rust || 'runtime-licenses-rust.json')
 const PYTHON_ARTIFACT_PATH = resolve(SOURCE_OF_TRUTH?.artifacts?.python || 'legal/python-licenses.json')
 const OTHER_ARTIFACT_PATH = resolve(SOURCE_OF_TRUTH?.artifacts?.other || 'legal/other-components.json')
-const PYTHON_RUNTIME_DEPENDENCIES_DIR = resolve('python_embedded/python_dependencies')
-const PYTHON_REQUIREMENTS_PATHS = [
-  resolve('python_embedded/requirements-validated.txt'),
-  resolve('python_embedded/requirements-rnaseq.txt'),
-]
 
 const LEGACY_MARKER_NPM = 'JavaScript Runtime Dependencies (NPM)'
 const LEGACY_MARKER_RUST = 'Rust Crate Notices (Cargo)'
@@ -74,7 +69,7 @@ const SPDX_PREFERENCE = [
 
 const SPDX_ALLOWED = new Set(SPDX_PREFERENCE)
 
-const FIRST_PARTY_EXCLUSIONS = new Set(['easycris-community', 'easycris', 'certifi'])
+const FIRST_PARTY_EXCLUSIONS = new Set(['easycris-community', 'easycris'])
 const NON_RUNTIME_EXCLUSIONS = new Set()
 
 const JS_LICENSE_OVERRIDES = new Map([
@@ -251,83 +246,44 @@ function normalizePythonPackageName(name) {
   return normalizeName(name).replace(/[-_.]+/g, '-')
 }
 
-function rememberPythonVersion(versions, packageName, version) {
-  const normalizedName = normalizePythonPackageName(packageName)
-  const current = versions.get(normalizedName)
-  if (!current) {
-    versions.set(normalizedName, version)
-    return
-  }
+function normalizePythonRowLicense(row, fallback = 'UNKNOWN') {
+  const rawLicense = String(row?.License || row?.license || fallback)
+    .split(/\r?\n/)
+    .map((part) => part.trim())
+    .find((part) => part.length > 0) || fallback
+  const normalized = normalizeLicense(rawLicense)
+  if (normalized !== 'UNKNOWN') return normalized
 
-  const compare = String(version).localeCompare(String(current), 'en', {
-    numeric: true,
-    sensitivity: 'base',
-  })
-  if (compare >= 0) {
-    versions.set(normalizedName, version)
+  const text = String(row?.LicenseText || row?.licenseText || '').toLowerCase()
+  if (text.includes('apache license') && text.includes('version 2.0')) return 'Apache-2.0'
+  if (
+    text.includes('redistribution and use in source and binary forms') &&
+    text.includes('neither the name')
+  ) {
+    return 'BSD-3-Clause'
   }
+  if (text.includes('redistribution and use in source and binary forms')) return 'BSD-2-Clause'
+  if (text.includes('permission is hereby granted, free of charge')) return 'MIT'
+  if (text.includes('mozilla public license') || text.includes('mozilla.org/mpl/2.0')) {
+    return 'MPL-2.0'
+  }
+  return normalized
 }
 
-function collectPinnedPythonVersions() {
-  const versions = new Map()
-  for (const requirementsPath of PYTHON_REQUIREMENTS_PATHS) {
-    if (!existsSync(requirementsPath)) continue
-    const lines = readFileSync(requirementsPath, 'utf-8').split(/\r?\n/)
-    for (const line of lines) {
-      const trimmed = line.trim()
-      if (!trimmed || trimmed.startsWith('#') || trimmed.startsWith('--')) continue
-      const match = /^([A-Za-z0-9_.-]+)==([^\s;#]+)/.exec(trimmed)
-      if (!match) continue
-      rememberPythonVersion(versions, match[1], match[2])
-    }
-  }
-  return versions
-}
-
-function collectRuntimePythonVersions() {
-  const versions = collectPinnedPythonVersions()
-  if (process.env.EASYCRIS_LICENSE_USE_RUNTIME_PYTHON_VERSIONS !== '1') return versions
-  if (!existsSync(PYTHON_RUNTIME_DEPENDENCIES_DIR)) return versions
-
-  const entries = readdirSync(PYTHON_RUNTIME_DEPENDENCIES_DIR, { withFileTypes: true })
-  for (const entry of entries) {
-    if (!entry.isDirectory()) continue
-    if (!entry.name.endsWith('.dist-info')) continue
-
-    const base = entry.name.slice(0, -'.dist-info'.length)
-    const match = /^(.*)-([0-9][\w.+-]*)$/.exec(base)
-    if (!match) continue
-
-    rememberPythonVersion(versions, match[1], match[2])
-  }
-
-  return versions
-}
-
-function pickPythonRow(current, candidate, runtimeVersion) {
+function pickPythonRow(current, candidate) {
   if (!current) return candidate
-
-  const currentIsRuntime = runtimeVersion && current.version === runtimeVersion
-  const candidateIsRuntime = runtimeVersion && candidate.version === runtimeVersion
-  if (candidateIsRuntime && !currentIsRuntime) return candidate
-  if (currentIsRuntime && !candidateIsRuntime) return current
 
   const currentKnown = normalizeLicense(current.license) !== 'UNKNOWN'
   const candidateKnown = normalizeLicense(candidate.license) !== 'UNKNOWN'
   if (candidateKnown && !currentKnown) return candidate
   if (currentKnown && !candidateKnown) return current
 
-  const compare = String(candidate.version).localeCompare(String(current.version), 'en', {
-    numeric: true,
-    sensitivity: 'base',
-  })
-
-  return compare >= 0 ? candidate : current
+  return current
 }
 
-function parsePythonArtifact(rawData, runtimeVersions) {
+function parsePythonArtifact(rawData) {
   const rows = Array.isArray(rawData) ? rawData : Array.isArray(rawData?.packages) ? rawData.packages : []
-  const byName = new Map()
+  const byExactVersion = new Map()
 
   for (const row of rows) {
     const name = row?.Name || row?.name
@@ -344,20 +300,16 @@ function parsePythonArtifact(rawData, runtimeVersions) {
     if (!version) continue
     if (isExcludedPackage(name)) continue
 
-    const rawLicense = String(row?.License || row?.license || 'UNKNOWN')
-      .split(/\r?\n/)
-      .map((part) => part.trim())
-      .find((part) => part.length > 0) || 'UNKNOWN'
-    const license = normalizeLicense(rawLicense)
+    const license = normalizePythonRowLicense(row)
     const canonicalName = normalizePythonPackageName(name)
     const candidate = { name, version, license, ecosystem: 'python' }
-    const runtimeVersion = runtimeVersions.get(canonicalName)
-    const current = byName.get(canonicalName)
+    const exactKey = canonicalName + '::' + String(version)
+    const current = byExactVersion.get(exactKey)
 
-    byName.set(canonicalName, pickPythonRow(current, candidate, runtimeVersion))
+    byExactVersion.set(exactKey, pickPythonRow(current, candidate))
   }
 
-  return [...byName.values()]
+  return [...byExactVersion.values()]
 }
 
 function parseOtherComponentsArtifact(rawData) {
@@ -1217,6 +1169,60 @@ function annotatePythonSummaryRefs(fileText, summaryRefs) {
   return nextLines.join('\n')
 }
 
+function rebuildPythonLicenseTextSection(fileText, rawPythonData, selectedPythonPackages) {
+  const lines = normalizeLineEndings(fileText).split('\n')
+  const sectionStart = lines.findIndex((line) => line.includes(MARKER_PYTHON_LICENSE_TEXT))
+  if (sectionStart === -1) {
+    throw new Error('Missing Python license text section')
+  }
+  const sectionEnd = lines.findIndex(
+    (line, idx) => idx > sectionStart && line.includes(MARKER_JS_LICENSE_TEXT)
+  )
+  if (sectionEnd === -1) {
+    throw new Error('Missing JavaScript license text section after Python licenses')
+  }
+
+  const sourceRows = Array.isArray(rawPythonData)
+    ? rawPythonData
+    : Array.isArray(rawPythonData?.packages)
+      ? rawPythonData.packages
+      : []
+  const byExactVersion = new Map()
+  for (const row of sourceRows) {
+    const name = row?.Name || row?.name
+    const version = row?.Version || row?.version
+    if (!name || !version) continue
+    const key = normalizePythonPackageName(name) + '::' + String(version)
+    byExactVersion.set(key, row)
+  }
+
+  const rebuilt = [MARKER_PYTHON_LICENSE_TEXT, '='.repeat(MARKER_PYTHON_LICENSE_TEXT.length), '']
+  for (const pkg of selectedPythonPackages) {
+    const key = normalizePythonPackageName(pkg.name) + '::' + String(pkg.version)
+    const row = byExactVersion.get(key)
+    const licenseText = String(row?.LicenseText || row?.licenseText || '').trim()
+    if (!row || !licenseText) {
+      throw new Error('Missing exact Python license text for ' + key)
+    }
+    const license = normalizePythonRowLicense(row, pkg.license)
+    if (!license || license === 'UNKNOWN') {
+      throw new Error('Missing normalized Python license for ' + key)
+    }
+    rebuilt.push(String(row?.Name || row?.name || pkg.name))
+    rebuilt.push(String(pkg.version))
+    rebuilt.push(license)
+    rebuilt.push(...normalizeLineEndings(licenseText).split('\n'))
+    rebuilt.push('')
+    rebuilt.push('')
+  }
+
+  return [
+    ...lines.slice(0, sectionStart),
+    ...collapseBlankRuns(rebuilt),
+    ...lines.slice(sectionEnd),
+  ].join('\n')
+}
+
 function prunePythonLicenseTextSection(fileText, selectedPythonPackages, { warnOnMissing = true } = {}) {
   const lines = normalizeLineEndings(fileText).split('\n')
   const sectionStart = lines.findIndex((line) => line.includes(MARKER_PYTHON_LICENSE_TEXT))
@@ -1348,11 +1354,10 @@ function main() {
   const rustArtifact = readRequiredJson(RUST_ARTIFACT_PATH, 'Rust')
   const pythonArtifact = readRequiredJson(PYTHON_ARTIFACT_PATH, 'Python')
   const otherArtifact = readRequiredJson(OTHER_ARTIFACT_PATH, 'Other')
-  const pythonRuntimeVersions = collectRuntimePythonVersions()
 
   const npmPackages = parseNpmArtifact(npmArtifact.data)
   const rustPackages = parseRustArtifact(rustArtifact.data)
-  const pythonPackages = parsePythonArtifact(pythonArtifact.data, pythonRuntimeVersions)
+  const pythonPackages = parsePythonArtifact(pythonArtifact.data)
   const otherData = parseOtherComponentsArtifact(otherArtifact.data)
   const npmLicenseFileHints = buildNpmLicenseFileHintSet(npmArtifact.data)
 
@@ -1375,13 +1380,21 @@ function main() {
   const summaryRefs = buildSummaryReferenceMaps(byEcosystem)
   const rustSingleVersionByName = buildSingleVersionMap(byEcosystem.rust)
   const otherLicenseTextsBlock = buildOtherLicenseTextsBlock(otherData.licenseTexts)
-  let newCanonical = prunePythonLicenseTextSection(sanitizedBase, byEcosystem.python, { warnOnMissing: !checkMode })
+  let newCanonical = rebuildPythonLicenseTextSection(
+    sanitizedBase,
+    pythonArtifact.data,
+    byEcosystem.python
+  )
   newCanonical = sanitizePackageSectionNoise(newCanonical, npmLicenseFileHints)
   newCanonical = annotatePythonSummaryRefs(newCanonical, summaryRefs)
   newCanonical = annotateJsRustSummaryRefs(newCanonical, summaryRefs, rustSingleVersionByName)
   newCanonical = replaceOrInsertSummaryBlock(newCanonical, summary.block, firstInventoryStart)
   newCanonical = replaceOrInsertOtherLicenseTexts(newCanonical, otherLicenseTextsBlock)
   newCanonical = sanitizeSpdxNoiseLines(newCanonical)
+  newCanonical = normalizeLineEndings(newCanonical)
+    .split('\n')
+    .map((line) => line.replace(/[ \t]+$/u, ''))
+    .join('\n')
 
   if (preserveCrlf) {
     newCanonical = newCanonical.replace(/\n/g, '\r\n')
@@ -1429,4 +1442,3 @@ function main() {
 }
 
 main()
-

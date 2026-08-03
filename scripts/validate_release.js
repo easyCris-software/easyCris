@@ -1,11 +1,29 @@
 #!/usr/bin/env node
 
 import { spawnSync } from 'node:child_process'
+import crypto from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { REQUIRED_BACKENDS } from './python-runtime-constants.mjs'
+import {
+  REQUIRED_BACKENDS,
+  assertRuntimePlatform,
+  backendExecutableName,
+} from './python-runtime-constants.mjs'
+import {
+  inspectDarwinBinary,
+  minimumMacOSVersions,
+  validateDarwinBinaryDescription,
+  validateDarwinTree,
+} from './darwin-artifact-validation.mjs'
+import { assertPlotExportArtifact } from './plot-export-signatures.mjs'
+import {
+  cleanTransientKaleidoLogs,
+  runtimeManifestContext,
+  runtimeTreeSha256,
+  validateDarwinRuntimeManifest,
+} from './stage_python_runtime.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -64,6 +82,12 @@ const RNASEQ_DISALLOWED_MISLEADING_KEYS = [
   'mouse_entrez_ensembl_version',
   'mouse_uniprot_ensembl_version',
   'mouse_uniprot_swissprot_ensembl_version',
+]
+const DARWIN_KALEIDO_NATIVE_LIBRARY_FILES = [
+  'libEGL.dylib',
+  'libGLESv2.dylib',
+  'libswiftshader_libEGL.dylib',
+  'libswiftshader_libGLESv2.dylib',
 ]
 const BACKEND_PROBE_TIMEOUT_MS = 120000
 const RNASEQ_REAL_COUNTS_CSV = path.join(
@@ -211,6 +235,649 @@ function removeProbeOutputFileIfPresent(targetPath) {
   if (fs.existsSync(targetPath)) {
     fs.rmSync(targetPath, { force: true })
   }
+}
+
+export function resolveInstalledDarwinDist(appPath) {
+  return path.join(
+    appPath,
+    'Contents',
+    'Resources',
+    '_up_',
+    'bundle_resources',
+    'python_embedded',
+    'runtime'
+  )
+}
+
+export function buildDarwinPlotParityMatrix(paths) {
+  const buildProbe = (scope, format, executable, args = []) => ({
+    scope,
+    format,
+    command: [executable, ...args].join(' '),
+    executable,
+    args,
+  })
+  return [
+    buildProbe('script', 'pdf', paths.scriptPython, [paths.scriptPlot]),
+    buildProbe('script', 'tiff', paths.scriptPython, [paths.scriptPlot]),
+    buildProbe('source-compiled', 'pdf', path.join(paths.sourceDist, 'plot.dist', 'plot')),
+    buildProbe('source-compiled', 'tiff', path.join(paths.sourceDist, 'plot.dist', 'plot')),
+    buildProbe('staged-compiled', 'pdf', path.join(paths.stagedDist, 'plot.dist', 'plot')),
+    buildProbe('staged-compiled', 'tiff', path.join(paths.stagedDist, 'plot.dist', 'plot')),
+  ]
+}
+
+export function normalizeDarwinArchitecture(architecture = os.arch()) {
+  if (architecture === 'x64' || architecture === 'x86_64') return 'x86_64'
+  if (architecture === 'arm64') return 'arm64'
+  throw new Error(`Unsupported Darwin architecture: ${architecture}`)
+}
+
+export function shouldRunWindowsScriptPlotParity({ communityMode }) {
+  return !communityMode
+}
+
+function darwinBackendProbe(backend) {
+  if (backend === 'stats') return BASE_BACKEND_PROBES[0]
+  if (backend === 'rnaseq') {
+    return {
+      backend: 'rnaseq',
+      payload: {
+        test: 'rnaseq_validate_samples',
+        data: { counts_sample_ids: ['s1'], metadata_sample_ids: ['s1'] },
+        params: {},
+      },
+      requireSuccess: true,
+    }
+  }
+  return {
+    backend: 'plot',
+    payload: { action: 'ping' },
+    requireSuccess: true,
+  }
+}
+
+function parseProbeResult(result, label, localErrors) {
+  if (result?.error) {
+    localErrors.push(`Backend probe failed to execute ${label}: ${result.error.message}`)
+    return null
+  }
+  if (result?.status !== 0) {
+    localErrors.push(`Backend probe returned non-zero exit for ${label}: exit=${result?.status}`)
+    return null
+  }
+  const parsed = parseJsonFromBackendStdout(result?.stdout)
+  if (!parsed || typeof parsed !== 'object') {
+    localErrors.push(`Backend probe returned no JSON object for ${label}`)
+    return null
+  }
+  return parsed
+}
+
+function defaultDarwinRunner({ command, args, input, cwd }) {
+  return spawnSync(command, args, {
+    cwd,
+    input,
+    encoding: 'utf8',
+    timeout: BACKEND_PROBE_TIMEOUT_MS,
+    maxBuffer: 10 * 1024 * 1024,
+    windowsHide: true,
+  })
+}
+
+function defaultMachOInspector(targetPath) {
+  return inspectDarwinBinary(targetPath)
+}
+
+function isPathLikeExecutable(executable) {
+  return path.isAbsolute(executable) || executable.includes('/') || executable.includes('\\')
+}
+
+function runDarwinProbe({ executable, args = [], payload, label, outputFormat, requireSuccess = true, runner, probeOutputDir: outputDir, localErrors }) {
+  if (isPathLikeExecutable(executable) && !fs.existsSync(executable)) {
+    localErrors.push(`Backend probe missing executable (${label}): ${executable}`)
+    return
+  }
+
+  let outputPath = null
+  try {
+    const probePayload = JSON.parse(JSON.stringify(payload))
+    if (outputFormat) {
+      fs.mkdirSync(outputDir, { recursive: true })
+      outputPath = path.join(outputDir, `release_probe_${label.replace(/[^a-z0-9_-]/gi, '_')}_${Date.now()}_${Math.random().toString(16).slice(2)}.${outputFormat}`)
+      probePayload.output_path = outputPath
+    }
+    const result = runner({
+      command: executable,
+      args,
+      input: JSON.stringify(probePayload),
+      cwd: path.dirname(executable),
+    })
+    const parsed = parseProbeResult(result, label, localErrors)
+    if (!parsed) return
+    if (requireSuccess && parsed.success !== true) {
+      localErrors.push(`Backend probe did not report success=true for ${label}: ${typeof parsed.error === 'string' ? parsed.error : JSON.stringify(parsed.error ?? parsed.success ?? null)}`)
+      return
+    }
+    if (outputPath) {
+      if (!fs.existsSync(outputPath)) {
+        localErrors.push(`Backend probe did not produce expected output file for ${label}: ${outputPath}`)
+      } else if (fs.statSync(outputPath).size <= 0) {
+        localErrors.push(`Backend probe produced empty output file for ${label}: ${outputPath}`)
+      } else {
+        try {
+          assertPlotExportArtifact(outputPath, outputFormat)
+        } catch (error) {
+          localErrors.push(`Backend probe ${error.message} (${label})`)
+        }
+      }
+    }
+  } finally {
+    if (outputPath) removeProbeOutputFileIfPresent(outputPath)
+  }
+}
+
+function validateDarwinMachO(targetPath, label, expectedArchitecture, inspectMachO, localErrors) {
+  if (!fs.existsSync(targetPath)) return null
+  let description
+  try {
+    description = String(inspectMachO(targetPath))
+  } catch (error) {
+    localErrors.push(`Failed to inspect ${label} architecture: ${targetPath} (${error.message})`)
+    return null
+  }
+  const architectures = description.match(/\b(?:x86_64|arm64)\b/g) || []
+  if (!description.includes('Mach-O') || !architectures.includes(expectedArchitecture)) {
+    localErrors.push(`${label} architecture mismatch: expected ${expectedArchitecture}, got ${description || '(empty result)'} (${targetPath})`)
+  }
+  localErrors.push(...validateDarwinBinaryDescription({
+    description,
+    expectedArchitecture,
+    label,
+    targetPath,
+  }).filter(error => !error.includes('architecture mismatch')))
+  return description
+}
+
+function validateDarwinRnaSeqCaches(backendDistDir, label, localErrors) {
+  const cacheDir = path.join(backendDistDir, 'rnaseq_module', 'gene_cache')
+  if (!fs.existsSync(cacheDir)) {
+    localErrors.push(`Missing ${label} rnaseq gene_cache directory: ${cacheDir}`)
+    return
+  }
+  for (const cacheFile of RNASEQ_REQUIRED_CACHE_FILES) {
+    const cachePath = path.join(cacheDir, cacheFile)
+    if (!fs.existsSync(cachePath)) {
+      localErrors.push(`Missing ${label} rnaseq cache file: ${cachePath}`)
+    }
+  }
+
+  const metadataPath = path.join(cacheDir, 'gene_cache_meta.json')
+  if (!fs.existsSync(metadataPath)) return
+  let metadata
+  try {
+    metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'))
+  } catch (error) {
+    localErrors.push(`Failed to parse ${label} rnaseq cache metadata: ${metadataPath} (${error.message})`)
+    return
+  }
+  for (const key of RNASEQ_REQUIRED_CACHE_METADATA_KEYS) {
+    if (typeof metadata?.[key] !== 'string' || metadata[key].trim().length === 0) {
+      localErrors.push(`Missing ${label} rnaseq cache metadata key: ${key}`)
+    }
+  }
+  for (const key of RNASEQ_DISALLOWED_MISLEADING_KEYS) {
+    if (typeof metadata?.[key] === 'string' && metadata[key].trim().length > 0) {
+      localErrors.push(`Misleading ${label} rnaseq metadata key present: ${key}`)
+    }
+  }
+}
+
+function validateDarwinRuntimePayloadForLocation(
+  backend,
+  backendDistDir,
+  label,
+  { expectedArchitecture, inspectMachO, localErrors }
+) {
+  const numpyRoot = path.join(backendDistDir, 'numpy')
+  const numpyNativeModules = walkFilesRecursive(numpyRoot).filter(filePath => filePath.endsWith('.so'))
+  const multiarrayModule = numpyNativeModules.find(filePath => path.basename(filePath) === '_multiarray_umath.so')
+  if (!multiarrayModule) {
+    localErrors.push(`Missing ${label} NumPy native module: expected _multiarray_umath.so under ${numpyRoot}`)
+  }
+  for (const nativeModule of numpyNativeModules) {
+    validateDarwinMachO(nativeModule, `${label} NumPy native module`, expectedArchitecture, inspectMachO, localErrors)
+  }
+
+  if (backend === 'rnaseq') {
+    validateDarwinRnaSeqCaches(backendDistDir, label, localErrors)
+  }
+
+  if (backend === 'plot') {
+    const kaleidoRoot = path.join(backendDistDir, 'kaleido', 'executable')
+    const wrapper = path.join(kaleidoRoot, 'kaleido')
+    const nativeExecutable = path.join(kaleidoRoot, 'bin', 'kaleido')
+    if (!fs.existsSync(wrapper)) {
+      localErrors.push(`Missing ${label} Kaleido executable wrapper: ${wrapper}`)
+    }
+    if (!fs.existsSync(nativeExecutable)) {
+      localErrors.push(`Missing ${label} Kaleido native executable: ${nativeExecutable}`)
+    } else {
+      validateDarwinMachO(nativeExecutable, `${label} Kaleido native executable`, expectedArchitecture, inspectMachO, localErrors)
+    }
+    for (const fileName of DARWIN_KALEIDO_NATIVE_LIBRARY_FILES) {
+      const nativePayload = path.join(kaleidoRoot, 'bin', fileName)
+      if (!fs.existsSync(nativePayload)) {
+        localErrors.push(`Missing ${label} Kaleido native payload: ${nativePayload}`)
+      } else {
+        validateDarwinMachO(nativePayload, `${label} Kaleido native payload`, expectedArchitecture, inspectMachO, localErrors)
+      }
+    }
+  }
+}
+
+function validateDarwinBackendTree(distRoot, label, localErrors, { expectedArchitecture, inspectMachO }) {
+  for (const backend of REQUIRED_BACKENDS) {
+    const backendDistDir = path.join(distRoot, `${backend}.dist`)
+    const executable = path.join(distRoot, `${backend}.dist`, backendExecutableName(backend, 'darwin'))
+    if (!fs.existsSync(backendDistDir)) {
+      localErrors.push(`Missing ${label} ${backend}.dist: ${backendDistDir}`)
+      continue
+    }
+    if (!fs.existsSync(executable)) {
+      localErrors.push(`Missing ${label} ${backend}.dist executable: ${executable}`)
+    } else {
+      validateDarwinMachO(executable, `${label} ${backend}.dist executable`, expectedArchitecture, inspectMachO, localErrors)
+    }
+    validateDarwinRuntimePayloadForLocation(backend, backendDistDir, `${label} ${backend}.dist`, {
+      expectedArchitecture,
+      inspectMachO,
+      localErrors,
+    })
+    localErrors.push(...validateDarwinTree(backendDistDir, expectedArchitecture, {
+      inspect: inspectMachO,
+      label: `${label} ${backend}.dist payload`,
+    }))
+  }
+}
+
+function walkPathsRecursive(targetDir) {
+  if (!fs.existsSync(targetDir)) return []
+  const result = [targetDir]
+  const stack = [targetDir]
+  while (stack.length > 0) {
+    const current = stack.pop()
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const entryPath = path.join(current, entry.name)
+      result.push(entryPath)
+      if (entry.isDirectory()) stack.push(entryPath)
+    }
+  }
+  return result
+}
+
+function isConfinedTask5ActivatePs1(runtimeRoot, candidate) {
+  if (!runtimeRoot) return false
+  try {
+    if (!fs.lstatSync(candidate).isFile()) return false
+    const runtime = fs.realpathSync(runtimeRoot)
+    return fs.realpathSync(candidate) === path.join(runtime, 'lib', 'python3.12', 'venv', 'scripts', 'common', 'Activate.ps1')
+  } catch {
+    return false
+  }
+}
+
+export function validateMacBundleResources(resourceRoot, { runtimeRoot } = {}) {
+  const forbiddenMacSuffixes = ['.exe', '.dll', '.pyd', '.ps1']
+  const forbiddenMacNames = ['pywin32', 'win32com', 'msedgedriver']
+  const forbiddenLegacyRuntimeNames = new Set(['dist', 'builder', 'build', 'wheelhouse', 'archive', 'archives', 'pip-cache', 'pip_cache', '_tmp'])
+  const localErrors = []
+  if (!fs.existsSync(resourceRoot)) return localErrors
+  const paths = walkPathsRecursive(resourceRoot)
+  for (const candidate of paths) {
+    const parts = path.relative(resourceRoot, candidate).split(path.sep).filter(Boolean)
+    const name = path.basename(candidate).toLowerCase()
+    if (
+      (forbiddenMacSuffixes.some(suffix => name.endsWith(suffix)) && !isConfinedTask5ActivatePs1(runtimeRoot, candidate)) ||
+      parts.some(part => {
+        const normalized = part.toLowerCase()
+        return forbiddenMacNames.includes(normalized) || normalized.startsWith('pywin32')
+      })
+    ) {
+      localErrors.push(`Windows-only payload found in macOS resources: ${candidate}`)
+    }
+    if (path.basename(path.dirname(candidate)).toLowerCase() === 'python_embedded') {
+      const normalized = name.toLowerCase()
+      if (normalized.endsWith('.dist') || forbiddenLegacyRuntimeNames.has(normalized)) {
+        localErrors.push(`Legacy Python runtime or build payload found in macOS resources: ${candidate}`)
+      }
+    }
+  }
+  return localErrors
+}
+
+function validateLegacyDarwinRuntime({
+  paths,
+  requireScriptCompiledPlotParity: requireParity = false,
+  installedApp,
+  runner = defaultDarwinRunner,
+  inspectMachO = defaultMachOInspector,
+  expectedArchitecture = os.arch(),
+  probeOutputDir: outputDir = probeOutputDir,
+} = {}) {
+  const localErrors = []
+  const normalizedArchitecture = normalizeDarwinArchitecture(expectedArchitecture)
+  const sourceDistPath = paths?.sourceDist
+  const stagedDistPath = paths?.stagedDist
+  const generatedKaleidoRoots = [
+    sourceDistPath && path.join(sourceDistPath, 'plot.dist', 'kaleido', 'executable'),
+    stagedDistPath && path.join(stagedDistPath, 'plot.dist', 'kaleido', 'executable'),
+  ].filter(Boolean)
+  const trees = [
+    { dist: sourceDistPath, label: 'source' },
+    { dist: stagedDistPath, label: 'staged' },
+  ]
+  let installedDist = null
+  if (installedApp) {
+    installedDist = resolveInstalledDarwinDist(installedApp)
+    generatedKaleidoRoots.push(path.join(installedDist, 'plot.dist', 'kaleido', 'executable'))
+    trees.push({ dist: installedDist, label: 'installed' })
+  }
+
+  try {
+    for (const tree of trees) {
+      if (!tree.dist) {
+        localErrors.push(`Missing ${tree.label} Python dist directory`)
+        continue
+      }
+      validateDarwinBackendTree(tree.dist, tree.label, localErrors, {
+        expectedArchitecture: normalizedArchitecture,
+        inspectMachO,
+      })
+      for (const backend of REQUIRED_BACKENDS) {
+        const executable = path.join(tree.dist, `${backend}.dist`, backendExecutableName(backend, 'darwin'))
+        const probe = darwinBackendProbe(backend)
+        runDarwinProbe({
+          executable,
+          payload: probe.payload,
+          requireSuccess: probe.requireSuccess,
+          label: `${tree.label}_${backend}`,
+          runner,
+          probeOutputDir: outputDir,
+          localErrors,
+        })
+      }
+    }
+
+    for (const parityProbe of buildDarwinPlotParityMatrix({
+      scriptPython: paths.scriptPython,
+      scriptPlot: paths.scriptPlot,
+      sourceDist: sourceDistPath,
+      stagedDist: stagedDistPath,
+    })) {
+      if (parityProbe.scope === 'script' && !requireParity) continue
+      runDarwinProbe({
+        executable: parityProbe.executable,
+        args: parityProbe.args,
+        payload: buildPlotExportProbe(parityProbe.format).payload,
+        label: `${parityProbe.scope}_${parityProbe.format}`,
+        outputFormat: parityProbe.format,
+        runner,
+        probeOutputDir: outputDir,
+        localErrors,
+      })
+    }
+
+    if (installedDist) {
+      for (const format of ['pdf', 'tiff']) {
+        runDarwinProbe({
+          executable: path.join(installedDist, 'plot.dist', 'plot'),
+          payload: buildPlotExportProbe(format).payload,
+          label: `installed_${format}`,
+          outputFormat: format,
+          runner,
+          probeOutputDir: outputDir,
+          localErrors,
+        })
+      }
+      localErrors.push(...validateMacBundleResources(path.join(installedApp, 'Contents', 'Resources')))
+    }
+    if (stagedDistPath) {
+      localErrors.push(...validateMacBundleResources(path.dirname(path.dirname(stagedDistPath))))
+    }
+  } finally {
+    cleanTransientKaleidoLogs(generatedKaleidoRoots)
+    for (const root of generatedKaleidoRoots) {
+      const logs = walkFilesRecursive(root).filter(filePath => path.basename(filePath).toLowerCase().endsWith('.log'))
+      for (const log of logs) localErrors.push(`Transient Kaleido log remained after validation: ${log}`)
+    }
+  }
+
+  return { errors: localErrors }
+}
+
+function bundledBackendPayload(backend, format, outputPath) {
+  if (backend === 'stats') {
+    return { test: 'independent_ttest', data: { group1: [1, 2, 3, 4], group2: [5, 6, 7, 8] }, parameters: { equal_var: true } }
+  }
+  if (backend === 'rnaseq') {
+    return { test: 'rnaseq_validate', data: { counts: { GeneA: { S1: 20, S2: 25 } }, metadata: { S1: { condition: 'A' }, S2: { condition: 'B' } } }, parameters: {} }
+  }
+  if (format) {
+    return {
+      action: 'export_plot',
+      plotly_json: PLOT_EXPORT_PROBE_FIGURE,
+      output_path: outputPath,
+      options: { format, width: 80, height: 80, dpi: 96 },
+    }
+  }
+  return { action: 'trendline', x: [1, 2, 3, 4], y: [2, 4, 6, 8], type: 'linear' }
+}
+
+function isMachOFile(targetPath) {
+  try {
+    const header = fs.readFileSync(targetPath).subarray(0, 4).toString('hex')
+    return new Set(['feedface', 'cefaedfe', 'feedfacf', 'cffaedfe', 'cafebabe', 'bebafeca', 'cafebabf', 'bfbafeca']).has(header)
+  } catch {
+    return false
+  }
+}
+
+function walkValidatedRuntimeFiles(runtime) {
+  const result = []
+  const stack = [runtime]
+  while (stack.length > 0) {
+    const current = stack.pop()
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const targetPath = path.join(current, entry.name)
+      if (entry.isDirectory()) {
+        stack.push(targetPath)
+      } else if (entry.isFile()) {
+        result.push(targetPath)
+      } else if (entry.isSymbolicLink()) {
+        try {
+          if (fs.statSync(targetPath).isFile()) result.push(targetPath)
+        } catch {}
+      }
+    }
+  }
+  return result
+}
+
+function validateBundledMachO(runtime, manifest, expectedArchitecture, inspectMachO, localErrors) {
+  const expected = new Map((manifest?.macho_inventory?.files || []).map(entry => [entry.path, entry]))
+  const found = walkValidatedRuntimeFiles(runtime).filter(isMachOFile)
+  for (const targetPath of found) {
+    const relative = path.relative(runtime, targetPath).split(path.sep).join('/')
+    const record = expected.get(relative)
+    if (!record) {
+      localErrors.push(`Mach-O missing from runtime manifest inventory: ${relative}`)
+      continue
+    }
+    if (record.sha256 !== crypto.createHash('sha256').update(fs.readFileSync(targetPath)).digest('hex')) {
+      localErrors.push(`Mach-O hash differs from runtime manifest: ${relative}`)
+    }
+    const description = validateDarwinMachO(targetPath, `runtime Mach-O ${relative}`, expectedArchitecture, inspectMachO, localErrors)
+    if (!description || !record) continue
+    const architectures = [...new Set(description.match(/\b(?:x86_64|arm64)\b/g) || [])].sort()
+    if (JSON.stringify(architectures) !== JSON.stringify([expectedArchitecture])) {
+      localErrors.push(`runtime Mach-O ${relative} is not an exact native slice: ${architectures.join(', ') || 'none'}`)
+    }
+    const versions = minimumMacOSVersions(description)
+    if (JSON.stringify(record.architectures) !== JSON.stringify([expectedArchitecture]) || JSON.stringify(record.minimum_macos_versions) !== JSON.stringify(versions)) {
+      localErrors.push(`Runtime manifest Mach-O metadata is stale: ${relative}`)
+    }
+  }
+  for (const relative of expected.keys()) {
+    if (!found.some(targetPath => path.relative(runtime, targetPath).split(path.sep).join('/') === relative)) {
+      localErrors.push(`Runtime manifest Mach-O is missing: ${relative}`)
+    }
+  }
+}
+
+function validateRuntimeSysPath(runtime, interpreter, runner, localErrors) {
+  const result = runner({
+    command: interpreter,
+    args: ['-I', '-B', '-c', 'import json,sys; print(json.dumps(sys.path))'],
+    input: '',
+    cwd: runtime,
+  })
+  if (result?.status !== 0) {
+    localErrors.push(`Bundled interpreter sys.path probe failed: ${runtime}`)
+    return
+  }
+  let entries
+  try { entries = JSON.parse(String(result.stdout).trim()) } catch { entries = null }
+  if (!Array.isArray(entries)) {
+    localErrors.push(`Bundled interpreter returned invalid sys.path data: ${runtime}`)
+    return
+  }
+  const resolved = fs.realpathSync(runtime)
+  for (const entry of entries) {
+    if (typeof entry !== 'string' || entry.length === 0) {
+      localErrors.push(`Bundled interpreter returned invalid sys.path entry: ${String(entry)}`)
+      continue
+    }
+    const candidate = path.isAbsolute(entry) ? path.resolve(entry) : path.resolve(runtime, entry)
+    const canonical = fs.existsSync(candidate) ? fs.realpathSync(candidate) : candidate
+    const relative = path.relative(resolved, canonical)
+    if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+      localErrors.push(`Bundled interpreter sys.path escapes runtime: ${entry}`)
+    }
+  }
+}
+
+function validateBundledInterpreterVersion(runtime, interpreter, version, runner, localErrors) {
+  const result = runner({ command: interpreter, args: ['--version'], input: '', cwd: runtime })
+  if (result?.status !== 0 || result?.error) {
+    localErrors.push(`Bundled interpreter version probe failed: ${runtime}`)
+    return
+  }
+  const expected = `Python ${version}`
+  if (String(result.stdout).trim() !== expected) {
+    localErrors.push(`Bundled interpreter version differs from pinned CPython: expected ${expected}, got ${String(result.stdout).trim() || '(empty)'}`)
+  }
+}
+
+function runtimeManifestSha256(runtime) {
+  return crypto.createHash('sha256').update(fs.readFileSync(path.join(runtime, 'easycris_runtime_manifest.json'))).digest('hex')
+}
+
+function runBundledBackendProbe({ runtime, backend, runner, outputDir, localErrors }) {
+  const interpreter = path.join(runtime, 'bin', 'python3.12')
+  const run = (format) => {
+    const outputPath = format
+      ? path.join(outputDir, `${path.basename(runtime)}-${backend}-${format}-${Date.now()}-${Math.random().toString(16).slice(2)}.${format}`)
+      : null
+    if (outputPath) fs.mkdirSync(outputDir, { recursive: true })
+    const result = runner({
+      command: interpreter,
+      args: ['-I', '-B', '-m', backend],
+      input: JSON.stringify(bundledBackendPayload(backend, format, outputPath)),
+      cwd: runtime,
+    })
+    const parsed = parseProbeResult(result, `${path.basename(runtime)}:${backend}${format ? `:${format}` : ''}`, localErrors)
+    if (parsed?.success !== true) localErrors.push(`Bundled ${backend} protocol did not report success=true: ${runtime}`)
+    if (outputPath) {
+      if (!fs.existsSync(outputPath) || fs.statSync(outputPath).size === 0) {
+        localErrors.push(`Bundled plot did not create ${format.toUpperCase()} output: ${runtime}`)
+      } else {
+        try { assertPlotExportArtifact(outputPath, format) } catch (error) { localErrors.push(error.message) }
+      }
+      if (fs.existsSync(outputPath)) fs.rmSync(outputPath, { force: true })
+    }
+  }
+  run()
+  if (backend === 'plot') {
+    run('pdf')
+    run('tiff')
+  }
+}
+
+export function validateDarwinRuntime({
+  paths,
+  installedApp,
+  runner = defaultDarwinRunner,
+  inspectMachO = defaultMachOInspector,
+  expectedArchitecture = os.arch(),
+  probeOutputDir: outputDir = probeOutputDir,
+  manifestContext,
+} = {}) {
+  const localErrors = []
+  const normalizedArchitecture = normalizeDarwinArchitecture(expectedArchitecture)
+  const trees = [
+    { runtime: paths?.sourceRuntime, label: 'source' },
+    { runtime: paths?.stagedRuntime, label: 'staged' },
+  ]
+  if (installedApp) trees.push({ runtime: resolveInstalledDarwinDist(installedApp), label: 'installed' })
+  for (const tree of trees) {
+    if (!tree.runtime) {
+      localErrors.push(`Missing ${tree.label} bundled runtime directory`)
+      continue
+    }
+    const context = manifestContext
+      ? { ...manifestContext, architecture: normalizedArchitecture }
+      : runtimeManifestContext(paths?.root ?? rootDir, { architecture: normalizedArchitecture })
+    const manifestErrors = validateDarwinRuntimeManifest(tree.runtime, { root: paths?.root, manifestContext: context })
+    localErrors.push(...manifestErrors.map(error => `${tree.label} ${error}`))
+    if (manifestErrors.length > 0) continue
+    const manifest = JSON.parse(fs.readFileSync(path.join(tree.runtime, 'easycris_runtime_manifest.json'), 'utf8'))
+    const before = runtimeTreeSha256(tree.runtime)
+    const manifestBefore = runtimeManifestSha256(tree.runtime)
+    const interpreter = path.join(tree.runtime, 'bin', 'python3.12')
+    validateBundledMachO(tree.runtime, manifest, normalizedArchitecture, inspectMachO, localErrors)
+    validateBundledInterpreterVersion(tree.runtime, interpreter, manifest.interpreter.version, runner, localErrors)
+    validateRuntimeSysPath(tree.runtime, interpreter, runner, localErrors)
+    for (const backend of REQUIRED_BACKENDS) {
+      runBundledBackendProbe({ runtime: tree.runtime, backend, runner, outputDir, localErrors })
+    }
+    if (runtimeTreeSha256(tree.runtime) !== before) localErrors.push(`Bundled runtime mutated during validation: ${tree.runtime}`)
+    if (runtimeManifestSha256(tree.runtime) !== manifestBefore) localErrors.push(`Bundled runtime manifest mutated during validation: ${tree.runtime}`)
+  }
+  if (paths?.stagedRuntime) {
+    localErrors.push(...validateMacBundleResources(path.dirname(path.dirname(paths.stagedRuntime)), { runtimeRoot: paths.stagedRuntime }))
+  }
+  if (installedApp) {
+    const installedRuntime = resolveInstalledDarwinDist(installedApp)
+    localErrors.push(...validateMacBundleResources(path.join(installedApp, 'Contents', 'Resources'), { runtimeRoot: installedRuntime }))
+  }
+  return { errors: localErrors }
+}
+
+export function validateInstalledDarwinExecution({
+  installedApp,
+  runner = defaultDarwinRunner,
+  probeOutputDir: outputDir = probeOutputDir,
+} = {}) {
+  if (!installedApp) {
+    throw new Error('post-sign installed execution requires an installed app')
+  }
+  const localErrors = []
+  const runtime = resolveInstalledDarwinDist(installedApp)
+  for (const backend of REQUIRED_BACKENDS) {
+    runBundledBackendProbe({ runtime, backend, runner, outputDir, localErrors })
+  }
+  return { errors: localErrors }
 }
 
 function validateCompiledBackends() {
@@ -771,15 +1438,19 @@ function assertAnyExists(baseDir, candidates, messagePrefix) {
   }
 }
 
-function validateNoUnexpectedPyFiles() {
-  const stagedFiles = walkFilesRecursive(stagedRoot)
+export function validateNoUnexpectedPyFiles({ resourceRoot = stagedRoot, platform = process.platform, localErrors = errors } = {}) {
+  const stagedFiles = walkFilesRecursive(resourceRoot)
   const disallowed = stagedFiles.filter(filePath => {
     if (!filePath.toLowerCase().endsWith('.py')) {
       return false
     }
-    const relativePath = path.relative(stagedRoot, filePath).replace(/\\/g, '/')
-    // Nuitka runtime payloads legitimately include Python files inside *.dist folders.
-    if (/(^|\/)[^/]+\.dist\//.test(relativePath)) {
+    const relativePath = path.relative(resourceRoot, filePath).replace(/\\/g, '/')
+    // Only the Windows Nuitka layout legitimately includes Python files inside *.dist folders.
+    if (platform !== 'darwin' && /(^|\/)[^/]+\.dist\//.test(relativePath)) {
+      return false
+    }
+    // The Darwin runtime intentionally contains CPython's stdlib and backend modules.
+    if (platform === 'darwin' && relativePath.startsWith('runtime/')) {
       return false
     }
     return !allowedPythonFiles.has(relativePath)
@@ -787,7 +1458,7 @@ function validateNoUnexpectedPyFiles() {
 
   if (disallowed.length > 0) {
     for (const filePath of disallowed) {
-      errors.push(`Disallowed Python source found in staged runtime: ${filePath}`)
+      localErrors.push(`Disallowed Python source found in staged runtime: ${filePath}`)
     }
   }
 }
@@ -991,23 +1662,105 @@ function validateLegalFiles() {
   }
 }
 
-function main() {
-  ensureProbeOutputDirectory()
-  validateLegalFiles()
+export function readTargetPlatform(argv = process.argv.slice(2)) {
+  const index = argv.indexOf('--platform')
+  if (index < 0) return assertRuntimePlatform(process.platform)
+  const platform = argv[index + 1]
+  if (!platform || platform.startsWith('--')) {
+    throw new Error('Missing value for --platform')
+  }
+  return assertRuntimePlatform(platform)
+}
+
+function readInstalledApp(argv) {
+  const index = argv.indexOf('--installed-app')
+  if (index < 0) return null
+  const appPath = argv[index + 1]
+  if (!appPath || appPath.startsWith('--')) {
+    throw new Error('Use --installed-app <path>')
+  }
+  return path.resolve(appPath)
+}
+
+function validateWindowsRuntime() {
   validateCompiledBackends()
   validateInstalledUpdaterBackends()
   validateCompiledBackendProbes()
-  if (!communityMode) {
+  if (shouldRunWindowsScriptPlotParity({ communityMode })) {
     validateScriptAndCompiledPlotParityProbes()
   }
-  validateNoUnexpectedPyFiles()
+}
+
+function validatePortableRelease(targetPlatform) {
+  validateNoUnexpectedPyFiles({ platform: targetPlatform })
   validateNoNuitkaInStagedRuntime()
   validateNoE2EArtifactsInReleaseDist()
   validateNoSourceMaps()
   validateNoUnresolvedStoreAliasInBundle()
   validateStrictCspAgainstRuntimeCodegen()
-  validateNsisReleaseConfig()
-  validateNsisArtifactSignatures()
+}
+
+export function dispatchReleaseValidation({
+  argv = process.argv.slice(2),
+  targetPlatform = readTargetPlatform(argv),
+  paths = {
+    root: rootDir,
+    sourceRuntime: path.join(rootDir, 'python_embedded', 'runtime'),
+    stagedRuntime: path.join(stagedRoot, 'runtime'),
+  },
+  runner = defaultDarwinRunner,
+  inspectMachO = defaultMachOInspector,
+  expectedArchitecture = os.arch(),
+  probeOutputDir: outputDir = probeOutputDir,
+  manifestContext,
+  fullValidationHooks = {
+    validateLegalFiles,
+    validateWindowsRuntime,
+    validatePortableRelease,
+    validateNsisReleaseConfig,
+    validateNsisArtifactSignatures,
+  },
+} = {}) {
+  const postSignInstalledExecution = argv.includes('--post-sign-installed-execution')
+  if (postSignInstalledExecution) {
+    if (targetPlatform !== 'darwin') {
+      throw new Error('--post-sign-installed-execution requires --platform darwin')
+    }
+    const installedApp = readInstalledApp(argv)
+    if (!installedApp) {
+      throw new Error('--post-sign-installed-execution requires --installed-app <path>')
+    }
+    return validateInstalledDarwinExecution({ installedApp, runner, probeOutputDir: outputDir })
+  }
+
+  fullValidationHooks.validateLegalFiles()
+  const localErrors = []
+  if (targetPlatform === 'win32') {
+    fullValidationHooks.validateWindowsRuntime()
+  } else {
+    const darwinResult = validateDarwinRuntime({
+      paths,
+      installedApp: readInstalledApp(argv),
+      runner,
+      inspectMachO,
+      expectedArchitecture,
+      probeOutputDir: outputDir,
+      manifestContext: manifestContext ?? runtimeManifestContext(paths.root ?? rootDir),
+    })
+    localErrors.push(...darwinResult.errors)
+  }
+  fullValidationHooks.validatePortableRelease(targetPlatform)
+  if (targetPlatform === 'win32') {
+    fullValidationHooks.validateNsisReleaseConfig()
+    fullValidationHooks.validateNsisArtifactSignatures()
+  }
+  return { errors: localErrors }
+}
+
+function main(argv = process.argv.slice(2)) {
+  const targetPlatform = readTargetPlatform(argv)
+  ensureProbeOutputDirectory()
+  errors.push(...dispatchReleaseValidation({ argv, targetPlatform }).errors)
 
   for (const warning of warnings) {
     console.warn(`[validate-release] WARN: ${warning}`)
@@ -1024,6 +1777,11 @@ function main() {
   console.log('[validate-release] OK: Hardened release prerequisites validated')
 }
 
-main()
-
-
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  try {
+    main()
+  } catch (error) {
+    console.error(`[validate-release] ERROR: ${error.message}`)
+    process.exitCode = 1
+  }
+}

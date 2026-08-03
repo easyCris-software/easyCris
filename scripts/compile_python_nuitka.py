@@ -580,6 +580,12 @@ def compile_backend(
 
 
 def main() -> int:
+    if sys.platform != "win32":
+        print(
+            f"[compile-python] ERROR: Windows-only compiler rejects target platform: {sys.platform}",
+            file=sys.stderr,
+        )
+        return 1
     if not PYTHON_EXE.exists():
         print(
             f"[compile-python] ERROR: Embedded Python not found at: {PYTHON_EXE}",
@@ -687,5 +693,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
-

@@ -9,25 +9,26 @@
 # Install: python_embedded/python.exe -m pip install -r requirements-validated.txt --target python_embedded/python_dependencies/
 #
 # ============================================================================
-# MPL-2.0 LICENSE ELIMINATION (2026-01-28)
+# PLATFORM-SPECIFIC TLS AND LICENSE POLICY
 # ============================================================================
-# Two MPL-2.0 packages were replaced with MIT alternatives:
+# Windows retains the custom MIT certifi compatibility stub backed by the
+# Windows certificate store:
+#   Location: python_embedded/python_dependencies/certifi/
+#   Implementation: Extracts CA certs via ssl.enum_certificates()
+#   API: certifi.where() and certifi.contents() work as expected
 #
-# 1. certifi (MPL-2.0) -> MIT stub using Windows certificate store
-#    Location: python_embedded/python_dependencies/certifi/
-#    Implementation: Extracts CA certs via ssl.enum_certificates()
-#    API: certifi.where() and certifi.contents() work as expected
+# Darwin ships the real certifi package (MPL-2.0) and truststore so Python
+# clients can use the macOS system trust store. MPL-2.0 is an accepted runtime
+# license and certifi is disclosed in the generated third-party notices.
 #
-# 2. legacy-api-wrap (MPL-2.0) -> REMOVED (anndata has built-in fallback)
-#    anndata/compat/__init__.py lines 198-205 checks for legacy_api_wrap
-#    If not found, uses no-op decorator: lambda func: func
-#    No functional impact - only disables deprecation warnings
-#
-# Result: ZERO copyleft licenses in Python runtime
+# legacy-api-wrap (MPL-2.0) remains removed because anndata has a built-in
+# fallback. anndata/compat/__init__.py lines 198-205 uses a no-op decorator
+# when legacy_api_wrap is absent, which only disables deprecation warnings.
 # ============================================================================
 
-# TLS/SSL (MIT stub - NOT from pip)
-# certifi - custom MIT stub at python_dependencies/certifi/ (Windows cert store)
+# TLS/SSL
+# Windows: custom MIT certifi stub at python_dependencies/certifi/
+# Darwin: real certifi (MPL-2.0) plus truststore; see requirements-macos.txt
 # legacy-api-wrap - NOT INSTALLED (anndata fallback used)
 
 # Core Scientific Stack (VALIDATED)
@@ -52,7 +53,7 @@ matplotlib==3.10.7
 seaborn==0.13.2
 plotly==5.24.1
 kaleido==0.1.0.post1
-# truststore - REMOVED (replaced by certifi MIT stub using Windows cert store)
+# truststore - Windows runtime does not use it; Darwin pins it separately
 # RNA-seq
 # Optional overlay is maintained in requirements-rnaseq.txt
 # Gene Set Enrichment

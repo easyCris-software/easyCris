@@ -1,0 +1,218 @@
+name: macOS Runtime Validation
+
+# Protected dual-architecture proof for M1 closeout candidates.
+# Does not publish releases or mutate the public updater channel.
+on:
+  push:
+    branches:
+      - "validation/macos/**"
+      - "validation/ci/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bundled-runtime-proof:
+    name: bundled-runtime (${{ matrix.suffix }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            rust_target: x86_64-apple-darwin
+            arch: x86_64
+            suffix: x86_64
+          - runner: macos-15
+            rust_target: aarch64-apple-darwin
+            arch: arm64
+            suffix: aarch64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 360
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Setup host Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@631a55b12751854ce901bb631d5902ceb48146f7 # stable
+        with:
+          targets: ${{ matrix.rust_target }}
+
+      - name: Reject private path leaks
+        run: |
+          set -euo pipefail
+          if git ls-files | grep -E '^(e2e/|_documentation/|_test_data/|_test_validation/|docs/plans/)'; then
+            echo "Private paths must not be tracked"
+            exit 1
+          fi
+
+      - name: Install JS dependencies
+        run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Typecheck and public unit contracts
+        run: |
+          set -euo pipefail
+          npm run -s typecheck
+          npm run -s test:runtime-platform
+          npm run -s test:python-runtime:macos
+          node --test scripts/runtime-artifact-layout.test.mjs scripts/validate-release.test.mjs
+          node --test scripts/macos-validation-contract.test.mjs scripts/ci-workflow-contract.test.mjs scripts/node-toolchain-contract.test.mjs
+          cargo test --manifest-path src-tauri/Cargo.toml bundled_runtime
+          cargo test --manifest-path src-tauri/Cargo.toml backend_mode
+
+      - name: Provision pinned Darwin runtime
+        env:
+          EASYCRIS_PROTECTED_VALIDATION: "1"
+        run: npm run -s provision-python:macos
+
+      - name: Stage and validate Darwin runtime
+        run: |
+          set -euo pipefail
+          node scripts/stage_python_runtime.mjs --platform darwin
+          node scripts/validate_release.js --platform darwin --community
+
+      - name: Public GSEApy dependency smoke (staged runtime)
+        run: |
+          set -euo pipefail
+          node scripts/gseapy-dependency-smoke.mjs \
+            --python bundle_resources/python_embedded/runtime/bin/python3.12
+
+      - name: Build unsigned macOS app bundle
+        env:
+          CI: "true"
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: |
+          set -euo pipefail
+          npm run -s build
+          # Keep the bundle unsigned until its installed runtime and manifests pass validation.
+          npm exec -- tauri build \
+            --no-sign \
+            --bundles app \
+            --target "${{ matrix.rust_target }}" \
+            --config src-tauri/tauri.validation.macos.conf.json
+
+      - name: Validate unsigned installed runtime and manifests
+        run: |
+          set -euo pipefail
+          APP="src-tauri/target/${{ matrix.rust_target }}/release/bundle/macos/easyCris.app"
+          if [[ ! -d "$APP" ]]; then
+            APP="src-tauri/target/release/bundle/macos/easyCris.app"
+          fi
+          test -d "$APP"
+          export APP_PATH="$APP"
+          echo "APP_PATH=$APP" >> "$GITHUB_ENV"
+          node scripts/validate_release.js \
+            --platform darwin \
+            --community \
+            --installed-app "$APP_PATH"
+
+      - name: Sign nested runtime inside-out (ad-hoc hardened)
+        run: |
+          set -euo pipefail
+          APP="src-tauri/target/${{ matrix.rust_target }}/release/bundle/macos/easyCris.app"
+          if [[ ! -d "$APP" ]]; then
+            APP="src-tauri/target/release/bundle/macos/easyCris.app"
+          fi
+          test -d "$APP"
+          # Same-step consumers need a real shell/process env; GITHUB_ENV only applies to later steps.
+          export APP_PATH="$APP"
+          echo "APP_PATH=$APP" >> "$GITHUB_ENV"
+
+          # Enumerate nested Mach-O payloads under the app and sign deepest paths first.
+          # Pass the path as argv so the quoted heredoc cannot depend on delayed GITHUB_ENV.
+          python3 - "$APP_PATH" <<'PY'
+          import subprocess, sys
+          from pathlib import Path
+
+          app = Path(sys.argv[1])
+          if not app.is_dir():
+              raise SystemExit(f"app bundle missing: {app}")
+          roots = [
+              app / "Contents" / "Resources",
+              app / "Contents" / "MacOS",
+              app / "Contents" / "Frameworks",
+          ]
+          candidates = []
+          for root in roots:
+              if not root.exists():
+                  continue
+              for path in root.rglob("*"):
+                  if not path.is_file():
+                      continue
+                  try:
+                      with path.open("rb") as handle:
+                          head = handle.read(4)
+                  except OSError:
+                      continue
+                  magic = head.hex()
+                  if magic not in {
+                      "feedface", "cefaedfe", "feedfacf", "cffaedfe",
+                      "cafebabe", "bebafeca", "cafebabf", "bfbafeca",
+                  }:
+                      continue
+                  candidates.append(path)
+
+          candidates.sort(key=lambda p: (-len(p.parts), str(p)))
+          for path in candidates:
+              cmd = [
+                  "codesign", "--force", "--timestamp=none",
+                  "--options", "runtime", "--sign", "-",
+                  str(path),
+              ]
+              print("signing", path.relative_to(app))
+              subprocess.run(cmd, check=True)
+
+          app_cmd = [
+              "codesign", "--force", "--timestamp=none",
+              "--options", "runtime", "--sign", "-",
+              str(app),
+          ]
+          print("signing app", app)
+          subprocess.run(app_cmd, check=True)
+          PY
+
+          codesign --verify --deep --strict --verbose=2 "$APP_PATH"
+
+      - name: Run signed installed execution probes
+        run: |
+          set -euo pipefail
+          node scripts/validate_release.js \
+            --platform darwin \
+            --community \
+            --post-sign-installed-execution \
+            --installed-app "$APP_PATH"
+          INSTALLED_PYTHON="$APP_PATH/Contents/Resources/_up_/bundle_resources/python_embedded/runtime/bin/python3.12"
+          if [[ ! -x "$INSTALLED_PYTHON" ]]; then
+            INSTALLED_PYTHON="$APP_PATH/Contents/Resources/python_embedded/runtime/bin/python3.12"
+          fi
+          test -x "$INSTALLED_PYTHON"
+          node scripts/gseapy-dependency-smoke.mjs --python "$INSTALLED_PYTHON"
+
+      - name: Upload sanitized validation summary
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: macos-runtime-proof-${{ matrix.suffix }}
+          path: |
+            python_embedded/runtime/easycris_runtime_manifest.json
+            bundle_resources/python_embedded/runtime/easycris_runtime_manifest.json
+          if-no-files-found: warn
+          retention-days: 7

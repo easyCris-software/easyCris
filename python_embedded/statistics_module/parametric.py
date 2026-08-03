@@ -20,6 +20,11 @@ from .adjustment_utils import apply_adjustment, get_method_label
 from .utils import preprocess_data, format_number, validate_input, _consume_context_metadata
 
 
+def _select_two_sample_primary(equal_var, pooled, welch):
+    """Select the caller-requested primary result while retaining both result families."""
+    return pooled if equal_var else welch
+
+
 def _assign_group_labels(group_labels: Optional[List[str]], k: int) -> List[str]:
     """
     Helper function to assign group labels.
@@ -218,11 +223,13 @@ def t_test_two_sample(data1: List[float], data2: List[float], equal_var: bool = 
         ci_welch_lower = mean_diff - ci_margin_welch
         ci_welch_upper = mean_diff + ci_margin_welch
 
-        # Primary result (Welch by default for robustness)
-        t_stat = t_welch
-        p_value = p_welch
-        df = df_welch
-        test_method = 'welch'
+        # Primary result follows the caller's explicit variance assumption.
+        # Both method-specific result families remain available below.
+        t_stat, p_value, df, test_method = _select_two_sample_primary(
+            equal_var,
+            (t_pooled, p_pooled, df_pooled, 'pooled'),
+            (t_welch, p_welch, df_welch, 'welch'),
+        )
 
         # Group names (default to "Group 1" and "Group 2" if not provided)
         g1_name = group1_name if group1_name else "Group 1"
@@ -231,13 +238,13 @@ def t_test_two_sample(data1: List[float], data2: List[float], equal_var: bool = 
         return {
             'success': True,
             'test_type': 'two_sample',
-            # Primary result (Welch default)
+            # Primary result selected by equal_var.
             't_statistic': format_number(t_stat),
             'p_value': format_number(p_value),
             'degrees_of_freedom': format_number(df),
             'is_significant': bool(p_value < alpha),
             'alpha': format_number(alpha),
-            'equal_variance_assumed': False,
+            'equal_variance_assumed': bool(equal_var),
             'test_method': test_method,
             'recommended_method': test_method,
             # Equality of Variances Test (F-test)
@@ -370,11 +377,12 @@ def t_test_two_sample_from_aggregates(
         ci_welch_lower = mean_diff - ci_margin_welch
         ci_welch_upper = mean_diff + ci_margin_welch
 
-        # Primary result (Welch by default for robustness)
-        t_stat = t_welch
-        p_value = p_welch
-        df = df_welch
-        test_method = 'welch'
+        # Primary result follows the caller's explicit variance assumption.
+        t_stat, p_value, df, test_method = _select_two_sample_primary(
+            equal_var,
+            (t_pooled, p_pooled, df_pooled, 'pooled'),
+            (t_welch, p_welch, df_welch, 'welch'),
+        )
 
         g1_name = group1_name if group1_name else "Group 1"
         g2_name = group2_name if group2_name else "Group 2"
@@ -387,7 +395,7 @@ def t_test_two_sample_from_aggregates(
             'degrees_of_freedom': format_number(df),
             'is_significant': bool(p_value < alpha),
             'alpha': format_number(alpha),
-            'equal_variance_assumed': False,
+            'equal_variance_assumed': bool(equal_var),
             'test_method': test_method,
             'recommended_method': test_method,
             'f_statistic': format_number(f_stat),

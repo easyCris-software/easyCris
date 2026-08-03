@@ -1,0 +1,30 @@
+# Hash-locked, build-only Python toolchain for macOS runtime provisioning.
+# This file is not shipped in the application runtime.
+
+# group: builder
+# archive: packaging-26.2-py3-none-any.whl
+packaging==26.2 --hash=sha256:5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e
+
+# group: builder
+# archive: pip-26.2-py3-none-any.whl
+pip==26.2 --hash=sha256:931c303696af6fa3417112103b1cad26890e5a07eccb5b99783700e33f2b8aad
+
+# group: builder
+# archive: semantic_version-2.10.0-py2.py3-none-any.whl
+semantic-version==2.10.0 --hash=sha256:de78a3b8e0feda74cabc54aab2da702113e33ac9d9eb9d2389bcf1f58b7d9177
+
+# group: builder
+# archive: setuptools-83.0.0-py3-none-any.whl
+setuptools==83.0.0 --hash=sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3
+
+# group: builder
+# archive: setuptools_rust-1.13.0-py3-none-any.whl
+setuptools-rust==1.13.0 --hash=sha256:666439c4d90e968bb625bcf87ec0aa02b4f49e599d2f5dc255c633a04e8eca99
+
+# group: builder
+# archive: toml-0.10.2-py2.py3-none-any.whl
+toml==0.10.2 --hash=sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b
+
+# group: builder
+# archive: wheel-0.47.0-py3-none-any.whl
+wheel==0.47.0 --hash=sha256:212281cab4dff978f6cedd499cd893e1f620791ca6ff7107cf270781e587eced

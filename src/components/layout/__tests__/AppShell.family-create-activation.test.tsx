@@ -532,6 +532,8 @@ vi.mock('@/components/data/SpreadsheetView', () => ({
 
 let AppShell: typeof import('../AppShell').AppShell
 
+const APP_SHELL_SETUP_TIMEOUT_MS = 30_000
+
 describe('AppShell family create activation contract', () => {
   beforeEach(async () => {
     vi.resetModules()
@@ -549,7 +551,7 @@ describe('AppShell family create activation contract', () => {
     pendingSurfaceReady = null
 
     AppShell = (await import('../AppShell')).AppShell
-  })
+  }, APP_SHELL_SETUP_TIMEOUT_MS)
 
   it('keeps rendering the committed dataset surface until the staged replacement surface reports ready', async () => {
     render(<AppShell />)

@@ -10,6 +10,10 @@
         "build": "tsc && vite build",
         "build:e2e": "node scripts/build-e2e.mjs",
         "compile-python": ".venv-nuitka-build\\Scripts\\python.exe scripts/compile_python_nuitka.py",
+        "provision-python:macos": "python3.12 scripts/bootstrap_python_macos.py",
+        "test:python-runtime:macos": "PYTHONPATH=scripts python3.12 -m unittest scripts/test_bootstrap_python_macos.py",
+        "test:compile-python": "PYTHONPATH=scripts python3.12 -m unittest scripts/test_compile_python_nuitka.py",
+        "test:runtime-platform": "node --test scripts/python-runtime-constants.test.mjs",
         "rnaseq:cache:refresh": "python_embedded\\python.exe scripts/generate_rnaseq_gene_caches.py",
         "updater:json": "node scripts/generate-updater-json.mjs",
         "updater:json:dry": "node scripts/generate-updater-json.mjs --dry-run",
@@ -79,14 +83,14 @@
         "test:all": "npm run test:run && npm run rust:test",
         "check:all": "npm run typecheck && npm run isolation:allowlist:check && npm run lint && npm run format:check && npm run rust:fmt:check && npm run rust:clippy && npm run test:run && npm run rust:test",
         "fix:all": "npm run lint:fix && npm run format && npm run rust:fmt && npm run rust:clippy:fix",
-        "build:analyze": "vite build && echo '\\nðŸ“Š Bundle analysis complete. Check dist/ folder sizes or use a tool like webpack-bundle-analyzer on the dist folder.'",
+        "build:analyze": "vite build && echo '\\n\u00f0\u0178\u201c\u0160 Bundle analysis complete. Check dist/ folder sizes or use a tool like webpack-bundle-analyzer on the dist folder.'",
         "release:prepare": "node scripts/prepare-release.js",
         "task:complete": "node scripts/complete-task.js",
         "task:rename-done": "node scripts/complete-task.js --rename-existing",
         "convert:validation-fixtures": "node scripts/convert-validation-to-fixtures.js",
         "license:summary": "node scripts/generate-license-summary-index.mjs && npm run -s license:check-sync",
         "license:summary:check": "node scripts/generate-license-summary-index.mjs --check",
-        "license:check-sync": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-third-party-license-sync.ps1",
+        "license:check-sync": "node scripts/check-third-party-license-sync.mjs",
         "mem:start": "cd %USERPROFILE%\\.claude-mem && npx pm2 start ecosystem.config.cjs",
         "mem:stop": "cd %USERPROFILE%\\.claude-mem && npx pm2 stop claude-mem-worker",
         "mem:restart": "cd %USERPROFILE%\\.claude-mem && npx pm2 restart claude-mem-worker",
@@ -194,5 +198,15 @@
     },
     "overrides": {
         "fast-xml-parser": "5.3.4"
+    },
+    "engines": {
+        "node": "24.x"
+    },
+    "devEngines": {
+        "runtime": {
+            "name": "node",
+            "version": "24.x",
+            "onFail": "error"
+        }
     }
 }
