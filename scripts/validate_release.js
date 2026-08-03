@@ -864,6 +864,22 @@ export function validateDarwinRuntime({
   return { errors: localErrors }
 }
 
+export function validateInstalledDarwinExecution({
+  installedApp,
+  runner = defaultDarwinRunner,
+  probeOutputDir: outputDir = probeOutputDir,
+} = {}) {
+  if (!installedApp) {
+    throw new Error('post-sign installed execution requires an installed app')
+  }
+  const localErrors = []
+  const runtime = resolveInstalledDarwinDist(installedApp)
+  for (const backend of REQUIRED_BACKENDS) {
+    runBundledBackendProbe({ runtime, backend, runner, outputDir, localErrors })
+  }
+  return { errors: localErrors }
+}
+
 function validateCompiledBackends() {
   assertExists(sourceDist, 'Missing Nuitka source dist directory')
   assertExists(stagedDist, 'Missing staged Python dist directory')
@@ -1687,25 +1703,37 @@ function validatePortableRelease(targetPlatform) {
 function main(argv = process.argv.slice(2)) {
   const targetPlatform = readTargetPlatform(argv)
   ensureProbeOutputDirectory()
-  validateLegalFiles()
-  if (targetPlatform === 'win32') {
-    validateWindowsRuntime()
+  const postSignInstalledExecution = argv.includes('--post-sign-installed-execution')
+  if (postSignInstalledExecution) {
+    if (targetPlatform !== 'darwin') {
+      throw new Error('--post-sign-installed-execution requires --platform darwin')
+    }
+    const installedApp = readInstalledApp(argv)
+    if (!installedApp) {
+      throw new Error('--post-sign-installed-execution requires --installed-app <path>')
+    }
+    errors.push(...validateInstalledDarwinExecution({ installedApp }).errors)
   } else {
-    const darwinResult = validateDarwinRuntime({
-      paths: {
-        root: rootDir,
-        sourceRuntime: path.join(rootDir, 'python_embedded', 'runtime'),
-        stagedRuntime: path.join(stagedRoot, 'runtime'),
-      },
-      installedApp: readInstalledApp(argv),
-      manifestContext: runtimeManifestContext(rootDir),
-    })
-    errors.push(...darwinResult.errors)
-  }
-  validatePortableRelease(targetPlatform)
-  if (targetPlatform === 'win32') {
-    validateNsisReleaseConfig()
-    validateNsisArtifactSignatures()
+    validateLegalFiles()
+    if (targetPlatform === 'win32') {
+      validateWindowsRuntime()
+    } else {
+      const darwinResult = validateDarwinRuntime({
+        paths: {
+          root: rootDir,
+          sourceRuntime: path.join(rootDir, 'python_embedded', 'runtime'),
+          stagedRuntime: path.join(stagedRoot, 'runtime'),
+        },
+        installedApp: readInstalledApp(argv),
+        manifestContext: runtimeManifestContext(rootDir),
+      })
+      errors.push(...darwinResult.errors)
+    }
+    validatePortableRelease(targetPlatform)
+    if (targetPlatform === 'win32') {
+      validateNsisReleaseConfig()
+      validateNsisArtifactSignatures()
+    }
   }
 
   for (const warning of warnings) {

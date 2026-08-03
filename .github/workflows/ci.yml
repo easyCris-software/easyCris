@@ -41,6 +41,9 @@ jobs:
       - name: Install JS dependencies
         run: npm ci --legacy-peer-deps --no-audit --no-fund
 
+      - name: Launch clean-installed Tauri CLI
+        run: npm exec -- tauri --version
+
       - name: Bootstrap Python runtime
         shell: pwsh
         run: ./scripts/bootstrap-python.ps1
@@ -120,6 +123,9 @@ jobs:
 
       - name: Install JS dependencies
         run: npm ci --legacy-peer-deps --no-audit --no-fund
+
+      - name: Launch clean-installed Tauri CLI
+        run: npm exec -- tauri --version
 
       - name: Typecheck
         run: npm run -s typecheck

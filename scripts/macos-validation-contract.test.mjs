@@ -10,6 +10,18 @@ const ciWorkflow = await readFile(
   new URL('../.github/workflows/ci.yml', import.meta.url),
   'utf8'
 )
+const validationConfig = JSON.parse(await readFile(
+  new URL('../src-tauri/tauri.validation.macos.conf.json', import.meta.url),
+  'utf8'
+))
+
+function workflowStep(name) {
+  const marker = `      - name: ${name}`
+  const start = workflow.indexOf(marker)
+  assert.notEqual(start, -1, `missing workflow step: ${name}`)
+  const next = workflow.indexOf('\n      - name:', start + marker.length)
+  return workflow.slice(start, next === -1 ? undefined : next)
+}
 
 test('protected validation targets native Intel and Apple Silicon only', () => {
   assert.match(workflow, /runner:\s*macos-15-intel/)
@@ -33,13 +45,62 @@ test('protected validation provisions, stages, builds, signs, and validates', ()
   assert.doesNotMatch(workflow, /@tauri-apps\/cli@2/)
 })
 
+test('protected validation checks unsigned manifests before signing and executes installed probes after signature verification', () => {
+  const buildStart = workflow.indexOf('- name: Build unsigned macOS app bundle')
+  const fullValidationStart = workflow.indexOf('- name: Validate unsigned installed runtime and manifests')
+  const signStart = workflow.indexOf('- name: Sign nested runtime inside-out')
+  const postSignStart = workflow.indexOf('- name: Run signed installed execution probes')
+
+  assert.notEqual(buildStart, -1)
+  assert.notEqual(fullValidationStart, -1)
+  assert.notEqual(signStart, -1)
+  assert.notEqual(postSignStart, -1)
+  assert.ok(buildStart < fullValidationStart)
+  assert.ok(fullValidationStart < signStart)
+  assert.ok(signStart < postSignStart)
+
+  const fullValidationStep = workflow.slice(fullValidationStart, signStart)
+  assert.match(fullValidationStep, /validate_release\.js[\s\S]*--installed-app "\$APP_PATH"/)
+  assert.doesNotMatch(fullValidationStep, /--post-sign-installed-execution/)
+
+  const signStep = workflow.slice(signStart, postSignStart)
+  assert.match(signStep, /codesign --verify --deep --strict --verbose=2 "\$APP_PATH"/)
+
+  const postSignStep = workflow.slice(postSignStart)
+  assert.match(postSignStep, /validate_release\.js[\s\S]*--post-sign-installed-execution[\s\S]*--installed-app "\$APP_PATH"/)
+})
+
+test('Tauri build explicitly disables signing before full installed manifest validation', () => {
+  const buildStep = workflowStep('Build unsigned macOS app bundle')
+  assert.match(buildStep, /npm exec -- tauri build[\s\S]*--no-sign/)
+  assert.doesNotMatch(buildStep, /codesign/)
+})
+
+test('validation overlay clears the inherited macOS signing identity', () => {
+  assert.equal(validationConfig.bundle?.macOS?.signingIdentity, null)
+})
+
+test('GSEApy smokes use distinct staged and installed interpreters, never the source interpreter for staged proof', () => {
+  const sourcePython = 'python_embedded/runtime/bin/python3.12'
+  const stagedPython = 'bundle_resources/python_embedded/runtime/bin/python3.12'
+  assert.notEqual(stagedPython, sourcePython)
+
+  const stagedStep = workflowStep('Public GSEApy dependency smoke (staged runtime)')
+  assert.match(stagedStep, /--python bundle_resources\/python_embedded\/runtime\/bin\/python3\.12(?:\s|$)/)
+  assert.doesNotMatch(stagedStep, /--python python_embedded\/runtime\/bin\/python3\.12(?:\s|$)/)
+
+  const installedStep = workflowStep('Run signed installed execution probes')
+  assert.match(installedStep, /--python "\$INSTALLED_PYTHON"/)
+  assert.doesNotMatch(installedStep, /--python (?:python_embedded|bundle_resources)\//)
+})
+
 test('sign step exports APP_PATH for same-step consumers and later steps', () => {
   const signStart = workflow.indexOf('Sign nested runtime inside-out')
   assert.notEqual(signStart, -1)
-  const validateStart = workflow.indexOf('Validate installed backends and exports')
-  assert.notEqual(validateStart, -1)
-  assert.ok(validateStart > signStart)
-  const signStep = workflow.slice(signStart, validateStart)
+  const postSignStart = workflow.indexOf('Run signed installed execution probes')
+  assert.notEqual(postSignStart, -1)
+  assert.ok(postSignStart > signStart)
+  const signStep = workflow.slice(signStart, postSignStart)
 
   // GITHUB_ENV alone is not visible in the same step; same-step signing needs export.
   assert.match(signStep, /export APP_PATH="\$APP"/)

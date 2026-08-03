@@ -93,19 +93,35 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/gseapy-dependency-smoke.mjs \
-            --python python_embedded/runtime/bin/python3.12
+            --python bundle_resources/python_embedded/runtime/bin/python3.12
 
-      - name: Build ad-hoc macOS app bundle
+      - name: Build unsigned macOS app bundle
         env:
           CI: "true"
         run: |
           set -euo pipefail
           npm run -s build
-          # Validation overlay disables updater artifacts and Windows-only .ps1 resources.
+          # Keep the bundle unsigned until its installed runtime and manifests pass validation.
           npm exec -- tauri build \
+            --no-sign \
             --bundles app \
             --target "${{ matrix.rust_target }}" \
             --config src-tauri/tauri.validation.macos.conf.json
+
+      - name: Validate unsigned installed runtime and manifests
+        run: |
+          set -euo pipefail
+          APP="src-tauri/target/${{ matrix.rust_target }}/release/bundle/macos/easyCris.app"
+          if [[ ! -d "$APP" ]]; then
+            APP="src-tauri/target/release/bundle/macos/easyCris.app"
+          fi
+          test -d "$APP"
+          export APP_PATH="$APP"
+          echo "APP_PATH=$APP" >> "$GITHUB_ENV"
+          node scripts/validate_release.js \
+            --platform darwin \
+            --community \
+            --installed-app "$APP_PATH"
 
       - name: Sign nested runtime inside-out (ad-hoc hardened)
         run: |
@@ -176,12 +192,13 @@ jobs:
 
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 
-      - name: Validate installed backends and exports
+      - name: Run signed installed execution probes
         run: |
           set -euo pipefail
           node scripts/validate_release.js \
             --platform darwin \
             --community \
+            --post-sign-installed-execution \
             --installed-app "$APP_PATH"
           INSTALLED_PYTHON="$APP_PATH/Contents/Resources/_up_/bundle_resources/python_embedded/runtime/bin/python3.12"
           if [[ ! -x "$INSTALLED_PYTHON" ]]; then

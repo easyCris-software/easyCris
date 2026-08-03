@@ -14,6 +14,7 @@ import {
   validateDarwinRuntime,
   validateMacBundleResources,
 } from './validate_release.js'
+import * as releaseValidation from './validate_release.js'
 
 const REQUIREMENTS = Object.fromEntries([
   'requirements-macos.txt',
@@ -196,6 +197,55 @@ test('Darwin validation runs stats, rnaseq, and plot through each isolated runti
   assert.equal(moduleCalls.length, 15)
   for (const call of moduleCalls) assert.deepEqual(call.args.slice(0, 4), ['-I', '-B', '-m', call.args[3]])
   assert.ok(moduleCalls.some(call => call.command === path.join(installed, 'bin', 'python3.12') && call.args[3] === 'plot'))
+})
+
+test('post-sign installed execution runs signed backends without trusting unsigned manifest hashes', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const source = makeRuntime(path.join(root, 'python_embedded', 'runtime')).runtime
+  const staged = makeRuntime(path.join(root, 'bundle_resources', 'python_embedded', 'runtime')).runtime
+  const app = path.join(root, 'easyCris.app')
+  const installed = makeRuntime(resolveInstalledDarwinDist(app)).runtime
+
+  // Ad-hoc signing changes Mach-O bytes after the provision manifest was sealed.
+  fs.appendFileSync(path.join(installed, 'kaleido', 'executable', 'bin', 'kaleido'), 'signed')
+
+  const fullResult = validateDarwinRuntime({
+    paths: { root, sourceRuntime: source, stagedRuntime: staged },
+    installedApp: app,
+    runner: successRunner([], source),
+    inspectMachO: fixtureMachOInspector,
+    manifestContext: manifestContext(root),
+    expectedArchitecture: 'x64',
+    probeOutputDir: path.join(root, 'full-exports'),
+  })
+  assert.ok(fullResult.errors.some(error => /installed .*Mach-O hash is stale|installed .*tree hash is stale/.test(error)))
+
+  assert.equal(typeof releaseValidation.validateInstalledDarwinExecution, 'function')
+  const calls = []
+  const executionResult = releaseValidation.validateInstalledDarwinExecution({
+    installedApp: app,
+    runner: successRunner(calls, installed),
+    probeOutputDir: path.join(root, 'post-sign-exports'),
+  })
+  assert.deepEqual(executionResult.errors, [])
+  const moduleCalls = calls.filter(call => call.args.includes('-m'))
+  assert.equal(moduleCalls.length, 5)
+  assert.ok(moduleCalls.every(call => call.command === path.join(installed, 'bin', 'python3.12')))
+  assert.deepEqual(
+    moduleCalls.map(call => call.args[3]),
+    ['stats', 'rnaseq', 'plot', 'plot', 'plot']
+  )
+})
+
+test('post-sign installed execution mode requires an installed app', () => {
+  const result = spawnSync(
+    process.execPath,
+    ['scripts/validate_release.js', '--platform', 'darwin', '--community', '--post-sign-installed-execution'],
+    { cwd: PROJECT_ROOT, encoding: 'utf8' }
+  )
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /--post-sign-installed-execution requires --installed-app/)
 })
 
 test('Darwin release validation accepts Task 5 Mach-O inventory entries for confined interpreter aliases', t => {
