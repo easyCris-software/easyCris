@@ -98,6 +98,7 @@ jobs:
       - name: Build unsigned macOS app bundle
         env:
           CI: "true"
+          NODE_OPTIONS: --max-old-space-size=4096
         run: |
           set -euo pipefail
           npm run -s build

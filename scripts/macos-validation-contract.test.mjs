@@ -98,6 +98,7 @@ test('protected validation checks unsigned manifests before signing and executes
 
 test('Tauri build explicitly disables signing before full installed manifest validation', () => {
   const buildStep = workflowStep('Build unsigned macOS app bundle')
+  assert.match(buildStep, /NODE_OPTIONS:\s*--max-old-space-size=4096/)
   assert.match(buildStep, /npm exec -- tauri build[\s\S]*--no-sign/)
   assert.doesNotMatch(buildStep, /codesign/)
 })
