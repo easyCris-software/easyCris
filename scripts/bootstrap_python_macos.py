@@ -9,6 +9,7 @@ import json
 import os
 import platform
 import re
+import shlex
 import shutil
 import stat
 import subprocess
@@ -16,7 +17,6 @@ import sys
 import tarfile
 import tempfile
 import traceback
-import venv
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
@@ -29,13 +29,18 @@ REQUIREMENTS = RUNTIME_DIR / "requirements-macos.txt"
 RNA_REQUIREMENTS = RUNTIME_DIR / "requirements-rnaseq.txt"
 INSTALLED_RUNTIME = RUNTIME_DIR / "runtime"
 BUILD_VENV = ROOT / ".venv-macos-build"
-BUILDER_TOOLS = (
-    "pip==26.2",
-    "setuptools==83.0.0",
-    "wheel==0.47.0",
-    "setuptools-rust==1.13.0",
-    "toml==0.10.2",
-)
+BUILDER_LOCK_SHA256 = "eb167db43a1ca70f31c580bec1229b0e6abc9d6fc930163928bf5beb2f8b4d63"
+GSEAPY_CARGO_LOCK_SHA256 = "2083f2702da6288120f7a8c1a05222228b586e47869d28ccb1f4c543d578315a"
+GSEAPY_SOURCE_SHA256 = "d36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd"
+BUILDER_DISTRIBUTIONS = {
+    "packaging": "26.2",
+    "pip": "26.2",
+    "semantic-version": "2.10.0",
+    "setuptools": "83.0.0",
+    "setuptools-rust": "1.13.0",
+    "toml": "0.10.2",
+    "wheel": "0.47.0",
+}
 
 ARCHIVE_PINS = {
     "x86_64": {
@@ -99,8 +104,11 @@ def parse_pinned_requirements(path: Path) -> dict[str, str]:
     return requirements
 
 
-def parse_hashed_lock(path: Path) -> tuple[LockEntry, ...]:
+def parse_hashed_lock(
+    path: Path, *, allowed_groups: set[str] | None = None
+) -> tuple[LockEntry, ...]:
     """Parse the EasyCris pip lock, requiring exact pins, filenames, and hashes."""
+    allowed_groups = allowed_groups or {"runtime", "rnaseq-overlay", "intel-source"}
     entries: list[LockEntry] = []
     pending_group: str | None = None
     pending_archives: list[str] = []
@@ -133,7 +141,7 @@ def parse_hashed_lock(path: Path) -> tuple[LockEntry, ...]:
         hashes = tuple(re.findall(r"--hash=sha256:([0-9a-f]{64})", line))
         if name in seen_names:
             raise RuntimeError(f"Duplicate package in hashed lock: {name}")
-        if pending_group not in {"runtime", "rnaseq-overlay", "intel-source"}:
+        if pending_group not in allowed_groups:
             raise RuntimeError(f"Missing lock group before {name} at {path}:{line_number}")
         if not pending_archives or len(pending_archives) != len(hashes):
             raise RuntimeError(f"Lock entry must name every hashed archive: {name}=={version}")
@@ -148,6 +156,66 @@ def parse_hashed_lock(path: Path) -> tuple[LockEntry, ...]:
     if not entries:
         raise RuntimeError(f"Hashed lock is empty: {path}")
     return tuple(entries)
+
+
+def load_builder_lock(root: Path) -> tuple[LockEntry, ...]:
+    """Load the immutable build-only Python toolchain lock."""
+    path = root / "python_embedded" / "requirements-macos-builder.lock"
+    if not path.is_file() or path.is_symlink():
+        raise RuntimeError(f"Builder lock is missing or unsafe: {path}")
+    actual_sha256 = sha256(path)
+    if actual_sha256 != BUILDER_LOCK_SHA256:
+        raise RuntimeError(
+            "Builder lock SHA-256 mismatch: "
+            f"expected {BUILDER_LOCK_SHA256}, got {actual_sha256}"
+        )
+    entries = parse_hashed_lock(path, allowed_groups={"builder"})
+    actual = {entry.name: entry.version for entry in entries}
+    if actual != BUILDER_DISTRIBUTIONS:
+        raise RuntimeError(
+            f"Builder lock distribution inventory mismatch: {actual}"
+        )
+    return entries
+
+
+def validate_gseapy_cargo_lock(root: Path) -> str:
+    """Require the reviewed Cargo graph used by the Intel GSEApy native build."""
+    path = root / "scripts" / "gseapy-1.1.11.Cargo.lock"
+    if not path.is_file() or path.is_symlink():
+        raise RuntimeError(f"GSEApy Cargo.lock is missing or unsafe: {path}")
+    actual_sha256 = sha256(path)
+    if actual_sha256 != GSEAPY_CARGO_LOCK_SHA256:
+        raise RuntimeError(
+            "GSEApy Cargo.lock SHA-256 mismatch: "
+            f"expected {GSEAPY_CARGO_LOCK_SHA256}, got {actual_sha256}"
+        )
+    return actual_sha256
+
+
+def create_locked_cargo_wrapper(
+    directory: Path, *, cargo_executable: Path | None = None
+) -> Path:
+    """Create a build-local Cargo launcher that always asserts the lock is unchanged."""
+    selected = cargo_executable or (
+        Path(candidate) if (candidate := shutil.which("cargo")) else None
+    )
+    if selected is None or not selected.is_file():
+        raise RuntimeError("Cargo executable is unavailable for the Intel GSEApy build")
+    directory.mkdir(parents=True, exist_ok=True)
+    wrapper = directory / "locked-cargo"
+    wrapper.write_text(
+        "#!/bin/sh\n"
+        "set -eu\n"
+        "test \"$#\" -gt 0\n"
+        "cargo_command=$1\n"
+        "shift\n"
+        # Cargo is commonly a basename-sensitive rustup proxy symlink. Preserve
+        # the selected proxy path instead of resolving it to the rustup binary.
+        f"exec {shlex.quote(str(selected.absolute()))} \"$cargo_command\" --locked \"$@\"\n",
+        encoding="utf-8",
+    )
+    wrapper.chmod(0o755)
+    return wrapper
 
 
 def validate_lock_matches_requirements(
@@ -397,6 +465,7 @@ def compute_content_fingerprint(root: Path, arch: str) -> str:
             for name in (
                 "requirements-macos.txt",
                 "requirements-rnaseq.txt",
+                "requirements-macos-builder.lock",
                 "requirements-macos-x86_64.lock",
                 "requirements-macos-arm64.lock",
             )
@@ -408,6 +477,7 @@ def compute_content_fingerprint(root: Path, arch: str) -> str:
                 "scripts/bootstrap_python_macos.py",
                 "scripts/apply_rnaseq_pydeseq2_patch.py",
                 "scripts/validate_rnaseq_runtime.py",
+                "scripts/gseapy-1.1.11.Cargo.lock",
             )
         },
         "rnaseq_patch_payload": directory_content_sha256(
@@ -474,10 +544,10 @@ def validate_host(
 
 
 def validate_builder_python(version_output: str) -> None:
-    """Fail before provisioning if a previously created builder is not Python 3.12."""
-    if not re.match(r"^Python 3\.12(?:\.\d+)?\b", version_output.strip()):
+    """Require the builder to use the exact pinned runtime Python."""
+    if version_output.strip() != "Python 3.12.13":
         raise RuntimeError(
-            "macOS build environment must use Python 3.12. Remove .venv-macos-build and rerun provisioning. "
+            "macOS build environment must use pinned Python 3.12.13. "
             f"Detected: {version_output.strip()}"
         )
 
@@ -571,6 +641,64 @@ def verify_and_extract_archive(
     finally:
         if staging.exists():
             shutil.rmtree(staging)
+
+
+def prepare_locked_gseapy_source(
+    source_archive: Path, output: Path, root: Path
+) -> tuple[Path, dict[str, str]]:
+    """Safely extract the pinned GSEApy sdist and inject the reviewed Cargo graph."""
+    if sha256(source_archive) != GSEAPY_SOURCE_SHA256:
+        raise RuntimeError("Intel GSEApy source hash mismatch before extraction")
+    cargo_lock_sha256 = validate_gseapy_cargo_lock(root)
+    cargo_lock = root / "scripts" / "gseapy-1.1.11.Cargo.lock"
+    source_root_name = "gseapy-1.1.11"
+    destination = output / "gseapy-source"
+    staging = Path(
+        tempfile.mkdtemp(prefix=".gseapy-source.extract-", dir=output)
+    )
+    try:
+        with tarfile.open(source_archive, "r:gz") as archive:
+            members = archive.getmembers()
+            for member in members:
+                member_path = PurePosixPath(member.name)
+                if (
+                    member_path.is_absolute()
+                    or ".." in member_path.parts
+                    or not member_path.parts
+                    or member_path.parts[0] != source_root_name
+                ):
+                    raise RuntimeError(
+                        f"GSEApy source archive contains unsafe path: {member.name}"
+                    )
+                if (
+                    member.issym()
+                    or member.islnk()
+                    or member.ischr()
+                    or member.isblk()
+                    or member.isfifo()
+                ):
+                    raise RuntimeError(
+                        f"GSEApy source archive contains unsafe member: {member.name}"
+                    )
+            archive.extractall(staging, members=members, filter="data")
+        project = staging / source_root_name
+        if not (project / "Cargo.toml").is_file():
+            raise RuntimeError("GSEApy source archive is missing Cargo.toml")
+        if (project / "Cargo.lock").exists():
+            raise RuntimeError("GSEApy source archive unexpectedly supplies Cargo.lock")
+        shutil.copy2(cargo_lock, project / "Cargo.lock")
+        if sha256(project / "Cargo.lock") != cargo_lock_sha256:
+            raise RuntimeError("Injected GSEApy Cargo.lock changed during preparation")
+        if destination.exists() or destination.is_symlink():
+            raise RuntimeError(f"GSEApy source destination already exists: {destination}")
+        staging.replace(destination)
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging)
+    return destination / source_root_name, {
+        "cargo_lock_filename": cargo_lock.name,
+        "cargo_lock_sha256": cargo_lock_sha256,
+    }
 
 
 def run_backend_protocol(
@@ -941,11 +1069,78 @@ def _download_archive(
             partial.unlink()
 
 
-def _ensure_builder(root: Path, logger: ProvisionLogger) -> Path:
+def _builder_distribution_inventory(
+    builder: Path, root: Path, logger: ProvisionLogger
+) -> list[dict[str, str]]:
+    output = _run_pip(
+        builder,
+        ["list", "--format=json", "--disable-pip-version-check"],
+        root=root,
+        logger=logger,
+        capture=True,
+    )
+    try:
+        rows = json.loads(output or "")
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("Builder distribution inventory is invalid JSON") from exc
+    if not isinstance(rows, list):
+        raise RuntimeError("Builder distribution inventory is invalid")
+    inventory = sorted(
+        (
+            {
+                "name": str(row.get("name", "")).lower().replace("_", "-").replace(".", "-"),
+                "version": str(row.get("version", "")),
+            }
+            for row in rows
+            if isinstance(row, dict)
+        ),
+        key=lambda row: row["name"],
+    )
+    actual = {row["name"]: row["version"] for row in inventory}
+    if actual != BUILDER_DISTRIBUTIONS or len(inventory) != len(BUILDER_DISTRIBUTIONS):
+        raise RuntimeError(f"Builder distribution inventory mismatch: {actual}")
+    return inventory
+
+
+def _ensure_builder(
+    root: Path,
+    output: Path,
+    runtime_interpreter: Path,
+    archive_pin: dict[str, str],
+    logger: ProvisionLogger,
+) -> tuple[Path, dict[str, object]]:
     build_venv = root / ".venv-macos-build"
     builder = build_venv / "bin" / "python"
-    if not builder.exists():
-        venv.EnvBuilder(with_pip=True).create(build_venv)
+    if build_venv.is_symlink():
+        raise RuntimeError(f"Builder environment must not be a symlink: {build_venv}")
+    if build_venv.exists():
+        if not build_venv.is_dir() or build_venv.resolve().parent != root.resolve():
+            raise RuntimeError(f"Builder environment path is unsafe: {build_venv}")
+        shutil.rmtree(build_venv)
+    if (
+        not runtime_interpreter.is_file()
+        or runtime_interpreter.is_symlink()
+        or runtime_interpreter.parent.parent != root / "python_embedded" / "runtime"
+    ):
+        raise RuntimeError(
+            f"Pinned runtime interpreter is missing or unsafe: {runtime_interpreter}"
+        )
+    run_captured(
+        [
+            str(runtime_interpreter),
+            "-I",
+            "-B",
+            "-m",
+            "venv",
+            "--copies",
+            str(build_venv),
+        ],
+        root=root,
+        logger=logger,
+        env=_clean_python_environment(),
+    )
+    if not builder.is_file():
+        raise RuntimeError("Pinned runtime failed to create the builder environment")
     version = run_captured(
         [str(builder), "-I", "-B", "--version"],
         root=root,
@@ -953,13 +1148,52 @@ def _ensure_builder(root: Path, logger: ProvisionLogger) -> Path:
         env=_clean_python_environment(),
     ).strip()
     validate_builder_python(version)
+    entries = load_builder_lock(root)
+    builder_lock = root / "python_embedded" / "requirements-macos-builder.lock"
+    wheelhouse = output / "builder-wheelhouse"
+    wheelhouse.mkdir(parents=True)
     _run_pip(
         builder,
-        ["install", "--upgrade", *BUILDER_TOOLS],
+        [
+            "download",
+            "--require-hashes",
+            "--only-binary=:all:",
+            "--dest",
+            str(wheelhouse),
+            "-r",
+            str(builder_lock),
+        ],
         root=root,
         logger=logger,
     )
-    return builder
+    archive_hashes = validate_download_set(entries, wheelhouse, groups={"builder"})
+    _run_pip(
+        builder,
+        [
+            "install",
+            "--no-index",
+            "--find-links",
+            str(wheelhouse),
+            "--require-hashes",
+            "--only-binary=:all:",
+            "--no-deps",
+            "--force-reinstall",
+            "-r",
+            str(builder_lock),
+        ],
+        root=root,
+        logger=logger,
+    )
+    distributions = _builder_distribution_inventory(builder, root, logger)
+    return builder, {
+        "python_version": "3.12.13",
+        "source_archive_filename": archive_pin["filename"],
+        "source_archive_sha256": archive_pin["sha256"],
+        "lock_filename": builder_lock.name,
+        "lock_sha256": BUILDER_LOCK_SHA256,
+        "archive_sha256": archive_hashes,
+        "distributions": distributions,
+    }
 
 
 def _verify_relocated_interpreter(
@@ -1164,12 +1398,24 @@ def _install_locked_dependencies(
         source_archive = wheelhouse / "gseapy-1.1.11.tar.gz"
         if sha256(source_archive) != "d36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd":
             raise RuntimeError("Intel GSEApy source hash mismatch before build")
+        locked_source, cargo_provenance = prepare_locked_gseapy_source(
+            source_archive, output, root
+        )
+        cargo_wrapper = create_locked_cargo_wrapper(output / "cargo-wrapper")
         built = output / "built-wheels"
         built.mkdir()
         build_env = gseapy_build_environment(root)
+        build_env["CARGO"] = str(cargo_wrapper)
         _run_pip(
             builder,
-            ["wheel", "--no-deps", "--no-build-isolation", "--wheel-dir", str(built), str(source_archive)],
+            [
+                "wheel",
+                "--no-deps",
+                "--no-build-isolation",
+                "--wheel-dir",
+                str(built),
+                str(locked_source),
+            ],
             root=root,
             logger=logger,
             env_extra=build_env,
@@ -1180,6 +1426,7 @@ def _install_locked_dependencies(
         source_provenance = {
             "source_filename": source_archive.name,
             "source_sha256": sha256(source_archive),
+            **cargo_provenance,
             "wheel": _validate_built_gseapy_wheel(wheels[0], root, logger),
         }
         _run_pip(
@@ -1604,6 +1851,7 @@ def _requirements_hashes(source_root: Path) -> dict[str, str]:
         for name in (
             "requirements-macos.txt",
             "requirements-rnaseq.txt",
+            "requirements-macos-builder.lock",
             "requirements-macos-x86_64.lock",
             "requirements-macos-arm64.lock",
         )
@@ -1796,6 +2044,7 @@ def _write_runtime_manifest(
     pin: dict[str, str],
     interpreter: dict,
     wheel_hashes: dict[str, str],
+    builder_provenance: dict[str, object],
     source_provenance: dict | None,
     source_inventory: dict,
     runtime_distributions: list[dict[str, str]],
@@ -1820,6 +2069,7 @@ def _write_runtime_manifest(
         "archive": pin,
         "interpreter": interpreter,
         "requirements_sha256": requirements_hashes,
+        "builder_provenance": builder_provenance,
         "wheel_archive_sha256": wheel_hashes,
         "intel_gseapy_source_build": source_provenance,
         "backend_sources": source_inventory,
@@ -1935,7 +2185,9 @@ def provision(
         logger.phase("verify-relocated-interpreter")
         interpreter = _verify_relocated_interpreter(runtime / "bin" / "python3.12", arch, root, logger)
         logger.phase("prepare-build-environment")
-        builder = _ensure_builder(root, logger)
+        builder, builder_provenance = _ensure_builder(
+            root, output, runtime / "bin" / "python3.12", pin, logger
+        )
         wheelhouse = output / "wheelhouse"
         cached_wheel_hashes = None
         if reuse_dev_cache:
@@ -1983,7 +2235,8 @@ def provision(
         manifest_path = _write_runtime_manifest(
             root=root, runtime=runtime, output=output, arch=arch, head=head,
             clean_tree=clean_tree, dirty_count=dirty_count, pin=pin, interpreter=interpreter,
-            wheel_hashes=wheel_hashes, source_provenance=source_provenance,
+            wheel_hashes=wheel_hashes, builder_provenance=builder_provenance,
+            source_provenance=source_provenance,
             source_inventory=source_inventory, runtime_distributions=runtime_distributions,
             requirements_hashes=requirements_hashes,
             macho_thinning=macho_thinning,

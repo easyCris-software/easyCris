@@ -3,11 +3,14 @@
 
 from __future__ import annotations
 
+import ast
 import importlib
 import io
 import json
+import math
 import os
 import platform as host_platform
+import statistics
 import subprocess
 import sys
 import tarfile
@@ -17,6 +20,7 @@ import venv
 import zipfile
 from contextlib import ExitStack, redirect_stderr
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import bootstrap_python_macos
@@ -54,6 +58,107 @@ class MacRequirementsContractTests(unittest.TestCase):
         self.assertNotIn("0.1.0.post1", requirements.values())
 
 
+class ScientificSourceContractTests(unittest.TestCase):
+    """Protect source-level numerical selection without importing host SciPy."""
+
+    def test_two_sample_primary_result_honors_equal_variance_choice(self):
+        source = ROOT / "python_embedded" / "statistics_module" / "parametric.py"
+        tree = ast.parse(source.read_text(encoding="utf-8"), filename=str(source))
+        helper = next(
+            node
+            for node in tree.body
+            if isinstance(node, ast.FunctionDef)
+            and node.name == "_select_two_sample_primary"
+        )
+        module = ast.Module(body=[helper], type_ignores=[])
+        namespace: dict[str, object] = {}
+        exec(compile(ast.fix_missing_locations(module), str(source), "exec"), namespace)
+        select = namespace["_select_two_sample_primary"]
+        pooled = (1.0, 0.01, 22, "pooled")
+        welch = (2.0, 0.02, 21.5, "welch")
+        self.assertEqual(select(True, pooled, welch), pooled)
+        self.assertEqual(select(False, pooled, welch), welch)
+
+    def test_both_two_sample_paths_map_primary_fields_to_the_requested_family(self):
+        source = ROOT / "python_embedded" / "statistics_module" / "parametric.py"
+        tree = ast.parse(source.read_text(encoding="utf-8"), filename=str(source))
+        selected_names = {
+            "_select_two_sample_primary",
+            "t_test_two_sample",
+            "t_test_two_sample_from_aggregates",
+        }
+        functions = [
+            node
+            for node in tree.body
+            if isinstance(node, ast.FunctionDef) and node.name in selected_names
+        ]
+        module = ast.Module(
+            body=[
+                ast.ImportFrom(
+                    module="__future__",
+                    names=[ast.alias(name="annotations")],
+                    level=0,
+                ),
+                *functions,
+            ],
+            type_ignores=[],
+        )
+
+        fake_numpy = SimpleNamespace(
+            inf=math.inf,
+            mean=statistics.mean,
+            min=min,
+            max=max,
+            sqrt=math.sqrt,
+            std=lambda values, ddof=1: statistics.stdev(values),
+            var=lambda values, ddof=1: statistics.variance(values),
+        )
+        fake_t = SimpleNamespace(
+            ppf=lambda probability, _df: probability,
+            cdf=lambda _value, _df: 0.75,
+        )
+        fake_stats = SimpleNamespace(
+            sem=lambda values: statistics.stdev(values) / math.sqrt(len(values)),
+            f=SimpleNamespace(cdf=lambda _value, _df1, _df2: 0.5),
+            t=fake_t,
+            ttest_ind=lambda _left, _right, *, equal_var: (
+                (-11.0, 0.011) if equal_var else (-22.0, 0.022)
+            ),
+        )
+        namespace = {
+            "np": fake_numpy,
+            "stats": fake_stats,
+            "preprocess_data": lambda values: list(values),
+            "format_number": lambda value: value,
+        }
+        exec(compile(ast.fix_missing_locations(module), str(source), "exec"), namespace)
+
+        raw = namespace["t_test_two_sample"]
+        aggregate = namespace["t_test_two_sample_from_aggregates"]
+        raw_arguments = ([1.0, 2.0, 4.0], [6.0, 8.0, 9.0])
+        aggregate_arguments = (
+            {"n": 3, "mean": 2.0, "std": 1.0, "var": 1.0, "min": 1.0, "max": 3.0},
+            {"n": 3, "mean": 7.0, "std": 2.0, "var": 4.0, "min": 5.0, "max": 9.0},
+        )
+
+        for label, function, arguments in (
+            ("raw", raw, raw_arguments),
+            ("aggregate", aggregate, aggregate_arguments),
+        ):
+            for equal_var, prefix, method in (
+                (True, "pooled", "pooled"),
+                (False, "welch", "welch"),
+            ):
+                with self.subTest(path=label, equal_var=equal_var):
+                    result = function(*arguments, equal_var=equal_var)
+                    self.assertTrue(result["success"])
+                    self.assertEqual(result["t_statistic"], result[f"{prefix}_t"])
+                    self.assertEqual(result["p_value"], result[f"{prefix}_p"])
+                    self.assertEqual(result["degrees_of_freedom"], result[f"{prefix}_df"])
+                    self.assertEqual(result["test_method"], method)
+                    self.assertEqual(result["equal_variance_assumed"], equal_var)
+
+
 class BootstrapHostContractTests(unittest.TestCase):
     """The bootstrap must never produce a cross-platform runtime by accident."""
 
@@ -63,6 +168,11 @@ class BootstrapHostContractTests(unittest.TestCase):
             bootstrap_python_macos.validate_host("Linux", (3, 12), "arm64")
         with self.assertRaisesRegex(RuntimeError, "Python 3.12"):
             bootstrap_python_macos.validate_host("Darwin", (3, 11), "arm64")
+
+    def test_builder_requires_the_exact_pinned_python_patch(self):
+        bootstrap_python_macos.validate_builder_python("Python 3.12.13")
+        with self.assertRaisesRegex(RuntimeError, "pinned Python 3.12.13"):
+            bootstrap_python_macos.validate_builder_python("Python 3.12.10")
 
     def test_reports_only_supported_native_architectures(self):
         # Mutation caught: silently accepting an unsupported architecture.
@@ -278,6 +388,215 @@ class HashedArchitectureLockTests(unittest.TestCase):
             expected.write_bytes(b"tampered")
             with self.assertRaisesRegex(RuntimeError, "hash mismatch"):
                 bootstrap_python_macos.validate_download_set(entries, wheelhouse)
+
+
+class BuildToolchainLockTests(unittest.TestCase):
+    """Build-only code must be as reproducible as shipped Python packages."""
+
+    def test_builder_lock_pins_direct_and_transitive_tools_with_archive_hashes(self):
+        entries = bootstrap_python_macos.load_builder_lock(ROOT)
+        self.assertEqual(
+            {entry.name: entry.version for entry in entries},
+            {
+                "packaging": "26.2",
+                "pip": "26.2",
+                "semantic-version": "2.10.0",
+                "setuptools": "83.0.0",
+                "setuptools-rust": "1.13.0",
+                "toml": "0.10.2",
+                "wheel": "0.47.0",
+            },
+        )
+        self.assertTrue(all(entry.group == "builder" for entry in entries))
+        self.assertTrue(all(len(entry.archives) == len(entry.hashes) == 1 for entry in entries))
+        self.assertEqual(
+            bootstrap_python_macos.sha256(
+                ROOT / "python_embedded" / "requirements-macos-builder.lock"
+            ),
+            bootstrap_python_macos.BUILDER_LOCK_SHA256,
+        )
+
+    def test_gseapy_cargo_lock_is_pinned_and_mutation_fails_closed(self):
+        self.assertEqual(
+            bootstrap_python_macos.validate_gseapy_cargo_lock(ROOT),
+            bootstrap_python_macos.GSEAPY_CARGO_LOCK_SHA256,
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            lock = root / "scripts" / "gseapy-1.1.11.Cargo.lock"
+            lock.parent.mkdir()
+            lock.write_text("changed lock\n", encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "Cargo.lock SHA-256 mismatch"):
+                bootstrap_python_macos.validate_gseapy_cargo_lock(root)
+
+    def test_cargo_wrapper_forces_locked_resolution(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            record = root / "cargo-arguments.txt"
+            fake_cargo = root / "cargo"
+            fake_cargo.write_text(
+                "#!/bin/sh\nprintf '%s\\n' \"$@\" > \"$CARGO_ARGUMENT_RECORD\"\n",
+                encoding="utf-8",
+            )
+            fake_cargo.chmod(0o755)
+            wrapper = bootstrap_python_macos.create_locked_cargo_wrapper(
+                root, cargo_executable=fake_cargo
+            )
+            subprocess.run(
+                [str(wrapper), "metadata", "--format-version", "1"],
+                check=True,
+                env={**os.environ, "CARGO_ARGUMENT_RECORD": str(record)},
+            )
+            self.assertEqual(
+                record.read_text(encoding="utf-8").splitlines(),
+                ["metadata", "--locked", "--format-version", "1"],
+            )
+
+    def test_cargo_wrapper_preserves_a_basename_sensitive_proxy(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            record = root / "cargo-proxy-arguments.txt"
+            dispatcher = root / "rustup"
+            dispatcher.write_text(
+                "#!/bin/sh\n"
+                "test \"$(basename \"$0\")\" = cargo\n"
+                "printf '%s\\n' \"$@\" > \"$CARGO_ARGUMENT_RECORD\"\n",
+                encoding="utf-8",
+            )
+            dispatcher.chmod(0o755)
+            cargo_proxy = root / "cargo"
+            cargo_proxy.symlink_to(dispatcher.name)
+            wrapper = bootstrap_python_macos.create_locked_cargo_wrapper(
+                root / "wrapper", cargo_executable=cargo_proxy
+            )
+            subprocess.run(
+                [str(wrapper), "metadata", "--format-version", "1"],
+                check=True,
+                env={**os.environ, "CARGO_ARGUMENT_RECORD": str(record)},
+            )
+            self.assertEqual(
+                record.read_text(encoding="utf-8").splitlines(),
+                ["metadata", "--locked", "--format-version", "1"],
+            )
+
+    def test_builder_is_recreated_and_installed_only_from_verified_lock(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output = root / "_tmp" / "python-runtime" / ("a" * 40) / "x86_64"
+            output.mkdir(parents=True)
+            stale = root / ".venv-macos-build" / "stale-extra"
+            stale.parent.mkdir()
+            stale.write_text("must disappear", encoding="utf-8")
+            runtime_interpreter = root / "python_embedded" / "runtime" / "bin" / "python3.12"
+            runtime_interpreter.parent.mkdir(parents=True)
+            runtime_interpreter.write_text("pinned runtime", encoding="utf-8")
+            logger = bootstrap_python_macos.ProvisionLogger(output / "provision.log")
+            entries = tuple(
+                bootstrap_python_macos.LockEntry(
+                    name, version, "builder", (f"{name}.whl",), ("a" * 64,)
+                )
+                for name, version in bootstrap_python_macos.BUILDER_DISTRIBUTIONS.items()
+            )
+            calls = []
+
+            captured = []
+
+            def run_captured(command, **_kwargs):
+                captured.append(command)
+                if "venv" in command:
+                    builder = root / ".venv-macos-build" / "bin" / "python"
+                    builder.parent.mkdir(parents=True)
+                    builder.write_text("builder", encoding="utf-8")
+                    return ""
+                return "Python 3.12.13"
+
+            def run_pip(_builder, arguments, **_kwargs):
+                calls.append(arguments)
+                if arguments[0] == "list":
+                    return json.dumps(
+                        [
+                            {"name": name, "version": version}
+                            for name, version in bootstrap_python_macos.BUILDER_DISTRIBUTIONS.items()
+                        ]
+                    )
+                return None
+
+            with (
+                patch.object(
+                    bootstrap_python_macos,
+                    "run_captured",
+                    side_effect=run_captured,
+                ),
+                patch.object(
+                    bootstrap_python_macos, "load_builder_lock", return_value=entries
+                ),
+                patch.object(bootstrap_python_macos, "_run_pip", side_effect=run_pip),
+                patch.object(
+                    bootstrap_python_macos,
+                    "validate_download_set",
+                    return_value={"builder.whl": "a" * 64},
+                ),
+            ):
+                _builder, provenance = bootstrap_python_macos._ensure_builder(
+                    root,
+                    output,
+                    runtime_interpreter,
+                    {
+                        "filename": "pinned-cpython.tar.gz",
+                        "sha256": "b" * 64,
+                    },
+                    logger,
+                )
+
+            self.assertFalse(stale.exists())
+            download = next(arguments for arguments in calls if arguments[0] == "download")
+            install = next(arguments for arguments in calls if arguments[0] == "install")
+            self.assertIn("--require-hashes", download)
+            self.assertIn("--only-binary=:all:", download)
+            self.assertIn("--no-index", install)
+            self.assertIn("--require-hashes", install)
+            self.assertIn("--force-reinstall", install)
+            self.assertEqual(provenance["lock_sha256"], bootstrap_python_macos.BUILDER_LOCK_SHA256)
+            self.assertEqual(provenance["python_version"], "3.12.13")
+            self.assertEqual(provenance["source_archive_sha256"], "b" * 64)
+            self.assertEqual(
+                captured[0],
+                [
+                    str(runtime_interpreter),
+                    "-I",
+                    "-B",
+                    "-m",
+                    "venv",
+                    "--copies",
+                    str(root / ".venv-macos-build"),
+                ],
+            )
+
+    def test_gseapy_source_injects_only_the_reviewed_cargo_lock(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output = root / "output"
+            output.mkdir()
+            cargo_lock = root / "scripts" / "gseapy-1.1.11.Cargo.lock"
+            cargo_lock.parent.mkdir()
+            cargo_lock.write_text("version = 4\n", encoding="utf-8")
+            source_tree = root / "fixture" / "gseapy-1.1.11"
+            source_tree.mkdir(parents=True)
+            (source_tree / "Cargo.toml").write_text("[package]\nname='gseapy'\n", encoding="utf-8")
+            archive = root / "gseapy-1.1.11.tar.gz"
+            with tarfile.open(archive, "w:gz") as tar:
+                tar.add(source_tree, arcname="gseapy-1.1.11")
+            source_hash = bootstrap_python_macos.sha256(archive)
+            lock_hash = bootstrap_python_macos.sha256(cargo_lock)
+            with (
+                patch.object(bootstrap_python_macos, "GSEAPY_SOURCE_SHA256", source_hash),
+                patch.object(bootstrap_python_macos, "GSEAPY_CARGO_LOCK_SHA256", lock_hash),
+            ):
+                project, provenance = bootstrap_python_macos.prepare_locked_gseapy_source(
+                    archive, output, root
+                )
+            self.assertEqual((project / "Cargo.lock").read_text(encoding="utf-8"), "version = 4\n")
+            self.assertEqual(provenance["cargo_lock_sha256"], lock_hash)
 
 
 class BackendSourceStagingTests(unittest.TestCase):
@@ -577,6 +896,7 @@ class ManifestCheckpointAndCacheTests(unittest.TestCase):
             for name in (
                 "stats.py", "rnaseq.py", "plot.py", "platform_trust.py", "plot_exporter.py",
                 "requirements-macos.txt", "requirements-rnaseq.txt",
+                "requirements-macos-builder.lock",
                 "requirements-macos-x86_64.lock", "requirements-macos-arm64.lock",
             ):
                 (source / name).write_text(name + "\n", encoding="utf-8")
@@ -590,6 +910,7 @@ class ManifestCheckpointAndCacheTests(unittest.TestCase):
                 "bootstrap_python_macos.py",
                 "apply_rnaseq_pydeseq2_patch.py",
                 "validate_rnaseq_runtime.py",
+                "gseapy-1.1.11.Cargo.lock",
             ):
                 (scripts / name).write_text(name + "\n", encoding="utf-8")
             patch_payload = scripts / "rnaseq_patches" / "pydeseq2_0_5_3"
@@ -865,7 +1186,11 @@ class ManifestCheckpointAndCacheTests(unittest.TestCase):
                     "_verify_relocated_interpreter",
                     return_value={"path": "bin/python3.12"},
                 ),
-                patch.object(bootstrap_python_macos, "_ensure_builder", return_value=Path("/builder")),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_ensure_builder",
+                    return_value=(Path("/builder"), {"lock_sha256": "c" * 64}),
+                ),
                 patch.object(
                     bootstrap_python_macos,
                     "_download_locked_groups",
@@ -1297,7 +1622,11 @@ class ProvisionOrchestrationBoundaryTests(unittest.TestCase):
                     "_verify_relocated_interpreter",
                     return_value={"path": "bin/python3.12"},
                 ),
-                patch.object(bootstrap_python_macos, "_ensure_builder", return_value=Path("/builder")),
+                patch.object(
+                    bootstrap_python_macos,
+                    "_ensure_builder",
+                    return_value=(Path("/builder"), {"lock_sha256": "c" * 64}),
+                ),
                 patch.object(
                     bootstrap_python_macos,
                     "_download_locked_groups",

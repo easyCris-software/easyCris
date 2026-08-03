@@ -157,11 +157,9 @@ jobs:
               for path in root.rglob("*"):
                   if not path.is_file():
                       continue
-                  # Skip obvious non-code; codesign rejects non-Mach-O.
-                  if path.suffix.lower() in {".txt", ".json", ".md", ".html", ".css", ".map", ".png", ".ico", ".icns", ".svg", ".csv"}:
-                      continue
                   try:
-                      head = path.read_bytes()[:4]
+                      with path.open("rb") as handle:
+                          head = handle.read(4)
                   except OSError:
                       continue
                   magic = head.hex()

@@ -19,10 +19,14 @@ import * as releaseValidation from './validate_release.js'
 const REQUIREMENTS = Object.fromEntries([
   'requirements-macos.txt',
   'requirements-rnaseq.txt',
+  'requirements-macos-builder.lock',
   'requirements-macos-x86_64.lock',
   'requirements-macos-arm64.lock',
 ].map(name => [name, 'a'.repeat(64)]))
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+REQUIREMENTS['requirements-macos-builder.lock'] = crypto.createHash('sha256')
+  .update(fs.readFileSync(path.join(PROJECT_ROOT, 'python_embedded', 'requirements-macos-builder.lock')))
+  .digest('hex')
 
 function manifestContext(root) {
   return runtimeManifestContext(root, {
@@ -75,8 +79,9 @@ function makeRuntime(runtime) {
     interpreter: { path: 'bin/python3.12', version: '3.12.13', architectures: ['x86_64'], minimum_macos_versions: ['14.0'] },
     archive: context.archive,
     requirements_sha256: REQUIREMENTS,
+    builder_provenance: context.builderProvenance,
     wheel_archive_sha256: { 'fixture.whl': 'e'.repeat(64) },
-    intel_gseapy_source_build: { source_filename: 'gseapy-1.1.11.tar.gz', source_sha256: 'd36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd', wheel: { filename: 'fixture.whl', sha256: 'f'.repeat(64) } },
+    intel_gseapy_source_build: { source_filename: 'gseapy-1.1.11.tar.gz', source_sha256: 'd36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd', cargo_lock_filename: 'gseapy-1.1.11.Cargo.lock', cargo_lock_sha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(PROJECT_ROOT, 'scripts', 'gseapy-1.1.11.Cargo.lock'))).digest('hex'), wheel: { filename: 'fixture.whl', sha256: 'f'.repeat(64) } },
     backend_sources: context.backendSources,
     runtime_distributions: [{ name: 'fixture', version: '1.0' }],
     universal_macho_thinning: [],
@@ -146,14 +151,14 @@ function copyCliRuntimeInputs(root) {
     fs.mkdirSync(path.join(root, 'scripts'), { recursive: true })
     fs.copyFileSync(path.join(PROJECT_ROOT, 'scripts', name), path.join(root, 'scripts', name))
   }
-  for (const name of ['requirements-macos.txt', 'requirements-rnaseq.txt', 'requirements-macos-x86_64.lock', 'requirements-macos-arm64.lock', 'stats.py', 'rnaseq.py', 'plot.py', 'platform_trust.py', 'plot_exporter.py']) {
+  for (const name of ['requirements-macos.txt', 'requirements-rnaseq.txt', 'requirements-macos-builder.lock', 'requirements-macos-x86_64.lock', 'requirements-macos-arm64.lock', 'stats.py', 'rnaseq.py', 'plot.py', 'platform_trust.py', 'plot_exporter.py']) {
     fs.mkdirSync(path.join(root, 'python_embedded'), { recursive: true })
     fs.copyFileSync(path.join(PROJECT_ROOT, 'python_embedded', name), path.join(root, 'python_embedded', name))
   }
   for (const directory of ['statistics_module', 'rnaseq_module', 'plots_module']) {
     fs.cpSync(path.join(PROJECT_ROOT, 'python_embedded', directory), path.join(root, 'python_embedded', directory), { recursive: true })
   }
-  for (const name of ['bootstrap_python_macos.py', 'apply_rnaseq_pydeseq2_patch.py', 'validate_rnaseq_runtime.py']) {
+  for (const name of ['bootstrap_python_macos.py', 'apply_rnaseq_pydeseq2_patch.py', 'validate_rnaseq_runtime.py', 'gseapy-1.1.11.Cargo.lock']) {
     fs.copyFileSync(path.join(PROJECT_ROOT, 'scripts', name), path.join(root, 'scripts', name))
   }
   fs.cpSync(

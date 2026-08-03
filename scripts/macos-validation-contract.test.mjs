@@ -139,6 +139,14 @@ test('sign step exports APP_PATH for same-step consumers and later steps', () =>
   assert.match(signStep, /codesign --verify --deep --strict --verbose=2 "\$APP_PATH"/)
 })
 
+test('signing discovers every Mach-O by magic before considering its filename', () => {
+  const signStep = workflowStep('Sign nested runtime inside-out (ad-hoc hardened)')
+  assert.doesNotMatch(signStep, /path\.suffix/)
+  assert.doesNotMatch(signStep, /read_bytes\(\)/)
+  assert.match(signStep, /with path\.open\("rb"\) as handle:\s+head = handle\.read\(4\)/)
+  assert.match(signStep, /if magic not in/)
+})
+
 test('protected validation never mutates public releases or private E2E', () => {
   for (const forbidden of [
     'softprops/action-gh-release',

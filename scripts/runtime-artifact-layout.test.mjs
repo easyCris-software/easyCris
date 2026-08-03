@@ -19,19 +19,24 @@ import { fileURLToPath } from 'node:url'
 const FIXTURE_REQUIREMENTS = Object.fromEntries([
   'requirements-macos.txt',
   'requirements-rnaseq.txt',
+  'requirements-macos-builder.lock',
   'requirements-macos-x86_64.lock',
   'requirements-macos-arm64.lock',
 ].map(name => [name, 'a'.repeat(64)]))
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+FIXTURE_REQUIREMENTS['requirements-macos-builder.lock'] = crypto.createHash('sha256')
+  .update(fs.readFileSync(path.join(PROJECT_ROOT, 'python_embedded', 'requirements-macos-builder.lock')))
+  .digest('hex')
 
 function copyTask5FingerprintInputs(root) {
   const sourceRoot = path.join(PROJECT_ROOT, 'python_embedded')
   const copies = [
-    ...['requirements-macos.txt', 'requirements-rnaseq.txt', 'requirements-macos-x86_64.lock', 'requirements-macos-arm64.lock', 'stats.py', 'rnaseq.py', 'plot.py', 'platform_trust.py', 'plot_exporter.py'].map(name => path.join('python_embedded', name)),
+    ...['requirements-macos.txt', 'requirements-rnaseq.txt', 'requirements-macos-builder.lock', 'requirements-macos-x86_64.lock', 'requirements-macos-arm64.lock', 'stats.py', 'rnaseq.py', 'plot.py', 'platform_trust.py', 'plot_exporter.py'].map(name => path.join('python_embedded', name)),
     ...['statistics_module', 'rnaseq_module', 'plots_module'].map(name => path.join('python_embedded', name)),
     'scripts/bootstrap_python_macos.py',
     'scripts/apply_rnaseq_pydeseq2_patch.py',
     'scripts/validate_rnaseq_runtime.py',
+    'scripts/gseapy-1.1.11.Cargo.lock',
     'scripts/rnaseq_patches/pydeseq2_0_5_3',
   ]
   for (const relative of copies) {
@@ -121,8 +126,9 @@ function writeDarwinRuntime(root, { includeTask5KeptPaths = false, includeInterp
     interpreter: { path: 'bin/python3.12', version: '3.12.13', architectures: ['x86_64'], minimum_macos_versions: ['14.0'] },
     archive: fixtureManifestContext(root).archive,
     requirements_sha256: FIXTURE_REQUIREMENTS,
+    builder_provenance: fixtureManifestContext(root).builderProvenance,
     wheel_archive_sha256: { 'fixture.whl': 'e'.repeat(64) },
-    intel_gseapy_source_build: { source_filename: 'gseapy-1.1.11.tar.gz', source_sha256: 'd36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd', wheel: { filename: 'fixture.whl', sha256: 'f'.repeat(64) } },
+    intel_gseapy_source_build: { source_filename: 'gseapy-1.1.11.tar.gz', source_sha256: 'd36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd', cargo_lock_filename: 'gseapy-1.1.11.Cargo.lock', cargo_lock_sha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(PROJECT_ROOT, 'scripts', 'gseapy-1.1.11.Cargo.lock'))).digest('hex'), wheel: { filename: 'fixture.whl', sha256: 'f'.repeat(64) } },
     backend_sources: fixtureManifestContext(root).backendSources,
     runtime_distributions: [{ name: 'fixture', version: '1.0' }],
     universal_macho_thinning: [],
@@ -609,6 +615,42 @@ test('Darwin staging rejects forged CPython/archive provenance and an empty Mach
   assert.throws(
     () => stagePythonRuntime({ root, platform: 'darwin', manifestContext: fixtureManifestContext(root) }),
     /CPython|archive|development reuse|content fingerprint|Mach-O inventory/
+  )
+})
+
+test('Darwin staging rejects tampered builder and Intel Cargo provenance', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-stage-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+
+  const builderRuntime = writeDarwinRuntime(path.join(root, 'builder'))
+  const builderManifestPath = path.join(builderRuntime, 'easycris_runtime_manifest.json')
+  const builderManifest = JSON.parse(fs.readFileSync(builderManifestPath, 'utf8'))
+  const builderArchive = Object.keys(builderManifest.builder_provenance.archive_sha256)[0]
+  builderManifest.builder_provenance.archive_sha256[builderArchive] = '0'.repeat(64)
+  builderManifest.runtime_tree_sha256 = runtimeTreeSha256(builderRuntime)
+  fs.writeFileSync(builderManifestPath, JSON.stringify(builderManifest))
+  assert.throws(
+    () => stagePythonRuntime({
+      root: path.join(root, 'builder'),
+      platform: 'darwin',
+      manifestContext: fixtureManifestContext(path.join(root, 'builder')),
+    }),
+    /builder provenance/
+  )
+
+  const cargoRuntime = writeDarwinRuntime(path.join(root, 'cargo'))
+  const cargoManifestPath = path.join(cargoRuntime, 'easycris_runtime_manifest.json')
+  const cargoManifest = JSON.parse(fs.readFileSync(cargoManifestPath, 'utf8'))
+  cargoManifest.intel_gseapy_source_build.cargo_lock_sha256 = '0'.repeat(64)
+  cargoManifest.runtime_tree_sha256 = runtimeTreeSha256(cargoRuntime)
+  fs.writeFileSync(cargoManifestPath, JSON.stringify(cargoManifest))
+  assert.throws(
+    () => stagePythonRuntime({
+      root: path.join(root, 'cargo'),
+      platform: 'darwin',
+      manifestContext: fixtureManifestContext(path.join(root, 'cargo')),
+    }),
+    /Intel GSEApy provenance/
   )
 })
 

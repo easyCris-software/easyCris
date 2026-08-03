@@ -19,6 +19,7 @@ const MANIFEST_NAME = 'easycris_runtime_manifest.json'
 const REQUIREMENT_FILES = [
   'requirements-macos.txt',
   'requirements-rnaseq.txt',
+  'requirements-macos-builder.lock',
   'requirements-macos-x86_64.lock',
   'requirements-macos-arm64.lock',
 ]
@@ -26,7 +27,7 @@ const REQUIRED_DARWIN_MODULES = ['stats', 'rnaseq', 'plot']
 const TASK5_MANIFEST_KEYS = new Set([
   'schema_version', 'head_sha', 'clean_tree', 'dirty_entry_count', 'development_reuse',
   'content_fingerprint', 'architecture', 'support_floor', 'archive', 'interpreter',
-  'requirements_sha256', 'wheel_archive_sha256', 'intel_gseapy_source_build',
+  'requirements_sha256', 'builder_provenance', 'wheel_archive_sha256', 'intel_gseapy_source_build',
   'backend_sources', 'runtime_distributions', 'universal_macho_thinning',
   'macho_inventory', 'probe_results', 'runtime_tree_sha256',
 ])
@@ -40,6 +41,7 @@ const FORBIDDEN_DARWIN_ROOT_PARTS = new Set([
 ])
 const FORBIDDEN_DARWIN_WINDOWS_PARTS = new Set(['pywin32', 'win32com', 'pywin32_system32'])
 const CPYTHON_VENV_ACTIVATE_PS1 = 'lib/python3.12/venv/scripts/common/activate.ps1'
+const GSEAPY_CARGO_LOCK_SHA256 = '2083f2702da6288120f7a8c1a05222228b586e47869d28ccb1f4c543d578315a'
 
 let task5ArchivePinsCache
 
@@ -248,6 +250,47 @@ function requirementHashes(root) {
   return Object.fromEntries(REQUIREMENT_FILES.map(name => [name, sha256File(path.join(source, name))]))
 }
 
+function expectedBuilderProvenance(architecture) {
+  const lockPath = path.join(rootDir, 'python_embedded', 'requirements-macos-builder.lock')
+  const archiveSha256 = {}
+  const distributions = []
+  let pendingArchives = []
+  for (const rawLine of fs.readFileSync(lockPath, 'utf8').split(/\r?\n/)) {
+    const line = rawLine.trim()
+    if (line.startsWith('# archive:')) {
+      pendingArchives.push(line.slice('# archive:'.length).trim())
+      continue
+    }
+    if (!line || line.startsWith('#')) continue
+    const requirement = /^([A-Za-z0-9_.-]+)==([^\s;#]+)/.exec(line)
+    const hashes = [...line.matchAll(/--hash=sha256:([0-9a-f]{64})/g)].map(match => match[1])
+    if (!requirement || pendingArchives.length === 0 || pendingArchives.length !== hashes.length) {
+      fail('Builder lock cannot be represented as exact provenance')
+    }
+    for (let index = 0; index < hashes.length; index += 1) {
+      archiveSha256[pendingArchives[index]] = hashes[index]
+    }
+    distributions.push({
+      name: requirement[1].toLowerCase().replaceAll('_', '-').replaceAll('.', '-'),
+      version: requirement[2],
+    })
+    pendingArchives = []
+  }
+  distributions.sort((left, right) => compareText(left.name, right.name))
+  const archive = task5ArchivePin(architecture)
+  return {
+    python_version: archive.python_version,
+    source_archive_filename: archive.filename,
+    source_archive_sha256: archive.sha256,
+    lock_filename: 'requirements-macos-builder.lock',
+    lock_sha256: sha256File(lockPath),
+    archive_sha256: Object.fromEntries(
+      Object.entries(archiveSha256).sort(([left], [right]) => compareText(left, right))
+    ),
+    distributions,
+  }
+}
+
 function task5BackendSourceInventory(root) {
   const source = path.join(root, 'python_embedded')
   const files = []
@@ -323,6 +366,7 @@ function task5ContentFingerprint(root, architecture, requirements, backendSource
       'scripts/bootstrap_python_macos.py',
       'scripts/apply_rnaseq_pydeseq2_patch.py',
       'scripts/validate_rnaseq_runtime.py',
+      'scripts/gseapy-1.1.11.Cargo.lock',
     ].map(relative => [relative, sha256File(path.join(root, relative))])),
     rnaseq_patch_payload: directoryContentSha256(path.join(root, 'scripts', 'rnaseq_patches', 'pydeseq2_0_5_3')),
   }
@@ -336,6 +380,9 @@ export function runtimeManifestContext(root, overrides = {}) {
   ).split(/\r?\n/).filter(Boolean)
   const architecture = overrides.architecture ?? (process.platform === 'darwin' ? normalizeDarwinArchitecture() : undefined)
   const requirementsSha256 = overrides.requirementsSha256 ?? requirementHashes(root)
+  const builderProvenance = overrides.builderProvenance ?? (
+    architecture ? expectedBuilderProvenance(architecture) : undefined
+  )
   const backendSources = overrides.backendSources ?? (architecture ? task5BackendSourceInventory(root) : undefined)
   const contentFingerprint = overrides.contentFingerprint ?? (
     architecture ? task5ContentFingerprint(root, architecture, requirementsSha256, backendSources) : undefined
@@ -345,6 +392,7 @@ export function runtimeManifestContext(root, overrides = {}) {
     cleanTree: overrides.cleanTree ?? dirtyEntries.length === 0,
     dirtyEntryCount: overrides.dirtyEntryCount ?? dirtyEntries.length,
     requirementsSha256,
+    builderProvenance,
     architecture,
     archive: overrides.archive ?? (architecture ? task5ArchivePin(architecture) : undefined),
     backendSources,
@@ -472,9 +520,23 @@ function validateCompleteManifest(manifest, context, problems) {
   if (!manifest.wheel_archive_sha256 || typeof manifest.wheel_archive_sha256 !== 'object' || Array.isArray(manifest.wheel_archive_sha256) || Object.keys(manifest.wheel_archive_sha256).length === 0 || Object.values(manifest.wheel_archive_sha256).some(value => !isSha256(value))) {
     problems.push('runtime manifest wheel archive inventory is invalid')
   }
+  const builder = manifest.builder_provenance
+  const expectedBuilder = expectedBuilderProvenance(architecture)
+  if (
+    !builder || typeof builder !== 'object' || Array.isArray(builder) ||
+    builder.lock_filename !== 'requirements-macos-builder.lock' ||
+    !isSha256(builder.lock_sha256) ||
+    builder.lock_sha256 !== manifest.requirements_sha256?.['requirements-macos-builder.lock'] ||
+    !builder.archive_sha256 || typeof builder.archive_sha256 !== 'object' || Array.isArray(builder.archive_sha256) ||
+    Object.keys(builder.archive_sha256).length === 0 || Object.values(builder.archive_sha256).some(value => !isSha256(value)) ||
+    !Array.isArray(builder.distributions) || builder.distributions.length === 0 ||
+    builder.distributions.some(row => !row || typeof row.name !== 'string' || typeof row.version !== 'string') ||
+    !sameObject(builder, expectedBuilder)
+  ) problems.push('runtime manifest builder provenance is invalid')
   if (architecture === 'x86_64') {
     const provenance = manifest.intel_gseapy_source_build
-    if (!provenance || provenance.source_filename !== 'gseapy-1.1.11.tar.gz' || provenance.source_sha256 !== 'd36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd' || !provenance.wheel || typeof provenance.wheel.filename !== 'string' || !isSha256(provenance.wheel.sha256)) {
+    const cargoLockSha256 = sha256File(path.join(rootDir, 'scripts', 'gseapy-1.1.11.Cargo.lock'))
+    if (!provenance || provenance.source_filename !== 'gseapy-1.1.11.tar.gz' || provenance.source_sha256 !== 'd36a164ee466f7ea6deadfe82ea041f3328ee937ff4c9de862b3e6e2825df0dd' || provenance.cargo_lock_filename !== 'gseapy-1.1.11.Cargo.lock' || cargoLockSha256 !== GSEAPY_CARGO_LOCK_SHA256 || provenance.cargo_lock_sha256 !== cargoLockSha256 || !provenance.wheel || typeof provenance.wheel.filename !== 'string' || !isSha256(provenance.wheel.sha256)) {
       problems.push('runtime manifest Intel GSEApy provenance is invalid')
     }
   } else if (manifest.intel_gseapy_source_build !== null) {
