@@ -206,27 +206,34 @@ function sha256File(targetPath) {
 
 export function runtimeTreeSha256(runtime) {
   const digest = crypto.createHash('sha256')
+  const resolvedRuntime = fs.realpathSync(runtime)
   const entries = walkEntries(runtime)
     .map(candidate => ({ candidate, relative: path.relative(runtime, candidate).split(path.sep).join('/') }))
     .filter(entry => entry.relative !== MANIFEST_NAME)
     .sort((left, right) => left.relative < right.relative ? -1 : left.relative > right.relative ? 1 : 0)
   for (const { candidate, relative } of entries) {
-    const stat = fs.lstatSync(candidate)
+    const linkStat = fs.lstatSync(candidate)
+    // Tauri's macOS resource bundler dereferences file symlinks and omits empty
+    // directories. Hash the logical file tree so the staged and installed copies
+    // retain one integrity identity across that deterministic packaging step.
+    if (linkStat.isDirectory()) continue
+    let stat = linkStat
+    if (linkStat.isSymbolicLink()) {
+      const resolvedTarget = fs.realpathSync(candidate)
+      if (!isInside(resolvedRuntime, resolvedTarget)) {
+        throw new Error(`Runtime tree symlink escapes runtime: ${candidate}`)
+      }
+      stat = fs.statSync(resolvedTarget)
+    }
+    if (!stat.isFile()) {
+      throw new Error(`Unsupported runtime tree entry: ${candidate}`)
+    }
     digest.update(relative, 'utf8')
     digest.update('\0')
     digest.update((stat.mode & 0o7777).toString(8).padStart(4, '0'), 'ascii')
     digest.update('\0')
-    if (stat.isSymbolicLink()) {
-      digest.update('symlink\0', 'ascii')
-      digest.update(fs.readlinkSync(candidate), 'utf8')
-    } else if (stat.isDirectory()) {
-      digest.update('directory', 'ascii')
-    } else if (stat.isFile()) {
-      digest.update('file\0', 'ascii')
-      digest.update(sha256File(candidate), 'ascii')
-    } else {
-      throw new Error(`Unsupported runtime tree entry: ${candidate}`)
-    }
+    digest.update('file\0', 'ascii')
+    digest.update(sha256File(candidate), 'ascii')
     digest.update('\0')
   }
   return digest.digest('hex')

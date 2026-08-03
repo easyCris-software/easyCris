@@ -153,6 +153,76 @@ test('resolves Darwin backend layout', () => {
   })
 })
 
+test('runtime tree digest survives Tauri symlink dereferencing and empty-directory elision', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-runtime-digest-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const staged = path.join(root, 'staged')
+  const installed = path.join(root, 'installed')
+  fs.mkdirSync(path.join(staged, 'bin'), { recursive: true })
+  fs.mkdirSync(path.join(staged, 'lib', 'empty'), { recursive: true })
+  const interpreter = path.join(staged, 'bin', 'python3.12')
+  fs.writeFileSync(interpreter, 'fixture interpreter')
+  fs.chmodSync(interpreter, 0o755)
+  fs.symlinkSync('python3.12', path.join(staged, 'bin', 'python'))
+  fs.symlinkSync('python3.12', path.join(staged, 'bin', 'python3'))
+  const manDirectory = path.join(staged, 'share', 'man', 'man1')
+  fs.mkdirSync(manDirectory, { recursive: true })
+  fs.writeFileSync(path.join(manDirectory, 'python3.12.1'), 'fixture manual')
+  fs.chmodSync(path.join(manDirectory, 'python3.12.1'), 0o644)
+  fs.symlinkSync('python3.12.1', path.join(manDirectory, 'python3.1'))
+
+  fs.cpSync(staged, installed, { recursive: true })
+  for (const [alias, target] of [
+    ['bin/python', 'bin/python3.12'],
+    ['bin/python3', 'bin/python3.12'],
+    ['share/man/man1/python3.1', 'share/man/man1/python3.12.1'],
+  ]) {
+    fs.rmSync(path.join(installed, alias))
+    fs.copyFileSync(path.join(installed, target), path.join(installed, alias))
+  }
+  fs.rmSync(path.join(installed, 'lib', 'empty'), { recursive: true })
+
+  assert.equal(runtimeTreeSha256(installed), runtimeTreeSha256(staged))
+})
+
+test('runtime tree digest rejects escaped symlinks before reading their targets', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-runtime-digest-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const runtime = path.join(root, 'runtime')
+  const external = path.join(root, 'external.py')
+  fs.mkdirSync(runtime)
+  fs.writeFileSync(external, 'external content')
+  fs.symlinkSync(external, path.join(runtime, 'escape.py'))
+  const originalReadFile = fs.readFileSync
+  let externalRead = false
+  fs.readFileSync = (target, ...args) => {
+    if (path.resolve(String(target)) === external) externalRead = true
+    return originalReadFile(target, ...args)
+  }
+  t.after(() => { fs.readFileSync = originalReadFile })
+
+  assert.throws(() => runtimeTreeSha256(runtime), /symlink escapes runtime/)
+  assert.equal(externalRead, false)
+})
+
+test('runtime tree digest still detects packaged file content and executable-mode changes', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-runtime-digest-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  const runtime = path.join(root, 'runtime')
+  fs.mkdirSync(path.join(runtime, 'bin'), { recursive: true })
+  const interpreter = path.join(runtime, 'bin', 'python3.12')
+  fs.writeFileSync(interpreter, 'fixture interpreter')
+  fs.chmodSync(interpreter, 0o755)
+  fs.symlinkSync('python3.12', path.join(runtime, 'bin', 'python'))
+  const originalDigest = runtimeTreeSha256(runtime)
+
+  fs.writeFileSync(interpreter, 'tampered interpreter')
+  assert.notEqual(runtimeTreeSha256(runtime), originalDigest)
+  fs.writeFileSync(interpreter, 'fixture interpreter')
+  fs.chmodSync(interpreter, 0o644)
+  assert.notEqual(runtimeTreeSha256(runtime), originalDigest)
+})
+
 test('recognizes only transient Kaleido logs', () => {
   assert.equal(isTransientKaleidoLog('plot.dist/kaleido/executable/debug.log'), true)
   assert.equal(isTransientKaleidoLog('plot.dist/kaleido/executable/chrome_debug.log'), true)
