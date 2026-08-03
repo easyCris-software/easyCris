@@ -1105,6 +1105,25 @@ class ManifestCheckpointAndCacheTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "local build path"):
                 bootstrap_python_macos.validate_no_local_build_paths(runtime, (root,))
 
+    def test_runtime_leak_roots_reject_checkout_but_allow_foreign_runner_provenance(self):
+        # Hosted-runner wheels may legitimately retain the generic builder home
+        # from the upstream wheel producer. Only paths from this checkout may
+        # identify the current EasyCris build and must be rejected here.
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "checkout"
+            runtime = root / "python_embedded" / "runtime"
+            runtime.mkdir(parents=True)
+            roots = bootstrap_python_macos.runtime_leak_roots(root)
+
+            upstream = runtime / "upstream-wheel.so"
+            upstream.write_bytes(b"Mach-O\0/Users/runner/work/gseapy/gseapy/src/lib.rs")
+            bootstrap_python_macos.validate_no_local_build_paths(runtime, roots)
+
+            local = runtime / "local-build.so"
+            local.write_bytes(b"Mach-O\0" + os.fsencode(root / "_tmp" / "cargo" / "src.rs"))
+            with self.assertRaisesRegex(RuntimeError, "local build path"):
+                bootstrap_python_macos.validate_no_local_build_paths(runtime, roots)
+
     def test_intel_rust_build_remaps_machine_local_paths(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "checkout"

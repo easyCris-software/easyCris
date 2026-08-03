@@ -1111,6 +1111,18 @@ def local_build_roots(root: Path) -> tuple[Path, ...]:
     return tuple(sorted(roots, key=lambda path: (-len(os.fsencode(path)), os.fspath(path))))
 
 
+def runtime_leak_roots(root: Path) -> tuple[Path, ...]:
+    """Return paths that identify this checkout's runtime build.
+
+    Generic hosted-runner homes and temporary roots are intentionally excluded:
+    upstream binary wheels can retain those shared builder paths. Our source
+    build still remaps the broader ``local_build_roots`` set, while the exact
+    checkout root covers every EasyCris builder, cache, and output directory.
+    """
+    roots = {root.absolute(), root.resolve()}
+    return tuple(sorted(roots, key=lambda path: (-len(os.fsencode(path)), os.fspath(path))))
+
+
 def gseapy_build_environment(root: Path) -> dict[str, str]:
     """Create a deterministic Intel Rust build environment without local paths."""
     flags = [
@@ -1363,7 +1375,7 @@ def validate_pruned_runtime(
     if forbidden:
         relative = sorted({path.relative_to(runtime).as_posix() for path in forbidden})
         raise RuntimeError(f"Final runtime contains provisioning-only artifacts: {relative}")
-    validate_no_local_build_paths(runtime, local_build_roots(root))
+    validate_no_local_build_paths(runtime, runtime_leak_roots(root))
     interpreter = runtime / "bin" / "python3.12"
     completed = subprocess.run(
         [str(interpreter), "-I", "-B", "-m", "pip", "--version"],
