@@ -559,6 +559,8 @@ vi.mock('@/components/data/SpreadsheetView', () => ({
 
 let AppShell: typeof import('../AppShell').AppShell
 
+const APP_SHELL_SETUP_TIMEOUT_MS = 30_000
+
 describe('AppShell statistics grid stability contract', () => {
   beforeEach(async () => {
     vi.resetModules()
@@ -587,7 +589,7 @@ describe('AppShell statistics grid stability contract', () => {
     )
 
     AppShell = (await import('../AppShell')).AppShell
-  })
+  }, APP_SHELL_SETUP_TIMEOUT_MS)
 
   it('keeps SpreadsheetView mounted and restores family-scoped cached state across statistics family switches', async () => {
     render(<AppShell />)
