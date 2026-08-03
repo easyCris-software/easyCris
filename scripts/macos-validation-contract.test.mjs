@@ -64,7 +64,33 @@ test('protected validation checks unsigned manifests before signing and executes
   assert.doesNotMatch(fullValidationStep, /--post-sign-installed-execution/)
 
   const signStep = workflow.slice(signStart, postSignStart)
-  assert.match(signStep, /codesign --verify --deep --strict --verbose=2 "\$APP_PATH"/)
+  const nestedCommand = signStep.indexOf('cmd = [')
+  const nestedHardenedSign = signStep.indexOf('"--options", "runtime", "--sign", "-",', nestedCommand)
+  const nestedExecution = signStep.indexOf('subprocess.run(cmd, check=True)', nestedHardenedSign)
+  const appCommand = signStep.indexOf('app_cmd = [', nestedExecution)
+  const appHardenedSign = signStep.indexOf('"--options", "runtime", "--sign", "-",', appCommand)
+  const appExecution = signStep.indexOf('subprocess.run(app_cmd, check=True)', appHardenedSign)
+  const strictVerification = signStep.indexOf(
+    'codesign --verify --deep --strict --verbose=2 "$APP_PATH"',
+    appExecution
+  )
+  for (const [label, position] of [
+    ['nested signing command', nestedCommand],
+    ['nested hardened-runtime identity', nestedHardenedSign],
+    ['nested signing execution', nestedExecution],
+    ['outer-app signing command', appCommand],
+    ['outer-app hardened-runtime identity', appHardenedSign],
+    ['outer-app signing execution', appExecution],
+    ['strict outer-app verification', strictVerification],
+  ]) {
+    assert.notEqual(position, -1, `missing ${label}`)
+  }
+  assert.ok(nestedCommand < nestedHardenedSign)
+  assert.ok(nestedHardenedSign < nestedExecution)
+  assert.ok(nestedExecution < appCommand)
+  assert.ok(appCommand < appHardenedSign)
+  assert.ok(appHardenedSign < appExecution)
+  assert.ok(appExecution < strictVerification)
 
   const postSignStep = workflow.slice(postSignStart)
   assert.match(postSignStep, /validate_release\.js[\s\S]*--post-sign-installed-execution[\s\S]*--installed-app "\$APP_PATH"/)

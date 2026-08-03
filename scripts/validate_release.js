@@ -1700,9 +1700,27 @@ function validatePortableRelease(targetPlatform) {
   validateStrictCspAgainstRuntimeCodegen()
 }
 
-function main(argv = process.argv.slice(2)) {
-  const targetPlatform = readTargetPlatform(argv)
-  ensureProbeOutputDirectory()
+export function dispatchReleaseValidation({
+  argv = process.argv.slice(2),
+  targetPlatform = readTargetPlatform(argv),
+  paths = {
+    root: rootDir,
+    sourceRuntime: path.join(rootDir, 'python_embedded', 'runtime'),
+    stagedRuntime: path.join(stagedRoot, 'runtime'),
+  },
+  runner = defaultDarwinRunner,
+  inspectMachO = defaultMachOInspector,
+  expectedArchitecture = os.arch(),
+  probeOutputDir: outputDir = probeOutputDir,
+  manifestContext,
+  fullValidationHooks = {
+    validateLegalFiles,
+    validateWindowsRuntime,
+    validatePortableRelease,
+    validateNsisReleaseConfig,
+    validateNsisArtifactSignatures,
+  },
+} = {}) {
   const postSignInstalledExecution = argv.includes('--post-sign-installed-execution')
   if (postSignInstalledExecution) {
     if (targetPlatform !== 'darwin') {
@@ -1712,29 +1730,37 @@ function main(argv = process.argv.slice(2)) {
     if (!installedApp) {
       throw new Error('--post-sign-installed-execution requires --installed-app <path>')
     }
-    errors.push(...validateInstalledDarwinExecution({ installedApp }).errors)
-  } else {
-    validateLegalFiles()
-    if (targetPlatform === 'win32') {
-      validateWindowsRuntime()
-    } else {
-      const darwinResult = validateDarwinRuntime({
-        paths: {
-          root: rootDir,
-          sourceRuntime: path.join(rootDir, 'python_embedded', 'runtime'),
-          stagedRuntime: path.join(stagedRoot, 'runtime'),
-        },
-        installedApp: readInstalledApp(argv),
-        manifestContext: runtimeManifestContext(rootDir),
-      })
-      errors.push(...darwinResult.errors)
-    }
-    validatePortableRelease(targetPlatform)
-    if (targetPlatform === 'win32') {
-      validateNsisReleaseConfig()
-      validateNsisArtifactSignatures()
-    }
+    return validateInstalledDarwinExecution({ installedApp, runner, probeOutputDir: outputDir })
   }
+
+  fullValidationHooks.validateLegalFiles()
+  const localErrors = []
+  if (targetPlatform === 'win32') {
+    fullValidationHooks.validateWindowsRuntime()
+  } else {
+    const darwinResult = validateDarwinRuntime({
+      paths,
+      installedApp: readInstalledApp(argv),
+      runner,
+      inspectMachO,
+      expectedArchitecture,
+      probeOutputDir: outputDir,
+      manifestContext: manifestContext ?? runtimeManifestContext(paths.root ?? rootDir),
+    })
+    localErrors.push(...darwinResult.errors)
+  }
+  fullValidationHooks.validatePortableRelease(targetPlatform)
+  if (targetPlatform === 'win32') {
+    fullValidationHooks.validateNsisReleaseConfig()
+    fullValidationHooks.validateNsisArtifactSignatures()
+  }
+  return { errors: localErrors }
+}
+
+function main(argv = process.argv.slice(2)) {
+  const targetPlatform = readTargetPlatform(argv)
+  ensureProbeOutputDirectory()
+  errors.push(...dispatchReleaseValidation({ argv, targetPlatform }).errors)
 
   for (const warning of warnings) {
     console.warn(`[validate-release] WARN: ${warning}`)

@@ -167,12 +167,38 @@ function copyCliRuntimeInputs(root) {
   }
 }
 
+function noOpFullValidationHooks() {
+  const noOp = () => undefined
+  return {
+    validateLegalFiles: noOp,
+    validateWindowsRuntime: noOp,
+    validatePortableRelease: noOp,
+    validateNsisReleaseConfig: noOp,
+    validateNsisArtifactSignatures: noOp,
+  }
+}
+
 test('resolves the installed Darwin runtime in updater resources', () => {
   assert.equal(
     resolveInstalledDarwinDist('/Applications/easyCris.app'),
     '/Applications/easyCris.app/Contents/Resources/_up_/bundle_resources/python_embedded/runtime'
   )
   assert.throws(() => readValidationTargetPlatform(['--platform']), /Missing value for --platform/)
+})
+
+test('release CLI rejects an unsupported platform before creating probe outputs', t => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-cli-'))
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }))
+  copyCliRuntimeInputs(root)
+
+  const result = spawnSync(
+    globalThis.process.execPath,
+    ['scripts/validate_release.js', '--platform', 'linux', '--community'],
+    { cwd: root, encoding: 'utf8' }
+  )
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /Unsupported runtime platform: linux/)
+  assert.equal(fs.existsSync(path.join(root, '_tmp')), false)
 })
 
 test('Darwin validation runs stats, rnaseq, and plot through each isolated runtime', t => {
@@ -199,7 +225,7 @@ test('Darwin validation runs stats, rnaseq, and plot through each isolated runti
   assert.ok(moduleCalls.some(call => call.command === path.join(installed, 'bin', 'python3.12') && call.args[3] === 'plot'))
 })
 
-test('post-sign installed execution runs signed backends without trusting unsigned manifest hashes', t => {
+test('release dispatcher runs signed installed backends without revalidating unsigned manifest hashes', t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'easycris-release-'))
   t.after(() => fs.rmSync(root, { recursive: true, force: true }))
   const source = makeRuntime(path.join(root, 'python_embedded', 'runtime')).runtime
@@ -210,23 +236,31 @@ test('post-sign installed execution runs signed backends without trusting unsign
   // Ad-hoc signing changes Mach-O bytes after the provision manifest was sealed.
   fs.appendFileSync(path.join(installed, 'kaleido', 'executable', 'bin', 'kaleido'), 'signed')
 
-  const fullResult = validateDarwinRuntime({
+  assert.equal(typeof releaseValidation.dispatchReleaseValidation, 'function')
+  const fullResult = releaseValidation.dispatchReleaseValidation({
+    argv: ['--platform', 'darwin', '--community', '--installed-app', app],
     paths: { root, sourceRuntime: source, stagedRuntime: staged },
-    installedApp: app,
     runner: successRunner([], source),
     inspectMachO: fixtureMachOInspector,
     manifestContext: manifestContext(root),
     expectedArchitecture: 'x64',
     probeOutputDir: path.join(root, 'full-exports'),
+    fullValidationHooks: noOpFullValidationHooks(),
   })
   assert.ok(fullResult.errors.some(error => /installed .*Mach-O hash is stale|installed .*tree hash is stale/.test(error)))
 
-  assert.equal(typeof releaseValidation.validateInstalledDarwinExecution, 'function')
   const calls = []
-  const executionResult = releaseValidation.validateInstalledDarwinExecution({
-    installedApp: app,
+  const executionResult = releaseValidation.dispatchReleaseValidation({
+    argv: [
+      '--platform', 'darwin',
+      '--community',
+      '--post-sign-installed-execution',
+      '--installed-app', app,
+    ],
+    paths: { root, sourceRuntime: source, stagedRuntime: staged },
     runner: successRunner(calls, installed),
     probeOutputDir: path.join(root, 'post-sign-exports'),
+    fullValidationHooks: noOpFullValidationHooks(),
   })
   assert.deepEqual(executionResult.errors, [])
   const moduleCalls = calls.filter(call => call.args.includes('-m'))
@@ -246,6 +280,22 @@ test('post-sign installed execution mode requires an installed app', () => {
   )
   assert.notEqual(result.status, 0)
   assert.match(result.stderr, /--post-sign-installed-execution requires --installed-app/)
+})
+
+test('post-sign installed execution CLI rejects non-Darwin targets', () => {
+  const result = spawnSync(
+    globalThis.process.execPath,
+    [
+      'scripts/validate_release.js',
+      '--platform', 'win32',
+      '--community',
+      '--post-sign-installed-execution',
+      '--installed-app', 'easyCris.app',
+    ],
+    { cwd: PROJECT_ROOT, encoding: 'utf8' }
+  )
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /--post-sign-installed-execution requires --platform darwin/)
 })
 
 test('Darwin release validation accepts Task 5 Mach-O inventory entries for confined interpreter aliases', t => {
