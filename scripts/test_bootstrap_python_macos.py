@@ -76,6 +76,27 @@ class BootstrapHostContractTests(unittest.TestCase):
             bootstrap_python_macos.validate_host("Darwin", (3, 12), "i386")
 
 
+class RuntimeTreeDigestTests(unittest.TestCase):
+    """Keep the provisioner digest safe and identical to installed packaging."""
+
+    def test_rejects_escaped_symlink_before_hashing_external_target(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            runtime = root / "runtime"
+            runtime.mkdir()
+            external = root / "external.py"
+            external.write_text("external content", encoding="utf-8")
+            (runtime / "escape.py").symlink_to(external)
+
+            with patch.object(
+                bootstrap_python_macos,
+                "sha256",
+                side_effect=AssertionError("external target must not be hashed"),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "symlink escapes runtime"):
+                    bootstrap_python_macos.runtime_tree_sha256(runtime)
+
+
 class BundledInterpreterArchiveTests(unittest.TestCase):
     """The immutable archive boundary must fail before touching a live runtime."""
 

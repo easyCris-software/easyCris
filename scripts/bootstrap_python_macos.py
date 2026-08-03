@@ -1642,29 +1642,42 @@ def runtime_relative_path(runtime: Path, path: Path) -> str:
 
 
 def runtime_tree_sha256(runtime: Path) -> str:
-    """Hash every runtime entry except the head-bound manifest itself."""
+    """Hash the package-stable logical file tree except its head-bound manifest."""
     digest = hashlib.sha256()
     if not runtime.is_dir():
         raise RuntimeError(f"Runtime tree is missing: {runtime}")
-    for path in sorted(runtime.rglob("*"), key=lambda candidate: candidate.relative_to(runtime).as_posix()):
+    resolved_runtime = runtime.resolve(strict=True)
+    for path in sorted(
+        runtime.rglob("*"),
+        key=lambda candidate: candidate.relative_to(runtime).as_posix().encode("utf-8"),
+    ):
         relative = path.relative_to(runtime).as_posix()
         if relative == "easycris_runtime_manifest.json":
             continue
-        metadata = path.lstat()
+        link_metadata = path.lstat()
+        # Tauri dereferences file symlinks and omits empty directories while
+        # copying macOS resources. Match the JavaScript validator's logical-file
+        # digest without ever following a link outside the runtime.
+        if stat.S_ISDIR(link_metadata.st_mode):
+            continue
+        metadata = link_metadata
+        if path.is_symlink():
+            resolved_target = path.resolve(strict=True)
+            try:
+                resolved_target.relative_to(resolved_runtime)
+            except ValueError as exc:
+                raise RuntimeError(
+                    f"Runtime tree symlink escapes runtime: {path}"
+                ) from exc
+            metadata = resolved_target.stat()
+        if not stat.S_ISREG(metadata.st_mode):
+            raise RuntimeError(f"Unsupported runtime tree entry: {path}")
         digest.update(relative.encode("utf-8"))
         digest.update(b"\0")
         digest.update(f"{stat.S_IMODE(metadata.st_mode):04o}".encode("ascii"))
         digest.update(b"\0")
-        if path.is_symlink():
-            digest.update(b"symlink\0")
-            digest.update(os.readlink(path).encode("utf-8"))
-        elif path.is_dir():
-            digest.update(b"directory")
-        elif path.is_file():
-            digest.update(b"file\0")
-            digest.update(sha256(path).encode("ascii"))
-        else:
-            raise RuntimeError(f"Unsupported runtime tree entry: {path}")
+        digest.update(b"file\0")
+        digest.update(sha256(path).encode("ascii"))
         digest.update(b"\0")
     return digest.hexdigest()
 

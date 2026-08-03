@@ -64,6 +64,16 @@ function pythonTask5Fingerprint(root) {
   ].join('\n')], { cwd: root, encoding: 'utf8' })
 }
 
+function pythonRuntimeTreeDigest(runtime) {
+  return spawnSync('python3', ['-c', [
+    'from pathlib import Path',
+    'import sys',
+    "sys.path.insert(0, 'scripts')",
+    'import bootstrap_python_macos as bootstrap',
+    'print(bootstrap.runtime_tree_sha256(Path(sys.argv[1])))',
+  ].join('\n'), runtime], { cwd: PROJECT_ROOT, encoding: 'utf8' })
+}
+
 function writeDarwinRuntime(root, { includeTask5KeptPaths = false, includeInterpreterMachAliases = false } = {}) {
   const runtime = path.join(root, 'python_embedded', 'runtime')
   const python = path.join(runtime, 'bin', 'python3.12')
@@ -170,6 +180,8 @@ test('runtime tree digest survives Tauri symlink dereferencing and empty-directo
   fs.writeFileSync(path.join(manDirectory, 'python3.12.1'), 'fixture manual')
   fs.chmodSync(path.join(manDirectory, 'python3.12.1'), 0o644)
   fs.symlinkSync('python3.12.1', path.join(manDirectory, 'python3.1'))
+  fs.writeFileSync(path.join(staged, '\uE000.py'), 'private-use fixture')
+  fs.writeFileSync(path.join(staged, '\u{10000}.py'), 'non-BMP fixture')
 
   fs.cpSync(staged, installed, { recursive: true })
   for (const [alias, target] of [
@@ -183,6 +195,12 @@ test('runtime tree digest survives Tauri symlink dereferencing and empty-directo
   fs.rmSync(path.join(installed, 'lib', 'empty'), { recursive: true })
 
   assert.equal(runtimeTreeSha256(installed), runtimeTreeSha256(staged))
+  const stagedPython = pythonRuntimeTreeDigest(staged)
+  const installedPython = pythonRuntimeTreeDigest(installed)
+  assert.equal(stagedPython.status, 0, stagedPython.stderr)
+  assert.equal(installedPython.status, 0, installedPython.stderr)
+  assert.equal(stagedPython.stdout.trim(), runtimeTreeSha256(staged))
+  assert.equal(installedPython.stdout.trim(), runtimeTreeSha256(installed))
 })
 
 test('runtime tree digest rejects escaped symlinks before reading their targets', t => {

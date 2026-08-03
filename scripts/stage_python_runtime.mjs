@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import crypto from 'node:crypto'
+import { Buffer } from 'node:buffer'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -210,7 +211,10 @@ export function runtimeTreeSha256(runtime) {
   const entries = walkEntries(runtime)
     .map(candidate => ({ candidate, relative: path.relative(runtime, candidate).split(path.sep).join('/') }))
     .filter(entry => entry.relative !== MANIFEST_NAME)
-    .sort((left, right) => left.relative < right.relative ? -1 : left.relative > right.relative ? 1 : 0)
+    .sort((left, right) => Buffer.compare(
+      Buffer.from(left.relative, 'utf8'),
+      Buffer.from(right.relative, 'utf8'),
+    ))
   for (const { candidate, relative } of entries) {
     const linkStat = fs.lstatSync(candidate)
     // Tauri's macOS resource bundler dereferences file symlinks and omits empty
