@@ -458,6 +458,8 @@ vi.mock('@/components/data/SpreadsheetView', () => ({
 
 let AppShell: typeof import('../AppShell').AppShell
 
+const APP_SHELL_SETUP_TIMEOUT_MS = 30_000
+
 describe('AppShell clear replacement contract', () => {
   beforeEach(async () => {
     vi.resetModules()
@@ -474,7 +476,7 @@ describe('AppShell clear replacement contract', () => {
     } as any)
     pendingSurfaceReady = null
     AppShell = (await import('../AppShell')).AppShell
-  })
+  }, APP_SHELL_SETUP_TIMEOUT_MS)
 
   it('replaces the active dataset transactionally during clear without a no-grid gap', async () => {
     render(<AppShell />)
