@@ -284,12 +284,17 @@ fn macos_bundle_python_base_dir_candidate(exe_dir: &Path) -> Option<PathBuf> {
         return None;
     }
 
-    exe_dir.parent().map(|contents_dir| {
+    let contents_dir = exe_dir.parent()?;
+    if contents_dir.file_name().and_then(|name| name.to_str()) != Some("Contents") {
+        return None;
+    }
+
+    Some(
         contents_dir
             .join("Resources")
             .join("_up_")
-            .join("bundle_resources")
-    })
+            .join("bundle_resources"),
+    )
 }
 
 /// Maximum execution time (5 minutes)
@@ -481,6 +486,50 @@ pub enum BackendMode {
     BundledRequired,
 }
 
+fn bundled_python_base_dir_for_executable(exe_path: &Path) -> Result<PathBuf, String> {
+    let exe_dir = exe_path
+        .parent()
+        .ok_or_else(|| "current executable has no parent directory".to_string())?;
+    let bundle_resources_dir =
+        macos_bundle_python_base_dir_candidate(exe_dir).ok_or_else(|| {
+            "current executable is not inside a macOS app Contents/MacOS directory".to_string()
+        })?;
+
+    if !bundle_resources_dir.join("python_embedded").is_dir() {
+        return Err(format!(
+            "bundled resources missing at {}",
+            bundle_resources_dir.display()
+        ));
+    }
+
+    Ok(bundle_resources_dir)
+}
+
+fn resolve_python_base_dir_for_mode<F>(
+    mode: BackendMode,
+    executable: Option<&Path>,
+    fallback: F,
+) -> Result<PathBuf, String>
+where
+    F: FnOnce() -> PathBuf,
+{
+    match mode {
+        BackendMode::BundledRequired => bundled_python_base_dir_for_executable(
+            executable.ok_or_else(|| "could not determine current executable path".to_string())?,
+        ),
+        _ => Ok(fallback()),
+    }
+}
+
+fn resolve_python_base_dir(mode: BackendMode) -> Result<PathBuf, String> {
+    let executable = if matches!(mode, BackendMode::BundledRequired) {
+        std::env::current_exe().ok()
+    } else {
+        None
+    };
+    resolve_python_base_dir_for_mode(mode, executable.as_deref(), get_python_base_dir)
+}
+
 /// Relative path helpers for the Task 6 Darwin bundled runtime (JS parity).
 fn bundled_runtime_rel() -> PathBuf {
     PathBuf::from("python_embedded").join("runtime")
@@ -624,10 +673,14 @@ fn detect_backend_mode_for(
     compiled_log_label: &str,
     required_log_label: &str,
 ) -> BackendMode {
-    let base_dir = get_python_base_dir();
-    let compiled_path = base_dir.join(compiled_rel_path);
     let build_profile = effective_build_profile();
     let platform = host_platform();
+    let compiled_path =
+        if matches!(platform, TargetPlatform::MacOS) && !is_open_profile(build_profile) {
+            compiled_rel_path
+        } else {
+            get_python_base_dir().join(compiled_rel_path)
+        };
     let mode = choose_backend_mode(build_profile, platform, compiled_path.exists());
 
     if matches!(mode, BackendMode::Script) {
@@ -647,10 +700,9 @@ fn detect_backend_mode_for(
         );
     } else if matches!(mode, BackendMode::BundledRequired) {
         log::info!(
-            "Using bundled {} runtime (profile={}) at: {:?}",
+            "Using bundled {} runtime (profile={}) resolved from the current executable",
             required_log_label,
             build_profile,
-            base_dir.join(bundled_interpreter_rel()),
         );
     } else {
         log::info!(
@@ -699,7 +751,18 @@ pub async fn spawn_python_backend(
     app: Option<&tauri::AppHandle>,
 ) -> CommandResult<Value> {
     // Get base directory for Python paths
-    let base_dir = get_python_base_dir();
+    let base_dir = match resolve_python_base_dir(mode) {
+        Ok(base_dir) => base_dir,
+        Err(reason) => {
+            return Err(
+                AppErrorEnvelope::new("STATS_PY_325", "Analysis backend unavailable")
+                    .with_detail(bundled_required_detail("stats", &reason))
+                    .with_retryable(false)
+                    .with_context("runtime_issue", serde_json::json!(true))
+                    .with_context("mode", serde_json::json!(format!("{:?}", mode))),
+            );
+        }
+    };
     let python_cwd = get_python_working_dir();
     log::debug!("Spawning Python backend with cwd: {:?}", python_cwd);
 
@@ -988,7 +1051,18 @@ pub async fn spawn_rnaseq(
     mode: BackendMode,
     app: &tauri::AppHandle,
 ) -> CommandResult<Value> {
-    let base_dir = get_python_base_dir();
+    let base_dir = match resolve_python_base_dir(mode) {
+        Ok(base_dir) => base_dir,
+        Err(reason) => {
+            return Err(
+                AppErrorEnvelope::new("RNASEQ_405", "RNA-seq backend unavailable")
+                    .with_detail(bundled_required_detail("RNA-seq", &reason))
+                    .with_retryable(false)
+                    .with_context("runtime_issue", serde_json::json!(true))
+                    .with_context("mode", serde_json::json!(format!("{:?}", mode))),
+            );
+        }
+    };
     let python_cwd = get_python_working_dir();
     log::debug!("Spawning RNA-seq backend with cwd: {:?}", python_cwd);
 
@@ -1269,7 +1343,15 @@ fn persistent_plot_export_worker() -> &'static Mutex<Option<PersistentPlotExport
 fn resolve_plot_command(
     mode: BackendMode,
 ) -> CommandResult<(PathBuf, Vec<PathBuf>, PathBuf, PathBuf)> {
-    let base_dir = get_python_base_dir();
+    let base_dir = match resolve_python_base_dir(mode) {
+        Ok(base_dir) => base_dir,
+        Err(reason) => {
+            return Err(AppErrorEnvelope::new("PLOT_603", "Plot creation failed")
+                .with_detail(bundled_required_detail("plot", &reason))
+                .with_retryable(false)
+                .with_context("mode", serde_json::json!(format!("{:?}", mode))));
+        }
+    };
     let python_cwd = get_python_working_dir();
 
     let (cmd, args): (PathBuf, Vec<PathBuf>) = match mode {
@@ -1967,6 +2049,44 @@ mod tests {
                 "/Applications/easyCris.app/Contents/Resources/_up_/bundle_resources"
             ))
         );
+    }
+
+    #[test]
+    fn macos_bundle_python_base_dir_candidate_rejects_macos_outside_app_contents() {
+        let exe_path = Path::new("/tmp/not-an-app/MacOS/easycris");
+        let exe_dir = exe_path.parent().expect("executable path has a parent");
+
+        assert_eq!(macos_bundle_python_base_dir_candidate(exe_dir), None);
+    }
+
+    #[test]
+    fn bundled_required_resolver_rejects_missing_app_resources_without_development_fallback() {
+        let root = std::env::temp_dir().join(format!(
+            "easycris-bundled-resolution-missing-{}",
+            std::process::id()
+        ));
+        let _ = std::fs::remove_dir_all(&root);
+        let app_exe = root
+            .join("easyCris.app")
+            .join("Contents")
+            .join("MacOS")
+            .join("easyCris");
+        std::fs::create_dir_all(app_exe.parent().expect("app executable parent")).expect("app");
+        std::fs::create_dir_all(root.join("development/python_embedded")).expect("development");
+
+        let fallback_was_used = std::cell::Cell::new(false);
+        let result =
+            resolve_python_base_dir_for_mode(BackendMode::BundledRequired, Some(&app_exe), || {
+                fallback_was_used.set(true);
+                root.join("development")
+            });
+
+        assert!(result.is_err(), "missing app resources must fail closed");
+        assert!(
+            !fallback_was_used.get(),
+            "must not consult development fallback"
+        );
+        let _ = std::fs::remove_dir_all(&root);
     }
 
     #[test]
