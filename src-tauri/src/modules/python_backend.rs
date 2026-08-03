@@ -343,6 +343,10 @@ fn apply_backend_spawn_flags(command: &mut Command, mode: BackendMode) {
     }
 }
 
+fn bundled_python_environment() -> [(&'static str, &'static str); 1] {
+    [("PYTHONDONTWRITEBYTECODE", "1")]
+}
+
 fn apply_backend_environment(command: &mut Command, mode: BackendMode) {
     // Enforce strict offline backend execution: no outbound network paths.
     command.env("EASYCRIS_OFFLINE", "1");
@@ -353,6 +357,9 @@ fn apply_backend_environment(command: &mut Command, mode: BackendMode) {
                 command.env_remove(key);
             }
         }
+        // `-B` protects the direct backend process. The environment variable
+        // propagates the same rule to Python child processes used by analyses.
+        command.envs(bundled_python_environment());
     }
 }
 
@@ -1891,6 +1898,14 @@ mod tests {
                 PathBuf::from("-m"),
                 PathBuf::from("plot"),
             ]
+        );
+    }
+
+    #[test]
+    fn backend_mode_bundled_environment_prevents_child_process_bytecode_writes() {
+        assert_eq!(
+            bundled_python_environment(),
+            [("PYTHONDONTWRITEBYTECODE", "1")]
         );
     }
 
