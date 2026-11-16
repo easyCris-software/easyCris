@@ -17,7 +17,7 @@
 
 ### Why researchers choose easyCris
 
-- **30+ statistical tests** — ANOVA, regression, survival, pharmacology, mediation, and more
+- **30+ statistical tests** — ANOVA, linear mixed models (Satterthwaite & Kenward-Roger df), regression, survival, pharmacology, mediation, and more
 - **Complete RNA-seq pipeline** — from raw counts to differential expression with QC plots
 - **Runs 100% locally** — your data never leaves your machine
 - **Publication-ready output** — interactive plots, results tables, and built-in citations
@@ -73,9 +73,12 @@ easyCris covers 30+ statistical tests across seven analysis groups. Most tests p
 | One-Way ANOVA | Wide or Long |
 | Two-Way ANOVA | Long only |
 | Multifactorial ANOVA (3-way) | Long only |
+| Linear Mixed Model (LMM) | Long only |
 
 Post-hoc corrections available for ANOVA: Tukey, Bonferroni, Holm, Holm-Sidak, Sidak, Dunnett, FDR-BH.
 Two-Way and Multifactorial ANOVA include interaction plots; simple effects analysis is available as an optional step.
+
+The **Linear Mixed Model** workflow handles repeated-measures and grouped data with fixed and random effects — random intercepts or random slopes, ML or REML estimation, and selectable denominator degrees-of-freedom methods: **Satterthwaite** (default), **Kenward-Roger** (random-intercept models), asymptotic, and residual. Interaction effects, simple effects analysis, and post-hoc adjustments are supported, with trajectory plots generated automatically.
 
 ### 📉 Nonparametric Tests
 
@@ -348,6 +351,7 @@ If you use easyCris in published research, please cite the underlying methods:
 | Module | Citation |
 |---|---|
 | t-Tests & ANOVA | Student (1908). The probable error of a mean. *Biometrika*, 6(1), 1-25. https://doi.org/10.1093/biomet/6.1.1; Fisher (1925). *Statistical Methods for Research Workers*. Oliver and Boyd. |
+| Linear Mixed Models | Laird & Ware (1982). Random-effects models for longitudinal data. *Biometrics*, 38(4), 963-974. https://doi.org/10.2307/2529876; Satterthwaite (1946). An approximate distribution of estimates of variance components. *Biometrics Bulletin*, 2(6), 110-114. https://doi.org/10.2307/3002019; Kenward & Roger (1997). Small sample inference for fixed effects from restricted maximum likelihood. *Biometrics*, 53(3), 983-997. https://doi.org/10.2307/2533558 |
 | Rank-Based Nonparametric Tests | Wilcoxon (1945). Individual comparisons by ranking methods. *Biometrics Bulletin*, 1(6), 80-83; Mann & Whitney (1947). On a test of whether one of two random variables is stochastically larger than the other. *Annals of Mathematical Statistics*, 18(1), 50-60. https://doi.org/10.1214/aoms/1177730491; Kruskal & Wallis (1952). Use of ranks in one-criterion variance analysis. *JASA*, 47(260), 583-621. https://doi.org/10.1080/01621459.1952.10483441; Dunn (1964). Multiple comparisons using rank sums. *Technometrics*, 6(3), 241-252. https://doi.org/10.1080/00401706.1964.10490181 |
 | Regression & Correlation | Pearson (1895). Note on regression and inheritance in the case of two parents. *Proceedings of the Royal Society of London*, 58, 240-242. https://doi.org/10.1098/rspl.1895.0041; Spearman (1904). The proof and measurement of association between two things. *American Journal of Psychology*, 15(1), 72-101. https://doi.org/10.2307/1412159; Kendall (1938). A new measure of rank correlation. *Biometrika*, 30(1/2), 81-93. https://doi.org/10.1093/biomet/30.1-2.81; Cox (1958). The regression analysis of binary sequences. *JRSS Series B*, 20(2), 215-242. https://doi.org/10.1111/j.2517-6161.1958.tb00292.x |
 | Survival Analysis | Kaplan & Meier (1958). Nonparametric estimation from incomplete observations. *JASA*, 53(282), 457-481. https://doi.org/10.1080/01621459.1958.10501452; Cox (1972). Regression models and life-tables. *JRSS Series B*, 34(2), 187-220. https://doi.org/10.1111/j.2517-6161.1972.tb00899.x; Nelson (1969). Hazard plotting for incomplete failure data. *Journal of Quality Technology*, 1(1), 27-52. https://doi.org/10.1080/00224065.1969.11980344 |
