@@ -174,7 +174,7 @@
         "@typescript-eslint/eslint-plugin": "^8.38.0",
         "@typescript-eslint/parser": "^8.38.0",
         "@vitejs/plugin-react": "^5.1.0",
-        "@vitest/coverage-v8": "^4.0.15",
+        "@vitest/coverage-v8": "^4.1.8",
         "chromedriver": "^143.0.3",
         "eslint": "^9.32.0",
         "eslint-config-prettier": "^10.1.8",
@@ -189,10 +189,11 @@
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.38.0",
         "vite": "^7.2.0",
-        "vitest": "^4.0.15",
+        "vitest": "^4.1.8",
         "ws": "^8.20.1"
     },
     "overrides": {
-        "fast-xml-parser": "5.3.4"
+        "fast-xml-parser": "5.3.4",
+        "maplibre-gl": "^6.4.1"
     }
 }
