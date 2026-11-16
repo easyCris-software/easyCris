@@ -42,23 +42,35 @@ if (-not $mt) {
 }
 Write-Host "[cargo-test-win] mt.exe: $mt"
 
-# ── 2. Build test binary (no run) ────────────────────────────────────────────
+# ── 2. Build test binary (no run) and locate it via cargo's JSON output ──────
+# The on-disk location of test executables depends on the cargo version
+# (newer stable moved intermediates out of target\debug\deps), so ask cargo
+# for the path instead of globbing a hardcoded directory.
 Write-Host "[cargo-test-win] Building test binary..."
 Push-Location $SrcTauriDir
 try {
-    cargo test --no-run
+    $cargoJson = cargo test --no-run --message-format=json-render-diagnostics
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 } finally {
     Pop-Location
 }
 
 # ── 3. Find the test binary ───────────────────────────────────────────────────
-$testBin = Get-ChildItem "$SrcTauriDir\target\debug\deps" -Filter "tauri_app_lib-*.exe" `
-    | Sort-Object LastWriteTime -Descending `
-    | Select-Object -First 1 -ExpandProperty FullName
+$testBin = @($cargoJson) `
+    | Where-Object { "$_" -like '{*' } `
+    | ForEach-Object { try { "$_" | ConvertFrom-Json } catch { $null } } `
+    | Where-Object { $_ -and $_.reason -eq 'compiler-artifact' -and $_.executable -and $_.profile.test -and $_.target.name -eq 'tauri_app_lib' } `
+    | Select-Object -Last 1 -ExpandProperty executable
 
 if (-not $testBin) {
-    Write-Error "Could not find test binary in target\debug\deps"
+    # Fallback for cargo layouts that keep test binaries in target\debug\deps
+    $testBin = Get-ChildItem "$SrcTauriDir\target\debug\deps" -Filter "tauri_app_lib-*.exe" -ErrorAction SilentlyContinue `
+        | Sort-Object LastWriteTime -Descending `
+        | Select-Object -First 1 -ExpandProperty FullName
+}
+
+if (-not $testBin) {
+    Write-Error "Could not locate the tauri_app_lib test binary from cargo output or target\debug\deps"
     exit 1
 }
 Write-Host "[cargo-test-win] Test binary: $testBin"
